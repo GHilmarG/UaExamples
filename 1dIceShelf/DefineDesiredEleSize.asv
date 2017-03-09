@@ -1,0 +1,10 @@
+function [x,y,EleSize]=DefineDesiredEleSize(x,y,EleSize,CtrlVar)
+    
+  
+    
+   EleSize(x > -1.4e6)=CtrlVar.hmax;
+   
+   ind=y>-400e3 && x > -1700e3 && x< -1500e
+    
+    
+end

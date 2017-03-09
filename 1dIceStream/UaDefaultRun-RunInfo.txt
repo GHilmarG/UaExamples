@@ -1,0 +1,10 @@
+ SSTREAM(uvh/supg) 	 time=        0.00000 	 dt=1e-10 	 r=4.26306e-18 	 #it= 2 	 CPUsec=6.86642 
+ SSTREAM(uvh/supg) 	 time=        0.00000 	 dt=1e-10 	 r=3.91455e-18 	 #it= 2 	 CPUsec=4.03118 
+ SSTREAM(uvh/supg) 	 time=        0.00000 	 dt=1e-10 	 r=5.62127e-23 	 #it= 2 	 CPUsec=4.36866 
+ SSTREAM(uvh/supg) 	 time=        0.00000 	 dt=1e-10 	 r=2.17266e-27 	 #it= 1 	 CPUsec=2.15176 
+ SSTREAM(uvh/supg) 	 time=        0.00000 	 dt=1e-10 	 r=1.64612e-27 	 #it= 1 	 CPUsec=2.1045 
+ SSTREAM(uvh/supg) 	 time=        0.00000 	 dt=1e-10 	 r=4.26311e-18 	 #it= 2 	 CPUsec=6.90497 
+ SSTREAM(uvh/supg) 	 time=        0.00000 	 dt=1e-10 	 r=7.55543e-18 	 #it= 2 	 CPUsec=4.28769 
+ SSTREAM(uvh/supg) 	 time=        0.00000 	 dt=1e-10 	 r=3.93348e-27 	 #it= 2 	 CPUsec=4.18751 
+ SSTREAM(uvh/supg) 	 time=        0.00000 	 dt=1e-10 	 r=1.82619e-27 	 #it= 1 	 CPUsec=2.08388 
+ SSTREAM(uvh/supg) 	 time=        0.00000 	 dt=1e-10 	 r=2.13372e-27 	 #it= 1 	 CPUsec=2.18775 
