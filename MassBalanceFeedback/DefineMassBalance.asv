@@ -1,0 +1,18 @@
+
+function [as,ab,dasdh,dabdh]=DefineMassBalance(Experiment,CtrlVar,MUA,time,s,b,h,S,B,rho,rhow,GF)
+
+
+as=h;
+
+ab=s*0;
+
+dasdh=zeros(MUA.Nnodes,1);
+dabdh=zeros(MUA.Nnodes,1);
+
+
+% if as=h and h=h0 at t=t0 and velocities are effectily zero, then:
+% dh/dt=a=h
+% h=h0 exp(ht)
+
+end
+
