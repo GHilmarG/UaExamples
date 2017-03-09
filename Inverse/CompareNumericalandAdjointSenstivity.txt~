@@ -1,0 +1,5 @@
+Flow over Gaussian shaped slipperiness pertubation 
+
+Sensitivity of Cost function in direction of gradient calulated using adjoint method and directly numerically differed by less than
+ 0.25% for  both 3, 6 and 10 node element
+
