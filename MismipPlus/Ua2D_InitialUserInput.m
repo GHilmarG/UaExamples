@@ -14,7 +14,7 @@ CtrlVar.TimeDependentRun=1;
 CtrlVar.TotalNumberOfForwardRunSteps=3;
 CtrlVar.TotalTime=100;
 CtrlVar.Restart=0;  
-CtrlVar.InfoLevelNonLinIt=100; 
+CtrlVar.InfoLevelNonLinIt=1; 
 
 CtrlVar.dt=0.01; 
 CtrlVar.time=0; 
