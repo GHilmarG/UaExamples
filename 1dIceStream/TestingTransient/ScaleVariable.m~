@@ -1,7 +1,0 @@
-function out=ScaleVariable(from,to,in)
-    
-    (in-min(in))/(from-to)
-    
-    out=from+(to-from).*(in-min(in))./(max(in)-min(in));
-    
-end

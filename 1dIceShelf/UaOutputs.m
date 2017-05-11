@@ -1,16 +1,14 @@
 function  UserVar=UaOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFinalValues,Priors,Meas,BCsAdjoint,RunInfo);
 
 v2struct(F);
- 
-
- 
+  
 plots='-ubvb-e-save-';
 plots='-sbB-udvd-ubvb-ub-ub(x)-';
 
 TRI=[];
 x=MUA.coordinates(:,1);  y=MUA.coordinates(:,2);
 
-if ~isempty(strfind(plots,'-save-'))
+if contains(plots,'-save-')
 
     % save data in files with running names
     % check if folder 'ResultsFiles' exists, if not create
@@ -33,7 +31,7 @@ end
 % only do plots at end of run
 if ~strcmp(CtrlVar.UaOutputsInfostring,'Last call') ; return ; end
 
-if ~isempty(strfind(plots,'-ub(x)-'))
+if contains(plots,'-ub(x)-')
     figure
     plot(x/CtrlVar.PlotXYscale,ub)
     title(sprintf('u_b(x) at t=%-g ',CtrlVar.time)) ; xlabel('x') ; ylabel('u_b')
@@ -41,9 +39,18 @@ end
 
 
 
-if ~isempty(strfind(plots,'-sbB-'))
-    figure(5)
-    hold off
+if contains(plots,'-sbB-')
+    
+    FigName='sbB';
+    fig=findobj(0,'name',FigName);
+    if isempty(fig)
+        fig=figure('name',FigName);
+        fig.Position=[10,10,500,500] ;
+    else
+        fig=figure(fig);
+        hold off
+    end
+
     if isempty(TRI) ;  TRI = delaunay(x,y); end
     trisurf(TRI,x/CtrlVar.PlotXYscale,y/CtrlVar.PlotXYscale,s,'EdgeColor','none') ; hold on
     trisurf(TRI,x/CtrlVar.PlotXYscale,y/CtrlVar.PlotXYscale,b,'EdgeColor','none') ;
@@ -59,7 +66,7 @@ if ~isempty(strfind(plots,'-sbB-'))
 end
 
 
-if ~isempty(strfind(plots,'-ubvb-'))
+if contains(plots,'-ubvb-')
     % plotting horizontal velocities
     figure
     N=1;
@@ -74,7 +81,7 @@ if ~isempty(strfind(plots,'-ubvb-'))
     
 end
 
-if ~isempty(strfind(plots,'-udvd-'))
+if contains(plots,'-udvd-')
     % plotting horizontal velocities
     figure
     N=1;
@@ -89,7 +96,7 @@ if ~isempty(strfind(plots,'-udvd-'))
     
 end
 
-if ~isempty(strfind(plots,'-e-'))
+if contains(plots,'-e-')
     % plotting effectiv strain rates
     
     % first get effective strain rates, e :
@@ -104,7 +111,7 @@ if ~isempty(strfind(plots,'-e-'))
     
 end
 
-if ~isempty(strfind(plots,'-ub-'))
+if contains(plots,'-ub-')
     
     figure
     [FigHandle,ColorbarHandel,tri]=PlotNodalBasedQuantities(MUA.connectivity,MUA.coordinates,ub,CtrlVar)    ;

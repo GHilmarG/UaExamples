@@ -1,5 +1,7 @@
 
 function  UserVar=UaOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFinalValues,Priors,Meas,BCsAdjoint,RunInfo);
+
+
 v2struct(F);
 
 time=CtrlVar.time; 
@@ -7,11 +9,13 @@ time=CtrlVar.time;
 
 plots='-ubvb-e-save-';
 plots='-sbB-udvd-ubvb-ub-';
+%plots='-mesh-';
 
+UserVar.CreateVideo=1;
 TRI=[];
 x=MUA.coordinates(:,1);  y=MUA.coordinates(:,2);
 
-if ~isempty(strfind(plots,'-save-'))
+if contains(plots,'-save-')
 
     % save data in files with running names
     % check if folder 'ResultsFiles' exists, if not create
@@ -31,11 +35,47 @@ if ~isempty(strfind(plots,'-save-'))
     end
 end
 
+% 
+% if contains(plots,'-mesh-')
+%     
+%     
+%     if isempty(fig100)
+%         fig100=figure(100) ;
+%         %fig100.Position=[0 0 figsWidth 3*figHeights];
+%         fig100.Position=[1 1 2190 1160];% full laptop window
+%         
+%         if UserVar.CreateVideo
+%             Video100=VideoWriter('Video100.avi');
+%             open(Video100);
+%         end
+%     else
+%         fig100=figure(100) ;
+%         hold off
+%     end
+%     
+%     
+%     
+%     PlotMuaMesh(CtrlVar,MUA)
+%     title('')
+%     
+%     if UserVar.CreateVideo
+%         frame = getframe(gcf);
+%         writeVideo(Video100,frame);
+%         
+%         if strcmp(CtrlVar.UaOutputsInfostring,'Last call')
+%             close(Video100)
+%         end
+%     end
+%     
+% end
+% 
+
+
 % only do plots at end of run
 if ~strcmp(CtrlVar.UaOutputsInfostring,'Last call') ; return ; end
 
 
-if ~isempty(strfind(plots,'-sbB-'))
+if contains(plots,'-sbB-')
     figure(5)
     hold off
     if isempty(TRI) ;  TRI = delaunay(x,y); end
@@ -53,7 +93,7 @@ if ~isempty(strfind(plots,'-sbB-'))
 end
 
 
-if ~isempty(strfind(plots,'-ubvb-'))
+if contains(plots,'-ubvb-')
     % plotting horizontal velocities
     figure
     N=1;
@@ -68,7 +108,7 @@ if ~isempty(strfind(plots,'-ubvb-'))
     
 end
 
-if ~isempty(strfind(plots,'-udvd-'))
+if contains(plots,'-udvd-')
     % plotting horizontal velocities
     figure
     N=1;
@@ -83,7 +123,7 @@ if ~isempty(strfind(plots,'-udvd-'))
     
 end
 
-if ~isempty(strfind(plots,'-e-'))
+if contains(plots,'-e-')
     % plotting effectiv strain rates
     
     % first get effective strain rates, e :
@@ -98,7 +138,7 @@ if ~isempty(strfind(plots,'-e-'))
     
 end
 
-if ~isempty(strfind(plots,'-ub-'))
+if contains(plots,'-ub-')
     
     figure
     [FigHandle,ColorbarHandel,tri]=PlotNodalBasedQuantities(MUA.connectivity,MUA.coordinates,ub,CtrlVar)    ;

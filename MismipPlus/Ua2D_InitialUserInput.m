@@ -4,6 +4,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar
 %%
 UserVar.MisExperiment='ice0';  % This I use in DefineMassBalance
 UserVar.Outputsdirectory='ResultsFiles'; % This I use in UaOutputs
+UserVar.MassBalanceCase='ice0';
 %%
 
 Experiment=['MismipPlus-',UserVar.MisExperiment];   
@@ -13,7 +14,7 @@ CtrlVar.TimeDependentRun=1;
 CtrlVar.TotalNumberOfForwardRunSteps=3;
 CtrlVar.TotalTime=100;
 CtrlVar.Restart=0;  
-
+CtrlVar.InfoLevelNonLinIt=100; 
 
 CtrlVar.dt=0.01; 
 CtrlVar.time=0; 
@@ -74,21 +75,7 @@ CtrlVar.AdaptMeshAndThenStop=0;    % if true, then mesh will be adapted but no f
                                    % usefull, for example, when trying out different remeshing options (then use CtrlVar.doRemeshPlots=1 to get plots)
 CtrlVar.doAdaptMeshPlots=0;       % if true and if CtrlVar.doplots true also, then do some extra plotting related to adapt meshing
 
-%CtrlVar.RefineCriteria={'flotation','thickness curvature','||grad(dhdt)||'};
-%CtrlVar.RefineCriteriaWeights=[1,1,1];                %  
-CtrlVar.RefineCriteriaFlotationLimit=[NaN,NaN];     
-
-CtrlVar.RefineCriteria={'flotation','thickness gradient'};
-CtrlVar.RefineCriteriaWeights=[1,0.75];                %  
-
-CtrlVar.RefineCriteria={'thickness gradient'};
-CtrlVar.RefineCriteriaWeights=[1];                %  
-  
 CtrlVar.AdaptMeshInterval=1;  % number of run-steps between mesh adaptation
-CtrlVar.AdaptMeshIterations=1;
-
-CtrlVar.RefineDiracDeltaWidth=250;
-
 CtrlVar.MeshAdapt.GLrange=[10000 5000 ; 3000 2000];
 
 
