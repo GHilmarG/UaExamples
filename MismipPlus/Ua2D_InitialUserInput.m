@@ -7,7 +7,7 @@ UserVar.Outputsdirectory='ResultsFiles'; % This I use in UaOutputs
 UserVar.MassBalanceCase='ice0';
 %%
 
-Experiment=['MismipPlus-',UserVar.MisExperiment];   
+CtrlVar.Experiment=['MismipPlus-',UserVar.MisExperiment];   
 %% Types of run
 %
 CtrlVar.TimeDependentRun=1; 
@@ -43,20 +43,28 @@ CtrlVar.PlotXYscale=1000;
 CtrlVar.TriNodes=3;
 
 
-CtrlVar.NameOfRestartFiletoWrite=['Restart',Experiment,'.mat'];
+CtrlVar.NameOfRestartFiletoWrite=['Restart',CtrlVar.Experiment,'.mat'];
 CtrlVar.NameOfRestartFiletoRead=CtrlVar.NameOfRestartFiletoWrite;
 
 
 
 
 %% adapt mesh
-%CtrlVar.InfoLevelAdaptiveMeshing=100;
+CtrlVar.InfoLevelAdaptiveMeshing=100;
+CtrlVar.doAdaptMeshPlots=1; 
+CtrlVar.MeshGenerator='gmsh';  % possible values: {mesh2d|gmsh}
 
-
+CtrlVar.GmshMeshingAlgorithm=8;     % see gmsh manual
+                                    % 1=MeshAdapt
+                                    % 2=Automatic
+                                    % 5=Delaunay
+                                    % 6=Frontal
+                                    % 7=bamg
+                                    % 8=DelQuad (experimental)
 % very coarse mesh resolution
-CtrlVar.MeshSize=20e3;       % over-all desired element size
-CtrlVar.MeshSizeMax=20e3;    % max element size
-CtrlVar.MeshSizeMin=0.05*CtrlVar.MeshSize;     % min element size
+CtrlVar.MeshSize=10e3;       % over-all desired element size
+CtrlVar.MeshSizeMax=10e3;    % max element size
+CtrlVar.MeshSizeMin=0.01*CtrlVar.MeshSize;     % min element size
 
 % reasonably fine mesh resolution
 %CtrlVar.MeshSize=8e3;       % over-all desired element size
@@ -65,7 +73,14 @@ CtrlVar.MeshSizeMin=0.05*CtrlVar.MeshSize;     % min element size
 
 CtrlVar.MaxNumberOfElements=250e3;           % max number of elements. If #elements larger then CtrlMeshSize/min/max are changed
 
-CtrlVar.AdaptMesh=1;           % 
+CtrlVar.AdaptMesh=1;         
+CtrlVar.AdaptMeshMaxIterations=10;  % Number of adapt mesh iterations within each run-step.
+CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';    % can have any of these values:
+                                                   % 'explicit:global' 
+                                                   % 'explicit:local'
+                                                   % 'explicit:local:red-green'
+                                                   % 'explicit:local:newest vertex bisection';
+%  
 CtrlVar.SaveAdaptMeshFileName='AdaptMesh.mat'; 
 
 
@@ -73,10 +88,10 @@ CtrlVar.SaveAdaptMeshFileName='AdaptMesh.mat';
 CtrlVar.AdaptMeshInitial=1 ;       % if true, then a remeshing will always be performed at the inital step
 CtrlVar.AdaptMeshAndThenStop=0;    % if true, then mesh will be adapted but no further calculations performed
                                    % usefull, for example, when trying out different remeshing options (then use CtrlVar.doRemeshPlots=1 to get plots)
-CtrlVar.doAdaptMeshPlots=0;       % if true and if CtrlVar.doplots true also, then do some extra plotting related to adapt meshing
+
 
 CtrlVar.AdaptMeshInterval=1;  % number of run-steps between mesh adaptation
-CtrlVar.MeshAdapt.GLrange=[10000 5000 ; 3000 2000];
+CtrlVar.MeshAdapt.GLrange=[20000 5000 ; 5000 500];
 
 
 
