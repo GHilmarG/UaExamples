@@ -18,11 +18,11 @@ CtrlVar.ThicknessConstraints=0;
 CtrlVar.FlowApproximation='SSTREAM' ;  % 'SSTREAM'|'SSHEET'|'Hybrid'
 
 
-CtrlVar.Implicituvh=0;      CtrlVar.TG3=0;
-CtrlVar.uvhTimeSteppingMethod='theta';  % theta | tg3 | supg
-CtrlVar.uvhTimeSteppingMethod='supg';  % theta | tg3 | supg
-CtrlVar.SUPG.beta0=0.5 ; CtrlVar.SUPG.beta1=0.0 ;
-CtrlVar.theta=0.5;
+%CtrlVar.Implicituvh=0;      CtrlVar.TG3=0;
+%CtrlVar.uvhTimeSteppingMethod='theta';  % theta | tg3 | supg
+%CtrlVar.uvhTimeSteppingMethod='supg';  % theta | tg3 | supg
+%CtrlVar.SUPG.beta0=0.5 ; CtrlVar.SUPG.beta1=0.0 ;
+%CtrlVar.theta=0.5;
 
 %CtrlVar.uvhTimeSteppingMethod='tg3';  CtrlVar.TG3=1 ; % theta | tg3 | supg
 %CtrlVar.uvhTimeSteppingMethod='shocks';
@@ -53,6 +53,7 @@ CtrlVar.MaxNumberOfElements=25000;
 
 %% for adaptive meshing
 CtrlVar.AdaptMesh=1;
+CtrlVar.MeshGenerator='mesh2d';  % possible values: {mesh2d|gmsh}
 CtrlVar.GmshMeshingAlgorithm=8;     % see gmsh manual
 
 CtrlVar.AdaptMeshInitial=1  ; % remesh in first run-step irrespecitivy of the value of AdaptMeshInterval
@@ -80,8 +81,9 @@ CtrlVar.ExplicitMeshRefinementCriteria(I).EleMin=[];
 CtrlVar.ExplicitMeshRefinementCriteria(I).EleMax=[];
 CtrlVar.ExplicitMeshRefinementCriteria(I).p=[];
 CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
-CtrlVar.ExplicitMeshRefinementCriteria(I).Use=true;
+CtrlVar.ExplicitMeshRefinementCriteria(I).Use=false;
 
+CtrlVar.MeshAdapt.GLrange=[5000 1000 ; 1000 250 ];
 
 %CtrlVar.MeshAdapt.GLrange=[10000 2000 ; 2000 500];                                                    
 %% plotting
