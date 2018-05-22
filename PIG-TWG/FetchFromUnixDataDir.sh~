@@ -1,0 +1,1 @@
+rsync --recursive -auve ssh ghg@bslcene.nerc-bas.ac.uk:/data/glacier3/ghg/Ua/Tests/PIG-TWG/*.$1 .
