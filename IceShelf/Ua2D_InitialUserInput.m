@@ -40,20 +40,17 @@ end
 CtrlVar.TimeDependentRun=1 ;
 CtrlVar.dt=0.1;
 CtrlVar.TotalNumberOfForwardRunSteps=200;
-CtrlVar.TotalTime=100;          % maximum model time
+CtrlVar.TotalTime=50;          % maximum model time
 CtrlVar.time=0; 
-CtrlVar.ATStimeStepTarget=10.0;  % Timestep maximum is 10 years
+CtrlVar.ATStimeStepTarget=2.0;  % Timestep maximum is 10 years
 
 
-%% Solver
-CtrlVar.NLtol=1e-15; % this is the square of the error, i.e. not root-mean-square error
-CtrlVar.InfoLevelNonLinIt=1;
-CtrlVar.LineSeachAllowedToUseExtrapolation=1;
+
 
 %% Restart
 CtrlVar.Restart=0;  CtrlVar.WriteRestartFile=1;
-CtrlVar.NameOfRestartFiletoRead='iA-Restart.mat';
-CtrlVar.NameOfRestartFiletoWrite='iA-Restart.mat';
+CtrlVar.NameOfRestartFiletoRead=UserVar.Geometry;
+CtrlVar.NameOfRestartFiletoWrite=UserVar.Geometry;
 
 
 

@@ -60,7 +60,7 @@ if contains(plots,'-plot-')
     
     subplot(3,2,6);
     hold off
-    [exx,eyy,exy,e]=CalcNodalStrainRates(CtrlVar,MUA,F.ub,F.vb);
+    [exx,eyy,exy,e]=CalcHorizontalNodalStrainRates(CtrlVar,MUA,F.ub,F.vb);
     PlotMeshScalarVariable(CtrlVar,MUA,e);   title(sprintf('effective strain rates at t=%g',time))
     %Plot_sbB(CtrlVar,MUA,s,b,B);   title(sprintf('sbB at t=%g',time))
 end
