@@ -105,9 +105,11 @@ CtrlVar.MaxNumberOfElements=70e3;
 
 
 CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';   
+%CtrlVar.MeshRefinementMethod='explicit:local:red-green';
 %CtrlVar.MeshRefinementMethod='explicit:global';   
 
 CtrlVar.MeshGenerator='gmsh' ; % 'mesh2d';
+CtrlVar.MeshGenerator='mesh2d' ; % 'mesh2d';
 CtrlVar.GmshMeshingAlgorithm=8; 
 CtrlVar.MeshSizeMax=20e3;
 CtrlVar.MeshSize=CtrlVar.MeshSizeMax/2;
@@ -118,7 +120,7 @@ MeshBoundaryCoordinates=CreateMeshBoundaryCoordinatesForPIGandTWG(CtrlVar);
 CtrlVar.AdaptMeshInitial=1  ;       % remesh in first iteration (Itime=1)  even if mod(Itime,CtrlVar.AdaptMeshInterval)~=0.
 CtrlVar.AdaptMeshAndThenStop=1;    % if true, then mesh will be adapted but no further calculations performed
                                    % useful, for example, when trying out different remeshing options (then use CtrlVar.doAdaptMeshPlots=1 to get plots)
-CtrlVar.AdaptMeshMaxIterations=4;
+CtrlVar.AdaptMeshMaxIterations=5;
 CtrlVar.SaveAdaptMeshFileName='MeshFileAdapt';    %  file name for saving adapt mesh. If left empty, no file is written
 CtrlVar.AdaptMeshInterval=1 ; % remesh whenever mod(Itime,CtrlVar.AdaptMeshInterval)==0
 

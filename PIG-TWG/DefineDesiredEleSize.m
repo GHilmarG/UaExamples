@@ -81,7 +81,7 @@ switch lower(CtrlVar.MeshRefinementMethod)
         ind=x< xmax & x>xmin & y>ymin & y< ymax ;
         EleSizeDesired(~ind)=CtrlVar.MeshSizeMax;
         
-    case 'explicit:local:newest vertex bisection'
+    case {'explicit:local:newest vertex bisection','explicit:local:red-green'}
         
         % When using local mesh refinement, return ElementsToBeRefined and ElementsToBeCoarsened defined over elements
         %
@@ -91,6 +91,10 @@ switch lower(CtrlVar.MeshRefinementMethod)
         ind=MUA.xEle < xmax & MUA.xEle > xmin & MUA.yEle >ymin & MUA.yEle < ymax ;
       
         ElementsToBeRefined(~ind)=false; 
+        
+    otherwise
+        
+        error('case not found')
 
 end
 
