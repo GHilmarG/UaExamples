@@ -1,12 +1,16 @@
 function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar,CtrlVar)
 
 
+% Select the type of run by uncommenting one of the following options:
 UserVar.RunType='Inverse-MatOpt';
-%UserVar.RunType='Inverse-ConjGrad';
-%UserVar.RunType='Forward-Diagnostic';
-%UserVar.RunType='Forward-Transient';
+% UserVar.RunType='Inverse-ConjGrad';
+% UserVar.RunType='Forward-Diagnostic';
+% UserVar.RunType='Forward-Transient';
+ UserVar.RunType='TestingMeshOptions';
 
 
+% This run requires some additional input files. They are too big to be kept on Github so you
+% will have to get those separately. 
 UserVar.GeometryInterpolant='../Interpolants/Bedmap2GriddedInterpolantModifiedBathymetry';
 UserVar.DensityInterpolant='../Interpolants/DepthAveragedDensityGriddedInterpolant.mat';
 UserVar.SurfaceVelocityInterpolant='../Interpolants/SurfVelMeasures990mInterpolants';
@@ -20,96 +24,145 @@ UserVar.CFile='FC.mat'; UserVar.AFile='FA.mat';
 
 CtrlVar.Experiment=UserVar.RunType;
 
-
-
-
-if contains(UserVar.RunType,'Inverse')
-    CtrlVar.InverseRun=1;
-    CtrlVar.Restart=0;
-    CtrlVar.Inverse.InfoLevel=1;
-    CtrlVar.InfoLevelNonLinIt=0;
-    CtrlVar.InfoLevel=0;
-    UserVar.Slipperiness.ReadFromFile=0;
-    UserVar.AGlen.ReadFromFile=0;
+switch UserVar.RunType
     
-else
-    
-    CtrlVar.InverseRun=0;
-    if contains(UserVar.RunType,'Transient')
+    case {'Inverse-MatOpt','Inverse-ConjGrad'}
+        
+        CtrlVar.InverseRun=1;
+        CtrlVar.Restart=0;
+        CtrlVar.Inverse.InfoLevel=1;
+        CtrlVar.InfoLevelNonLinIt=0;
+        CtrlVar.InfoLevel=0;
+        UserVar.Slipperiness.ReadFromFile=0;
+        UserVar.AGlen.ReadFromFile=0;
+        CtrlVar.ReadInitialMesh=1;
+        CtrlVar.AdaptMesh=0;
+        
+    case 'Forward-Transient'
+        
+        CtrlVar.InverseRun=0;
         CtrlVar.TimeDependentRun=1;
-    else
+        CtrlVar.Restart=1;
+        CtrlVar.InfoLevelNonLinIt=1;
+        UserVar.Slipperiness.ReadFromFile=1;
+        UserVar.AGlen.ReadFromFile=0;
+        CtrlVar.ReadInitialMesh=1;
+        CtrlVar.AdaptMesh=0;
+        
+    case 'Forward-Diagnostic'
+               
+        CtrlVar.InverseRun=0;
         CtrlVar.TimeDependentRun=0;
-    end
-    
-    CtrlVar.Restart=1;
-    CtrlVar.InfoLevelNonLinIt=1;
-    UserVar.Slipperiness.ReadFromFile=1;
-    UserVar.AGlen.ReadFromFile=0;
-    
+        CtrlVar.Restart=1;
+        CtrlVar.InfoLevelNonLinIt=1;
+        UserVar.Slipperiness.ReadFromFile=1;
+        UserVar.AGlen.ReadFromFile=0;
+        CtrlVar.ReadInitialMesh=1;
+        CtrlVar.AdaptMesh=0;
+        
+    case 'TestingMeshOptions'
+        
+        CtrlVar.TimeDependentRun=0;  % {0|1} if true (i.e. set to 1) then the run is a forward transient one, if not
+        CtrlVar.InverseRun=0;
+        CtrlVar.Restart=0;
+        CtrlVar.ReadInitialMesh=0;
+        CtrlVar.AdaptMesh=1;
+        UserVar.Slipperiness.ReadFromFile=1;
+        UserVar.AGlen.ReadFromFile=1;
+        CtrlVar.AdaptMesh=1;
+        CtrlVar.AdaptMeshInitial=1  ;       % remesh in first iteration (Itime=1)  even if mod(Itime,CtrlVar.AdaptMeshInterval)~=0.
+        CtrlVar.AdaptMeshAndThenStop=1;    % if true, then mesh will be adapted but no further calculations performed
+        % useful, for example, when trying out different remeshing options (then use CtrlVar.doAdaptMeshPlots=1 to get plots)
+        CtrlVar.InfoLevelAdaptiveMeshing=10;
 end
 
 
-CtrlVar.ReadInitialMesh=1;
-CtrlVar.AdaptMesh=0;
 CtrlVar.dt=0.01;
 CtrlVar.time=0;
-CtrlVar.ResetTimeStep=0; 
 CtrlVar.TotalNumberOfForwardRunSteps=1; 
 CtrlVar.TotalTime=10;
 
-%
+% Element type
 CtrlVar.TriNodes=3 ;
-CtrlVar.ATStimeStepTarget=0.1; CtrlVar.ATSTargetIterations=4;
 
 
 %%
 CtrlVar.doplots=1;
-CtrlVar.PlotMesh=0;  CtrlVar.PlotBCs=1 ;
+CtrlVar.PlotMesh=0;  
+CtrlVar.PlotBCs=1 ;
+CtrlVar.PlotXYscale=1000;
+CtrlVar.doAdaptMeshPlots=5; 
 %%
-
-
-CtrlVar.MeshSizeMax=20e3;
-CtrlVar.MeshSize=CtrlVar.MeshSizeMax/2;
-CtrlVar.MeshSizeMin=CtrlVar.MeshSizeMax/10;
-CtrlVar.MeshSizeFastFlow=CtrlVar.MeshSizeMax/5;
-CtrlVar.MeshSizeIceShelves=CtrlVar.MeshSizeMax/10;
-CtrlVar.MeshSizeBoundary=CtrlVar.MeshSize;
-
-
-MeshBoundaryCoordinates=CreateMeshBoundaryCoordinatesForPIGandTWG(CtrlVar);
 
 CtrlVar.ReadInitialMeshFileName='PIG-TWG-Mesh.mat';
 CtrlVar.SaveInitialMeshFileName='MeshFile.mat';
-
-CtrlVar.OnlyMeshDomainAndThenStop=0; % if true then only meshing is done and no further calculations. Usefull for checking if mesh is reasonable
 CtrlVar.MaxNumberOfElements=70e3;
 
 
-%% plotting
-CtrlVar.PlotXYscale=1000;
 
 
+%% Meshing 
 
-%% adapt mesh
 
+CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';   
+%CtrlVar.MeshRefinementMethod='explicit:global';   
 
-CtrlVar.MeshRefinementMethod='explicit:global';    % can have any of these values:
-                                                   % 'explicit:global'
-                                                   % 'explicit:local'
-                                                   % 'implicit:global'  (broken at the moment, do not use)
-                                                   % 'implicit:local'   (broken at the moment, do not use)
-
-CtrlVar.InfoLevelAdaptiveMeshing=10;                                            
-CtrlVar.AdaptMeshInitial=1  ; % remesh in first iteration (Itime=1)  even if mod(Itime,CtrlVar.AdaptMeshInterval)~=0.
-CtrlVar.AdaptMeshAndThenStop=0;    % if true, then mesh will be adapted but no further calculations performed
+CtrlVar.MeshGenerator='gmsh' ; % 'mesh2d';
+CtrlVar.GmshMeshingAlgorithm=8; 
+CtrlVar.MeshSizeMax=20e3;
+CtrlVar.MeshSize=CtrlVar.MeshSizeMax/2;
+CtrlVar.MeshSizeMin=CtrlVar.MeshSizeMax/20;
+UserVar.MeshSizeIceShelves=CtrlVar.MeshSizeMax/5;
+MeshBoundaryCoordinates=CreateMeshBoundaryCoordinatesForPIGandTWG(CtrlVar);
+                                         
+CtrlVar.AdaptMeshInitial=1  ;       % remesh in first iteration (Itime=1)  even if mod(Itime,CtrlVar.AdaptMeshInterval)~=0.
+CtrlVar.AdaptMeshAndThenStop=1;    % if true, then mesh will be adapted but no further calculations performed
                                    % useful, for example, when trying out different remeshing options (then use CtrlVar.doAdaptMeshPlots=1 to get plots)
-%CtrlVar.MeshRefinementMethod='explicit:local';
-CtrlVar.AdaptMeshMaxIterations=1;
+CtrlVar.AdaptMeshMaxIterations=4;
 CtrlVar.SaveAdaptMeshFileName='MeshFileAdapt';    %  file name for saving adapt mesh. If left empty, no file is written
-CtrlVar.AdaptMeshInterval=10 ; % remesh whenever mod(Itime,CtrlVar.AdaptMeshInterval)==0
-CtrlVar.doAdaptMeshPlots=1; 
+CtrlVar.AdaptMeshInterval=1 ; % remesh whenever mod(Itime,CtrlVar.AdaptMeshInterval)==0
 
 
+
+I=1;
+CtrlVar.ExplicitMeshRefinementCriteria(I).Name='effective strain rates';
+CtrlVar.ExplicitMeshRefinementCriteria(I).Scale=0.001;
+CtrlVar.ExplicitMeshRefinementCriteria(I).EleMin=[];
+CtrlVar.ExplicitMeshRefinementCriteria(I).EleMax=[];
+CtrlVar.ExplicitMeshRefinementCriteria(I).p=[];
+CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
+CtrlVar.ExplicitMeshRefinementCriteria(I).Use=true;
+
+
+I=I+1;
+CtrlVar.ExplicitMeshRefinementCriteria(I).Name='flotation';
+CtrlVar.ExplicitMeshRefinementCriteria(I).Scale=0.0001;
+CtrlVar.ExplicitMeshRefinementCriteria(I).EleMin=[];
+CtrlVar.ExplicitMeshRefinementCriteria(I).EleMax=[];
+CtrlVar.ExplicitMeshRefinementCriteria(I).p=[];
+CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
+CtrlVar.ExplicitMeshRefinementCriteria(I).Use=false;
+
+I=I+1;
+CtrlVar.ExplicitMeshRefinementCriteria(I).Name='thickness gradient';
+CtrlVar.ExplicitMeshRefinementCriteria(I).Scale=0.01;
+CtrlVar.ExplicitMeshRefinementCriteria(I).EleMin=[];
+CtrlVar.ExplicitMeshRefinementCriteria(I).EleMax=[];
+CtrlVar.ExplicitMeshRefinementCriteria(I).p=[];
+CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
+CtrlVar.ExplicitMeshRefinementCriteria(I).Use=false;
+
+
+I=I+1;
+CtrlVar.ExplicitMeshRefinementCriteria(I).Name='upper surface gradient';
+CtrlVar.ExplicitMeshRefinementCriteria(I).Scale=0.01;
+CtrlVar.ExplicitMeshRefinementCriteria(I).EleMin=[];
+CtrlVar.ExplicitMeshRefinementCriteria(I).EleMax=[];
+CtrlVar.ExplicitMeshRefinementCriteria(I).p=[];
+CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
+CtrlVar.ExplicitMeshRefinementCriteria(I).Use=false;
+
+%%
                                                         
 %%  Bounds on C and AGlen
 %CtrlVar.AGlenmin=1e-10; CtrlVar.AGlenmax=1e-5;
