@@ -1,17 +1,25 @@
 function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar,CtrlVar)
 
 
-% Select the type of run by uncommenting one of the following options:
+%% Select the type of run by uncommenting one of the following options:
 UserVar.RunType='Inverse-MatOpt';
 % UserVar.RunType='Inverse-ConjGrad';
+% UserVar.RunType='Inverse-SteepestDesent';
+% UserVar.RunType='Inverse-ConjGrad-FixPoint';
 % UserVar.RunType='Forward-Diagnostic';
 % UserVar.RunType='Forward-Transient';
- UserVar.RunType='TestingMeshOptions';
+% UserVar.RunType='TestingMeshOptions';
+%%
 
-
+%%
 % This run requires some additional input files. They are too big to be kept on Github so you
 % will have to get those separately. 
-UserVar.GeometryInterpolant='../Interpolants/Bedmap2GriddedInterpolantModifiedBathymetry';
+%
+% You can get these files on OneDrive using the link: https://1drv.ms/f/s!Anaw0Iv-oEHTloRzWreBMDBFCJ0R4Q
+% 
+% Put the OneDrive folder `Interpolants' into you directory so that it can be reaced as ../Interpolants with respect to you rundirectory. 
+%
+UserVar.GeometryInterpolant='../Interpolants/Bedmap2GriddedInterpolantModifiedBathymetry'; % this assumes you have downloaded the OneDrive folder `Interpolants'.
 UserVar.DensityInterpolant='../Interpolants/DepthAveragedDensityGriddedInterpolant.mat';
 UserVar.SurfaceVelocityInterpolant='../Interpolants/SurfVelMeasures990mInterpolants';
 
@@ -26,7 +34,7 @@ CtrlVar.Experiment=UserVar.RunType;
 
 switch UserVar.RunType
     
-    case {'Inverse-MatOpt','Inverse-ConjGrad'}
+    case {'Inverse-MatOpt','Inverse-ConjGrad','Inverse-MatOpt-FixPoint','Inverse-ConjGrad-FixPoint','Inverse-SteepestDesent'}
         
         CtrlVar.InverseRun=1;
         CtrlVar.Restart=0;
@@ -37,6 +45,24 @@ switch UserVar.RunType
         UserVar.AGlen.ReadFromFile=0;
         CtrlVar.ReadInitialMesh=1;
         CtrlVar.AdaptMesh=0;
+        
+        CtrlVar.Inverse.Iterations=5;
+        CtrlVar.Inverse.InvertFor='logAGlenlogC' ; % {'C','logC','AGlen','logAGlen'}
+        CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor;
+        
+        if contains(UserVar.RunType,'FixPoint')
+            
+            % FixPoint inversion is an ad-hoc method of estimating the gradient of the cost function with respect to C.
+            % It can produce quite good estimates for C using just one or two inversion iterations, but then typically stagnates.
+            % The FixPoint method can often be used right at the start of an inversion to get a reasonably good C estimate,
+            % after which in a restart step one can switch to gradient calculation using adjoint 
+            CtrlVar.Inverse.DataMisfit.GradientCalculation='FixPoint' ;
+            CtrlVar.Inverse.InvertFor='logC' ;
+            CtrlVar.Inverse.Iterations=1;
+            CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor;
+          
+        end
+        
         
     case 'Forward-Transient'
         
@@ -197,11 +223,9 @@ else
     
 end
 
-CtrlVar.Inverse.Iterations=5;
-CtrlVar.Inverse.InvertFor='logAGlenlogC' ; % {'C','logC','AGlen','logAGlen'}
-CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor;
 
-CtrlVar.Inverse.DataMisfit.GradientCalculation='Adjoint' ; % {'Adjoint','FixPointC'}
+
+
 CtrlVar.Inverse.AdjointGradientPreMultiplier='I'; % {'I','M'}
 
 

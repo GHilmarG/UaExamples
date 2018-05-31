@@ -31,53 +31,6 @@ Meas.wsCov=sparse(1:MUA.Nnodes,1:MUA.Nnodes,wsError.^2,MUA.Nnodes,MUA.Nnodes);
 [UserVar,InvStartValues.C,InvStartValues.m]=DefineSlipperyDistribution(UserVar,CtrlVar,MUA,CtrlVar.time,F.s,F.b,F.s-F.b,F.S,F.B,F.rho,F.rhow,GF);
 [UserVar,InvStartValues.AGlen,InvStartValues.n]=DefineAGlenDistribution(UserVar,CtrlVar,MUA,CtrlVar.time,F.s,F.b,F.s-F.b,F.S,F.B,F.rho,F.rhow,GF);
 
-listingCC=dir('CC.mat') ; listingCA=dir('CAGlen.mat') ;
-
-%% Covariance of prior
-
-if strcmpi(CtrlVar.Inverse.Regularize.Field,'cov')
-    CreateCovMatAndSave=1;
-    if numel(listingCC)==1 && numel(listingCA)==1
-        CreateCovMatAndSave=0;
-        FileName='CC.mat';
-        fprintf('DefineInverseModelingParameters: loading CC from file: %-s ',FileName)
-        load(FileName,'CC') ;
-        fprintf(' done \n ')
-        %%
-        
-        FileName='CAGlen.mat';
-        fprintf('DefineInverseModelingParameters: loading CAGlen from file: %-s ',FileName)
-        load(FileName,'CAGlen');
-        fprintf(' done \n ')
-        
-        if length(CC)~=length(F.C)
-            CreateCovMatAndSave=1;
-            fprintf(' Covariance matrix in input file does not have correct dimentions. Will create a new one \n')
-        end
-    end
-    
-    if CreateCovMatAndSave
-        
-        
-        xEle=Nodes2EleMean(MUA.connectivity,MUA.coordinates(:,1)); yEle=Nodes2EleMean(MUA.connectivity,MUA.coordinates(:,2));
-        Err=1e-1 ; Sigma=200 ; DistanceCutoff=5*Sigma;
-        fprintf('creating sparse covariance matrix ')  ; tStart=tic;
-        [CC]=SparseCovarianceDistanceMatrix(xEle,yEle,Err,Sigma,DistanceCutoff);
-        tElapsed=toc(tStart);
-        fprintf('in %-g sec \n',tElapsed)
-        FileName='CC.mat'; save(FileName,'CC')
-        
-        Err=1e-5 ; Sigma=200 ; DistanceCutoff=5*Sigma;
-        fprintf('creating sparse covariance matrix ')  ; tStart=tic;
-        [CAGlen]=SparseCovarianceDistanceMatrix(xEle,yEle,Err,Sigma,DistanceCutoff);
-        tElapsed=toc(tStart);
-        fprintf('in %-g sec \n',tElapsed)
-        FileName='CAGlen.mat'; save(FileName,'CAGlen')
-    end
-else
-    CC=[] ;
-    CAGlen=[];
-end
 
 
 
@@ -94,7 +47,67 @@ Priors.C=C0;
 Priors.rho=F.rho;
 Priors.rhow=F.rhow;
 
-Priors.CovAGlen=CAGlen;
-Priors.CovC=CC;
+
+
+
+%% Covariance of prior (if using Bayesian Regularisation)
+% listingCC=dir('CC.mat') ; listingCA=dir('CAGlen.mat') ;
+%
+% 
+%  Note: this is only used if using Bayesian Regularisation involving covariance matrices and when doing an element-wise inversion.
+%
+%  By default inversion is done over nodes and using Tikhonov regularisation. Hence, this defining covariance matrices for the priors is
+%  then not needed. 
+%
+% if strcmpi(CtrlVar.Inverse.Regularize.Field,'cov')
+%     CreateCovMatAndSave=1;
+%     if numel(listingCC)==1 && numel(listingCA)==1
+%         CreateCovMatAndSave=0;
+%         FileName='CC.mat';
+%         fprintf('DefineInverseModelingParameters: loading CC from file: %-s ',FileName)
+%         load(FileName,'CC') ;
+%         fprintf(' done \n ')
+%         %%
+%         
+%         FileName='CAGlen.mat';
+%         fprintf('DefineInverseModelingParameters: loading CAGlen from file: %-s ',FileName)
+%         load(FileName,'CAGlen');
+%         fprintf(' done \n ')
+%         
+%         if length(CC)~=length(F.C)
+%             CreateCovMatAndSave=1;
+%             fprintf(' Covariance matrix in input file does not have correct dimentions. Will create a new one \n')
+%         end
+%     end
+%     
+%     if CreateCovMatAndSave
+%         
+%         
+%         xEle=Nodes2EleMean(MUA.connectivity,MUA.coordinates(:,1)); yEle=Nodes2EleMean(MUA.connectivity,MUA.coordinates(:,2));
+%         Err=1e-1 ; Sigma=200 ; DistanceCutoff=5*Sigma;
+%         fprintf('creating sparse covariance matrix ')  ; tStart=tic;
+%         [CC]=SparseCovarianceDistanceMatrix(xEle,yEle,Err,Sigma,DistanceCutoff);
+%         tElapsed=toc(tStart);
+%         fprintf('in %-g sec \n',tElapsed)
+%         FileName='CC.mat'; save(FileName,'CC')
+%         
+%         Err=1e-5 ; Sigma=200 ; DistanceCutoff=5*Sigma;
+%         fprintf('creating sparse covariance matrix ')  ; tStart=tic;
+%         [CAGlen]=SparseCovarianceDistanceMatrix(xEle,yEle,Err,Sigma,DistanceCutoff);
+%         tElapsed=toc(tStart);
+%         fprintf('in %-g sec \n',tElapsed)
+%         FileName='CAGlen.mat'; save(FileName,'CAGlen')
+%     end
+% else
+%     CC=[] ;
+%     CAGlen=[];
+% end
+% 
+% Priors.CovAGlen=CAGlen;
+% Priors.CovC=CC;
+% 
+% 
+
+
 
 end
