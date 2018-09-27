@@ -11,10 +11,10 @@ CtrlVar.Experiment=['MismipPlus-',UserVar.MisExperiment];
 %% Types of run
 %
 CtrlVar.TimeDependentRun=1; 
-CtrlVar.TotalNumberOfForwardRunSteps=3;
+CtrlVar.TotalNumberOfForwardRunSteps=1;
 CtrlVar.TotalTime=100;
 CtrlVar.Restart=0;  
-CtrlVar.InfoLevelNonLinIt=1; 
+CtrlVar.InfoLevelNonLinIt=100; 
 
 CtrlVar.dt=0.01; 
 CtrlVar.time=0; 
@@ -73,7 +73,7 @@ CtrlVar.MeshSizeMin=0.01*CtrlVar.MeshSize;     % min element size
 
 CtrlVar.MaxNumberOfElements=250e3;           % max number of elements. If #elements larger then CtrlMeshSize/min/max are changed
 
-CtrlVar.AdaptMesh=1;         
+CtrlVar.AdaptMesh=0;         
 CtrlVar.AdaptMeshMaxIterations=10;  % Number of adapt mesh iterations within each run-step.
 CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';    % can have any of these values:
                                                    % 'explicit:global' 

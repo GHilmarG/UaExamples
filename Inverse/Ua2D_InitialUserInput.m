@@ -6,94 +6,37 @@ if ~isfield(UserVar,'RunType')
     UserVar.RunType='IceStream';
 end
 
+UserVar.AddDataErrors=0;
 
+%%
 CtrlVar.doplots=1;
 
 xd=200e3; xu=-200e3 ; yl=200e3 ; yr=-200e3;
 MeshBoundaryCoordinates=[xu yr ; xd yr ; xd yl ; xu yl];
 MeshBoundaryCoordinates=flipud(MeshBoundaryCoordinates);
 %% Types of runs
-CtrlVar.DevelopmentVersion=1;  %
-CtrlVar.doInverseStep=1 ;
-CtrlVar.TriNodes=3;
+CtrlVar.InverseRun=1;
+
 
 
 %% Restart
-CtrlVar.Restart=0;  CtrlVar.WriteRestartFile=1;
+CtrlVar.Restart=1;  CtrlVar.WriteRestartFile=1;
 CtrlVar.NameOfRestartFiletoRead=['Nod',num2str(CtrlVar.TriNodes),'-iC-Restart.mat'];
 CtrlVar.NameOfRestartFiletoWrite=CtrlVar.NameOfRestartFiletoRead;
 
 
 %% Inverse   -inverse
+CtrlVar.Inverse.MinimisationMethod='UaOptimization'; % {'MatlabOptimization','UaOptimization'}
 
-CtrlVar.Inverse.MinimisationMethod='MatlabOptimization'; % {'MatlabOptimization','UaOptimization'}
-CtrlVar.Inverse.MinimisationMethod='UaOptimization';
-CtrlVar.Inverse.Iterations=5;
-CtrlVar.Inverse.InvertFor='logAGlenlogC' ; % {'C','logC','AGlen','logAGlen'}
-CtrlVar.CisElementBased=0;
-CtrlVar.AGlenisElementBased=0;
-CtrlVar.Inverse.CalcGradI=true;  
-
-
-% UaOptimization parameters, start :
-CtrlVar.Inverse.GradientUpgradeMethod='conjgrad' ; %{'SteepestDecent','conjgrad'}
-CtrlVar.Inverse.InitialLineSearchStepSize=[];
-CtrlVar.Inverse.MinimumAbsoluteLineSearchStepSize=1e-20; % minimum step size in backtracking
-CtrlVar.Inverse.MinimumRelativelLineSearchStepSize=1e-5; % minimum fractional step size relative to initial step size
-CtrlVar.Inverse.MaximumNumberOfLineSeachSteps=50;
-% end, UaOptimization parameters
-
-% MatlabOptimisation parameters, start :
-CtrlVar.Inverse.MatlabOptimisationParameters = optimoptions('fminunc',...
-    'Algorithm','trust-region',...
-    'MaxIterations',CtrlVar.Inverse.Iterations,...
-    'MaxFunctionEvaluations',1000,...
-    'Display','iter-detailed',...
-    'OutputFcn',@fminuncOutfun,...
-    'Diagnostics','on',...
-    'OptimalityTolerance',1e-20,...
-    'FunctionTolerance',1e-10,...
-    'StepTolerance',1e-20,...
-    'PlotFcn',{@optimplotfval,@optimplotstepsize},...
-    'SpecifyObjectiveGradient',CtrlVar.Inverse.CalcGradI,...
-    'HessianFcn','objective');
-
-CtrlVar.Inverse.MatlabOptimisationParameters = optimoptions('fminunc',...
-    'Algorithm','quasi-newton',...
-    'MaxIterations',CtrlVar.Inverse.Iterations,...
-    'MaxFunctionEvaluations',1000,...
-    'Display','iter-detailed',...
-    'OutputFcn',@fminuncOutfun,...
-    'Diagnostics','on',...
-    'OptimalityTolerance',1e-20,...
-    'StepTolerance',1e-20,...
-    'PlotFcn',{@optimplotfval,@optimplotstepsize},...
-    'SpecifyObjectiveGradient',CtrlVar.Inverse.CalcGradI);
-% end, MatlabOptimisation parameters.
+CtrlVar.Inverse.Iterations=4;
 
 CtrlVar.Inverse.InfoLevel=1;  % Set to 1 to get some basic information, >=2 for additional info on backtrackgin,
                                  % >=100 for further info and plots
 
 CtrlVar.InfoLevelNonLinIt=0; CtrlVar.InfoLevel=0;
 
-
-CtrlVar.Inverse.DataMisfit.GradientCalculation='Adjoint' ; % {'Adjoint','FixPointC'}
-CtrlVar.Inverse.AdjointGradientPreMultiplier='I'; % {'I','M'}
-
-% Testing adjoint parameters, start:
-CtrlVar.Inverse.TestAdjoint.isTrue=0; % If true then perform a brute force calculation 
-                                      % of the directinal derivative of the objective function.  
-CtrlVar.Inverse.TestAdjoint.FiniteDifferenceType='central' ; % {'central','forward'}
-CtrlVar.Inverse.TestAdjoint.FiniteDifferenceStepSize=1e-8 ;
-CtrlVar.Inverse.TestAdjoint.iRange=[] ;  % range of nodes/elements over which brute force gradient is to be calculated.
-                                         % if left empty, values are calulated for every node/element within the mesh. 
-                                         % If set to for example [1,10,45] values are calculated for these three
-                                         % nodes/elements.
-% end, testing adjoint parameters. 
                                                     
-UserVar.AddDataErrors=0;
-
-CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor;
+% regularisation parameters
 CtrlVar.Inverse.Regularize.C.gs=1;
 CtrlVar.Inverse.Regularize.C.ga=1;
 CtrlVar.Inverse.Regularize.logC.ga=1;
@@ -105,19 +48,9 @@ CtrlVar.Inverse.Regularize.logAGlen.ga=1;
 CtrlVar.Inverse.Regularize.logAGlen.gs=1 ;
 
 
-
-
-CtrlVar.Inverse.DataMisfit.HessianEstimate='0'; % {'0','I','MassMatrix'}
-
-CtrlVar.Inverse.DataMisfit.Multiplier=1;
-CtrlVar.Inverse.Regularize.Multiplier=1;
-
-CtrlVar.Inverse.DataMisfit.FunctionEvaluation='integral';
-CtrlVar.MUA.MassMatrix=1;
-CtrlVar.MUA.StiffnessMatrix=1;
-
 %% Mesh generation and remeshing parameters
 
+CtrlVar.TriNodes=3;
 CtrlVar.meshgeneration=1;
 CtrlVar.GmshMeshingAlgorithm=8;    % see gmsh manual
 % 1=MeshAdapt
@@ -146,13 +79,6 @@ CtrlVar.GmshGeoFileAdditionalInputLines{1}='Periodic Line {1,2} = {3,4};';
 CtrlVar.AdaptMesh=0;
 CtrlVar.SaveAdaptMeshFileName='AdaptMeshFile';
 
-CtrlVar.RefineCriteria='effective strain rates';
-CtrlVar.RefineCriteriaFlotationLimit=NaN ;
-CtrlVar.RefineCriteriaWeights=1;
-%CtrlVar.RefineCriteria='thickness gradient';
-%CtrlVar.RefineCriteria={'flotation','thickness gradient'};
-CtrlVar.RefineDiracDeltaInvWidth=1000;
-
 
 
 %% plotting
@@ -178,6 +104,6 @@ CtrlVar.Inverse.NameOfRestartOutputFile=filename;
 CtrlVar.Inverse.NameOfRestartInputFile=CtrlVar.Inverse.NameOfRestartOutputFile;
 %%
 
-CtrlVar.Experiment=['I-',CtrlVar.Inverse.AdjointGradientPreMultiplier,'-',num2str(CtrlVar.TriNodes)];
+CtrlVar.Experiment=['I-',num2str(CtrlVar.TriNodes)];
 
 end
