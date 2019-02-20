@@ -20,7 +20,7 @@ CtrlVar.InverseRun=1;
 
 
 %% Restart
-CtrlVar.Restart=1;  CtrlVar.WriteRestartFile=1;
+CtrlVar.Restart=0;  CtrlVar.WriteRestartFile=1;
 CtrlVar.NameOfRestartFiletoRead=['Nod',num2str(CtrlVar.TriNodes),'-iC-Restart.mat'];
 CtrlVar.NameOfRestartFiletoWrite=CtrlVar.NameOfRestartFiletoRead;
 
