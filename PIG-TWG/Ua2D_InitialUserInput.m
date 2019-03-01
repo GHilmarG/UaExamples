@@ -2,13 +2,15 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar
 
 
 %% Select the type of run by uncommenting one of the following options:
-UserVar.RunType='Inverse-MatOpt';
-% UserVar.RunType='Inverse-ConjGrad';
-% UserVar.RunType='Inverse-SteepestDesent';
-% UserVar.RunType='Inverse-ConjGrad-FixPoint';
-% UserVar.RunType='Forward-Diagnostic';
-% UserVar.RunType='Forward-Transient';
-% UserVar.RunType='TestingMeshOptions';
+if ~isfield(UserVar,'RunType')
+    % UserVar.RunType='Inverse-MatOpt';
+    % UserVar.RunType='Inverse-ConjGrad';
+    % UserVar.RunType='Inverse-SteepestDesent';
+    % UserVar.RunType='Inverse-ConjGrad-FixPoint';
+    % UserVar.RunType='Forward-Diagnostic';
+    % UserVar.RunType='Forward-Transient';
+    % UserVar.RunType='TestingMeshOptions';
+end
 %%
 
 %%

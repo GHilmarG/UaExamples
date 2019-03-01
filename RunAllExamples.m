@@ -33,7 +33,11 @@ Ua
 cd ..
 
 cd PIG-TWG\
-Ua
+UserVar.RunType='Inverse-MatOpt'; Ua(UserVar) ;
+UserVar.RunType='Inverse-ConjGrad' ; Ua(UserVar) ;
+UserVar.RunType='Inverse-SteepestDesent' ; Ua(UserVar) ;
+UserVar.RunType='Inverse-ConjGrad-FixPoint'; Ua(UserVar) ;
+UserVar.RunType='TestingMeshOptions' ; Ua(UserVar) ;
 cd ..
 
 cd MassBalanceFeedback\

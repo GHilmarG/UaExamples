@@ -57,11 +57,6 @@ end
 Priors.CovAGlen=CAGlen;
 Priors.CovC=CC;
 
-Priors.s=F.s;
-Priors.b=F.b;
-Priors.S=F.S;
-Priors.B=F.B;
-
 
 [UserVar,Priors.C,Priors.m]=DefineSlipperyDistribution(UserVar,CtrlVar,MUA,CtrlVar.time,F.s,F.b,F.s-F.b,F.S,F.B,F.rho,F.rhow,GF);
 [UserVar,Priors.AGlen,Priors.n]=DefineAGlenDistribution(UserVar,CtrlVar,MUA,CtrlVar.time,F.s,F.b,F.s-F.b,F.S,F.B,F.rho,F.rhow,GF);
