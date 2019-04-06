@@ -28,7 +28,8 @@ CtrlVar.NameOfRestartFiletoWrite=CtrlVar.NameOfRestartFiletoRead;
 %% Inverse   -inverse
 CtrlVar.Inverse.MinimisationMethod='MatlabOptimization'; % {'MatlabOptimization','UaOptimization'}
 
-
+CtrlVar.Inverse.InvertFor='-logA-logC-'; 
+CtrlVar.Inverse.Regularize.Field='-logA-logC-' ;
 CtrlVar.Inverse.Iterations=4;
 
 CtrlVar.Inverse.InfoLevel=1;  % Set to 1 to get some basic information, >=2 for additional info on backtrackgin,
