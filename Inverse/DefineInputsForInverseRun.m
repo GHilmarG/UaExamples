@@ -57,6 +57,7 @@ end
 Priors.CovAGlen=CAGlen;
 Priors.CovC=CC;
 
+
 Priors.s=F.s;
 Priors.b=F.b;
 Priors.S=F.S;

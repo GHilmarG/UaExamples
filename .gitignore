@@ -1,0 +1,6 @@
+#
+*.exe
+*.sh
+*Tag
+*.mat
+*.txt
