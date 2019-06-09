@@ -19,14 +19,20 @@ UserVar.RunType='Inverse-MatOpt';
 % 
 % Put the OneDrive folder `Interpolants' into you directory so that it can be reaced as ../Interpolants with respect to you rundirectory. 
 %
-UserVar.GeometryInterpolant='../Interpolants/Bedmap2GriddedInterpolantModifiedBathymetry'; % this assumes you have downloaded the OneDrive folder `Interpolants'.
+%
+UserVar.GeometryInterpolant='../Interpolants/Bedmap2GriddedInterpolantModifiedBathymetry.mat'; % this assumes you have downloaded the OneDrive folder `Interpolants'.
 UserVar.DensityInterpolant='../Interpolants/DepthAveragedDensityGriddedInterpolant.mat';
-UserVar.SurfaceVelocityInterpolant='../Interpolants/SurfVelMeasures990mInterpolants';
+UserVar.SurfaceVelocityInterpolant='../Interpolants/SurfVelMeasures990mInterpolants.mat';
 
 UserVar.CFile='FC5kGrid_m3.mat'; UserVar.AFile='FA5kGrid_n3.mat';
 UserVar.CFile='FC.mat'; UserVar.AFile='FA.mat';
 
-
+if ~isfile(UserVar.GeometryInterpolant) || ~isfile(UserVar.DensityInterpolant) || ~isfile(UserVar.SurfaceVelocityInterpolant)
+     
+     fprintf('\n This run requires the additional input files: \n %s \n %s \n %s  \n \n',UserVar.GeometryInterpolant,UserVar.DensityInterpolant,UserVar.SurfaceVelocityInterpolant)
+     fprintf('You can download these file from : https://1drv.ms/f/s!Anaw0Iv-oEHTloRzWreBMDBFCJ0R4Q \n')
+     
+end
 
 %%
 

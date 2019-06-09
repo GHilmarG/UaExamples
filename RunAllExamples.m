@@ -40,7 +40,4 @@ cd MassBalanceFeedback\
 Ua
 cd ..
 
-cd PIG-TWG\
-Ua
-cd ..
 
