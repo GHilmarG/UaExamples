@@ -57,11 +57,6 @@ end
 Priors.CovAGlen=CAGlen;
 Priors.CovC=CC;
 
-Priors.s=F.s;
-Priors.b=F.b;
-Priors.S=F.S;
-Priors.B=F.B;
-
 
 [UserVar,Priors.C,Priors.m]=DefineSlipperyDistribution(UserVar,CtrlVar,MUA,CtrlVar.time,F.s,F.b,F.s-F.b,F.S,F.B,F.rho,F.rhow,GF);
 [UserVar,Priors.AGlen,Priors.n]=DefineAGlenDistribution(UserVar,CtrlVar,MUA,CtrlVar.time,F.s,F.b,F.s-F.b,F.S,F.B,F.rho,F.rhow,GF);
@@ -101,22 +96,22 @@ Priors.TrueAGlen=F.AGlen;
 %[UserVar,ub,vb,ud,vd,l,Kuv,Ruv,RunInfo,ubvbL]=uv(UserVar,CtrlVar,MUA,BCs,s,b,h,S,B,ub,vb,ud,vd,l,AGlen,C,n,m,alpha,rho,rhow,g,GF);
 Meas.us=F.ub ;
 Meas.vs=F.vb;
-Meas.ws=F.ub*0;
+
 
 VelScale=mean(F.ub);
 usError=1e-3*VelScale; 
 vsError=1e-3*VelScale  ; 
-wsError=1e-3*VelScale;
+
 
 Meas.usCov=sparse(1:MUA.Nnodes,1:MUA.Nnodes,usError.^2,MUA.Nnodes,MUA.Nnodes);
 Meas.vsCov=sparse(1:MUA.Nnodes,1:MUA.Nnodes,vsError.^2,MUA.Nnodes,MUA.Nnodes);
-Meas.wsCov=sparse(1:MUA.Nnodes,1:MUA.Nnodes,wsError.^2,MUA.Nnodes,MUA.Nnodes);
+
 
 % if add errors
 
 Meas.us=Meas.us+UserVar.AddDataErrors*usError.*randn(MUA.Nnodes,1);
 Meas.vs=Meas.vs+UserVar.AddDataErrors*vsError.*randn(MUA.Nnodes,1);
-Meas.ws=Meas.ws+UserVar.AddDataErrors*wsError.*randn(MUA.Nnodes,1);
+
 
 
 

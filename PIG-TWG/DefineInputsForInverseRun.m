@@ -21,10 +21,10 @@ MissingData=isnan(Meas.us) | isnan(Meas.vs) | isnan(Err) | (Err==0);
 Meas.us(MissingData)=0 ;  Meas.vs(MissingData)=0 ; Err(MissingData)=1e10; 
 
 
-usError=Err ; vsError=Err ; wsError=usError*0+1e10;
+usError=Err ; vsError=Err ; 
 Meas.usCov=sparse(1:MUA.Nnodes,1:MUA.Nnodes,usError.^2,MUA.Nnodes,MUA.Nnodes);
 Meas.vsCov=sparse(1:MUA.Nnodes,1:MUA.Nnodes,vsError.^2,MUA.Nnodes,MUA.Nnodes);
-Meas.wsCov=sparse(1:MUA.Nnodes,1:MUA.Nnodes,wsError.^2,MUA.Nnodes,MUA.Nnodes);
+
 
 %% Define Start Values of Inversion
 
@@ -35,10 +35,7 @@ Meas.wsCov=sparse(1:MUA.Nnodes,1:MUA.Nnodes,wsError.^2,MUA.Nnodes,MUA.Nnodes);
 
 
 %% Define Priors
-Priors.s=F.s;
-Priors.b=F.b;
-Priors.S=F.S;
-Priors.B=F.B;
+
 Priors.AGlen=AGlenVersusTemp(-10);
 Priors.n=3; 
 Priors.m=3; ub=10 ; tau=80 ; % units meters, year , kPa

@@ -20,14 +20,16 @@ CtrlVar.InverseRun=1;
 
 
 %% Restart
-CtrlVar.Restart=1;  CtrlVar.WriteRestartFile=1;
+CtrlVar.Restart=0;  CtrlVar.WriteRestartFile=1;
 CtrlVar.NameOfRestartFiletoRead=['Nod',num2str(CtrlVar.TriNodes),'-iC-Restart.mat'];
 CtrlVar.NameOfRestartFiletoWrite=CtrlVar.NameOfRestartFiletoRead;
 
 
 %% Inverse   -inverse
-CtrlVar.Inverse.MinimisationMethod='UaOptimization'; % {'MatlabOptimization','UaOptimization'}
+CtrlVar.Inverse.MinimisationMethod='MatlabOptimization'; % {'MatlabOptimization','UaOptimization'}
 
+CtrlVar.Inverse.InvertFor='-logA-logC-'; 
+CtrlVar.Inverse.Regularize.Field='-logA-logC-' ;
 CtrlVar.Inverse.Iterations=4;
 
 CtrlVar.Inverse.InfoLevel=1;  % Set to 1 to get some basic information, >=2 for additional info on backtrackgin,
