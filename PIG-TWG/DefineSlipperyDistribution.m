@@ -15,10 +15,17 @@ else
     
     
     if isempty(FC)
-        fprintf('DefineSlipperyDistribution: loading file: %-s ',UserVar.CFile)
-        load(UserVar.CFile,'FC')
-        fprintf(' done \n')
         
+        if isfile(UserVar.CFile)
+            fprintf('DefineSlipperyDistribution: loading file: %-s ',UserVar.CFile)
+            load(UserVar.CFile,'FC')
+            fprintf(' done \n')
+        else
+            % create a FC file
+            load('C-Estimate.mat','C','xC','yC')
+            FC=scatteredInterpolant(xC,yC,C); 
+            save(UserVar.CFile,'FC')
+        end
     end
     
     C=FC(MUA.coordinates(:,1),MUA.coordinates(:,2));

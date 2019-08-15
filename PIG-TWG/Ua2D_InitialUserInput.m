@@ -3,14 +3,17 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar
 
 
 %% Select the type of run by uncommenting one of the following options:
-UserVar.RunType='Inverse-MatOpt';
-% UserVar.RunType='Inverse-ConjGrad';
-% UserVar.RunType='Inverse-SteepestDesent';
-% UserVar.RunType='Inverse-ConjGrad-FixPoint';
-% UserVar.RunType='Forward-Diagnostic';
-% UserVar.RunType='Forward-Transient';
-% UserVar.RunType='TestingMeshOptions';
-%%
+
+if isempty(UserVar) || ~isfield(UserVar,'RunType')
+    
+    UserVar.RunType='Inverse-MatOpt';
+    % UserVar.RunType='Inverse-ConjGrad';
+    % UserVar.RunType='Inverse-SteepestDesent';
+    % UserVar.RunType='Inverse-ConjGrad-FixPoint';
+    % UserVar.RunType='Forward-Diagnostic';
+    % UserVar.RunType='Forward-Transient';
+    % UserVar.RunType='TestingMeshOptions';
+end
 
 %%
 % This run requires some additional input files. They are too big to be kept on Github so you
@@ -75,7 +78,7 @@ switch UserVar.RunType
         
         CtrlVar.InverseRun=0;
         CtrlVar.TimeDependentRun=1;
-        CtrlVar.Restart=1;
+        CtrlVar.Restart=0;
         CtrlVar.InfoLevelNonLinIt=1;
         UserVar.Slipperiness.ReadFromFile=1;
         UserVar.AGlen.ReadFromFile=0;
