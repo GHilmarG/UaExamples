@@ -3,7 +3,7 @@ function [UserVar,InvStartValues,Priors,Meas,BCsAdjoint,RunInfo]=DefineInputsFor
 
 
 x=MUA.coordinates(:,1) ; y=MUA.coordinates(:,2);
-Lx=max(x)-min(x); Ly=max(y)-min(y);
+Lx=max(x)-min(x); Ly=max(y)-min(y);  
 
 if CtrlVar.CisElementBased
     xC=mean(reshape(x(MUA.connectivity,1),MUA.Nele,MUA.nod),2);
