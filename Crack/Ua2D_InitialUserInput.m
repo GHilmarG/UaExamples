@@ -1,6 +1,15 @@
 
 function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar,CtrlVar)
 
+%%
+
+UserVar.Crack.a=0.1e3 ;  % horizontal   
+UserVar.Crack.b=5e3   ;  % vertical
+UserVar.Crack.x0=0; 
+UserVar.Crack.y0=0;
+
+
+%%
 
 CtrlVar.Experiment='Crack';
 CtrlVar.TimeDependentRun=1;

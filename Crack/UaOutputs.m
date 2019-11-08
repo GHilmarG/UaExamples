@@ -127,12 +127,10 @@ if contains(plots,'-stresses-')
 
     [txzb,tyzb,txx,tyy,txy,exx,eyy,exy,e]=CalcNodalStrainRatesAndStresses(CtrlVar,MUA,AGlen,n,C,m,GF,s,b,ub,vb,ud,vd);
     N=20;
-    I=1:N:MUA.Nnodes;
     
     [X,Y]=ndgrid(linspace(min(x),max(x),20),linspace(min(y),max(y),20));
-    I=nearestNeighbor(MUA.TR,[X(:) Y(:)]);  % find nodes within computational grid closest to the regularly scape X and Y grid points.
-    
-    
+    I=nearestNeighbor(MUA.TR,[X(:) Y(:)]);  % find nodes within computational grid closest to the regularly spaced X and Y grid points.
+
     
     scale=1e-3;
     PlotTensor(x(I)/CtrlVar.PlotXYscale,y(I)/CtrlVar.PlotXYscale,txx(I),txy(I),tyy(I),scale);
@@ -140,7 +138,42 @@ if contains(plots,'-stresses-')
     PlotMuaBoundary(CtrlVar,MUA,'k')
  
     axis equal
-
+  
+    title(' Deviatoric stresses ' )
     
 end
+
+
+if contains(plots,'-profile-')
+    
+    figure
+
+    [txzb,tyzb,txx,tyy,txy,exx,eyy,exy,e]=CalcNodalStrainRatesAndStresses(CtrlVar,MUA,AGlen,n,C,m,GF,s,b,ub,vb,ud,vd);
+    
+    N=20;
+   
+    [X,Y]=ndgrid(0,linspace(UserVar.Crack.b,max(x),N));
+    I=nearestNeighbor(MUA.TR,[X(:) Y(:)]);  % find nodes within computational grid closest to the regularly scape X and Y grid points.
+
+    figure 
+    plot(MUA.coordinates(I,2),F.vb(I))
+    hold on
+    PlotMuaBoundary(CtrlVar,MUA,'k')
+ 
+    xlabel('y (m)') ; ylabel('v (m/yr)')
+  
+    title(' velocity ' )
+    
+end
+
+
+
+
+
+
+
+
+
+
+
 end
