@@ -14,7 +14,7 @@ function  UserVar=UaOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFin
 v2struct(F);
 time=CtrlVar.time;
 
-CtrlVar.UaOutputs='-ubvb-Speed-e-stresses-';
+CtrlVar.UaOutputs='-Speed-e-stresses-profile-';
 
 
 %%
@@ -126,9 +126,9 @@ if contains(plots,'-stresses-')
     figure
 
     [txzb,tyzb,txx,tyy,txy,exx,eyy,exy,e]=CalcNodalStrainRatesAndStresses(CtrlVar,MUA,AGlen,n,C,m,GF,s,b,ub,vb,ud,vd);
-    N=20;
+    N=30;
     
-    [X,Y]=ndgrid(linspace(min(x),max(x),20),linspace(min(y),max(y),20));
+    [X,Y]=ndgrid(linspace(min(x),max(x),N),linspace(min(y),max(y),N));
     I=nearestNeighbor(MUA.TR,[X(:) Y(:)]);  % find nodes within computational grid closest to the regularly spaced X and Y grid points.
 
     
@@ -143,27 +143,56 @@ if contains(plots,'-stresses-')
     
 end
 
-
+save TestSave
 if contains(plots,'-profile-')
     
-    figure
-
+    
+%%
     [txzb,tyzb,txx,tyy,txy,exx,eyy,exy,e]=CalcNodalStrainRatesAndStresses(CtrlVar,MUA,AGlen,n,C,m,GF,s,b,ub,vb,ud,vd);
     
-    N=20;
+    N=40;
    
-    [X,Y]=ndgrid(0,linspace(UserVar.Crack.b,max(x),N));
-    I=nearestNeighbor(MUA.TR,[X(:) Y(:)]);  % find nodes within computational grid closest to the regularly scape X and Y grid points.
-
+    [X,Y]=ndgrid(0,linspace(UserVar.Crack.b,max(y),N));
+    [I,distance]=nearestNeighbor(MUA.TR,[X(:) Y(:)]);  % find nodes within computational grid closest to the regularly scape X and Y grid points.
+    I(abs(MUA.coordinates(I,1)-UserVar.Crack.x0)>5*UserVar.Crack.a)=[];
+    I(abs(MUA.coordinates(I,2))<=UserVar.Crack.b)=[];
     figure 
-    plot(MUA.coordinates(I,2),F.vb(I))
-    hold on
-    PlotMuaBoundary(CtrlVar,MUA,'k')
- 
+    yyaxis left
+    hold off
+    plot(MUA.coordinates(I,2),F.vb(I),'o-r')
+    axis normal tight
     xlabel('y (m)') ; ylabel('v (m/yr)')
-  
-    title(' velocity ' )
+    title(' y velocity ' )
     
+    hold on
+    yyaxis right
+    plot(MUA.coordinates(I,2),exx(I),'x-b')
+    xlabel('y (m)') ; ylabel('\epsilon_{xx} (1/yr)')
+    title(' velocity and strain rates ' )
+    
+    legend('v_y','\epsilon_{xx}')
+    
+    N=150; 
+    Fv=scatteredInterpolant(MUA.coordinates(:,1),MUA.coordinates(:,2),F.vb);
+    yProfile=linspace(UserVar.Crack.b+UserVar.Crack.a,max(y)/2,N);  % start a bit away from edge, so use crack width
+    vProfile=Fv(0*yProfile,yProfile) ;
+    r=yProfile-UserVar.Crack.b;
+    n=3; 
+    f=abs(vProfile).^((n+1)/n)./r.^(1/n);
+    f=abs(vProfile)./r.^(1/(n+1));
+    figure ; loglog(r,abs(vProfile),'x-m')
+    hold on
+    
+    vTheory=abs(vProfile(1)./((r/r(1)).^(1/(n+1))));
+    loglog(r,vTheory,'+-r')
+    xlabel('log(r)')  ; ylabel('log(v)')
+    I=(r>0 & r< (10*UserVar.Crack.a));
+    
+    Fit=fit(log(r(I))',log(abs(vProfile(I)))','poly1')
+    
+    
+    
+    %%
 end
 
 

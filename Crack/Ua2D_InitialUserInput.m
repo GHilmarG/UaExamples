@@ -3,21 +3,26 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar
 
 %%
 
-UserVar.Crack.a=0.1e3 ;  % horizontal   
-UserVar.Crack.b=5e3   ;  % vertical
+UserVar.Crack.a=0.01e3 ;  % horizontal   
+UserVar.Crack.b=2e3   ;  % vertical
 UserVar.Crack.x0=0; 
 UserVar.Crack.y0=0;
+UserVar.Domain=20e3 ; % 
 
-
+%%
+CtrlVar.MeshSizeMax=1e3; 
+CtrlVar.MeshSizeMin=0.01e3;
+CtrlVar.AdaptMesh=1;  
 %%
 
 CtrlVar.Experiment='Crack';
-CtrlVar.TimeDependentRun=1;
+CtrlVar.TimeDependentRun=0;
 CtrlVar.Restart=0;
 CtrlVar.time=0 ; 
 CtrlVar.dt=1e-5; 
 CtrlVar.TotalNumberOfForwardRunSteps=1;
 
+%%
 
 %%
 
@@ -25,15 +30,8 @@ CtrlVar.TotalNumberOfForwardRunSteps=1;
 
  
 CtrlVar.OnlyMeshDomainAndThenStop=0;
-
 CtrlVar.TriNodes=3;   % [3,6,10]
 
-
-%CtrlVar.MeshGenerator='gmsh' ; % 'mesh2d';
-% The following options fields are only of relevance if gmsh is selected as a mesh generator. 
-CtrlVar.GmshMeshingAlgorithm=8 ; 
-CtrlVar.GmshCharacteristicLengthFromCurvature = 1 ;
-CtrlVar.GmshCharacteristicLengthExtendFromBoundary=1;
 
 %%
 

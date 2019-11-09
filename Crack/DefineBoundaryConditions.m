@@ -48,21 +48,10 @@ nodesl=find(abs(y-yl)<1e-5); [~,ind]=sort(MUA.coordinates(nodesl,1)); nodesl=nod
 nodesr=find(abs(y-yr)<1e-5); [~,ind]=sort(MUA.coordinates(nodesr,1)); nodesr=nodesr(ind);
 
 
-
-% fixed u along upper and lower sides
-BCs.ubFixedNode=[nodesu;nodesd]; BCs.ubFixedValue=[nodesu*0;nodesd*0]; 
-
-% fixed u only along upper side
-BCs.ubFixedNode=[nodesu]; BCs.ubFixedValue=[nodesu*0]; 
-
-% fix u along upper boundary and sides
-BCs.ubFixedNode=[nodesu;nodesl;nodesr]; BCs.ubFixedValue=[nodesu*0;nodesl*0;nodesr*0]; 
-
-
 U=10000;
-BCs.ubFixedNode=[nodesu;nodesd]; BCs.ubFixedValue=[nodesu*0;nodesd*0+U]; 
 
-BCs.vbFixedNode=[nodesl;nodesr]; BCs.vbFixedValue=[nodesl;nodesr]*0; 
+BCs.ubFixedNode=[nodesu;nodesd]; BCs.ubFixedValue=[nodesu*0;nodesd*0+U]; 
+BCs.vbFixedNode=[nodesu;nodesd;nodesl;nodesr]; BCs.vbFixedValue= BCs.vbFixedNode*0;
 
 
 end
