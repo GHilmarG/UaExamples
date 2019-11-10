@@ -11,8 +11,9 @@ UserVar.Domain=20e3 ; %
 
 %%
 CtrlVar.MeshSizeMax=1e3; 
-CtrlVar.MeshSizeMin=0.01e3;
+CtrlVar.MeshSizeMin=0.001e3;
 CtrlVar.AdaptMesh=1;  
+CtrlVar.AdaptMeshMaxIterations=2;  
 %%
 
 CtrlVar.Experiment='Crack';

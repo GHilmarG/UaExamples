@@ -12,7 +12,7 @@ function [UserVar,AGlen,n]=DefineAGlenDistribution(UserVar,CtrlVar,MUA,time,s,b,
 
 n=3 ; AGlen=AGlenVersusTemp(-25);
  
-n=1; eps=0.01 ; tau=100; AGlen=eps/tau ; %     % eps=A*tau^n ;  eps=0.01 ; tau=100; 
+% n=1; eps=0.01 ; tau=100; AGlen=eps/tau ; %     % eps=A*tau^n ;  eps=0.01 ; tau=100; 
 
 end
 

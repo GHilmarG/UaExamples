@@ -28,6 +28,8 @@ function [UserVar,EleSizeDesired,ElementsToBeRefined]=...
     
     D=10e3; I=x>-D & x< D & y> -D & y < D ; Temp(I)=0.5e3;
     D=1e3;  I=y> (UserVar.Crack.b-D) & y < (UserVar.Crack.b+D)  & x> -D & x < D ; Temp(I)=0.1e3;
+    D=0.1e3;  I=y> (UserVar.Crack.b-D) & y < (UserVar.Crack.b+D)  & x> -D & x < D ; Temp(I)=0.01e3;
+    D=0.01e3;  I=y> (UserVar.Crack.b-D) & y < (UserVar.Crack.b+D)  & x> -D & x < D ; Temp(I)=0.001e3;
     
     EleSizeDesired=min(Temp(:),EleSizeDesired(:));
     

@@ -121,6 +121,8 @@ if contains(plots,'-e-')
     
 end
 
+e=[];
+
 if contains(plots,'-stresses-')
     
     figure
@@ -138,7 +140,7 @@ if contains(plots,'-stresses-')
     PlotMuaBoundary(CtrlVar,MUA,'k')
  
     axis equal
-  
+    
     title(' Deviatoric stresses ' )
     
 end
@@ -147,51 +149,60 @@ save TestSave
 if contains(plots,'-profile-')
     
     
-%%
-    [txzb,tyzb,txx,tyy,txy,exx,eyy,exy,e]=CalcNodalStrainRatesAndStresses(CtrlVar,MUA,AGlen,n,C,m,GF,s,b,ub,vb,ud,vd);
-    
+    %%
+    if isempty(e)
+        [txzb,tyzb,txx,tyy,txy,exx,eyy,exy,e]=CalcNodalStrainRatesAndStresses(CtrlVar,MUA,AGlen,n,C,m,GF,s,b,ub,vb,ud,vd);
+    end
     Fv=scatteredInterpolant(MUA.coordinates(:,1),MUA.coordinates(:,2),F.vb);
     Fexx=scatteredInterpolant(MUA.coordinates(:,1),MUA.coordinates(:,2),exx);
-    N=100;
-    yProfile=linspace(UserVar.Crack.b+UserVar.Crack.a,max(y)/2,N);  % start a bit away from edge, so use crack width
-    vProfile=Fv(0*yProfile,yProfile) ;
+    Feyy=scatteredInterpolant(MUA.coordinates(:,1),MUA.coordinates(:,2),eyy);
+    N=200;
+    yProfile=linspace(UserVar.Crack.b,2*UserVar.Crack.b,N);  % start a bit away from edge, so use crack width
+    vProfile=Fv(0*yProfile,yProfile) ;  vProfile=vProfile ; 
     exxProfile=Fexx(0*yProfile,yProfile) ;
+    eyyProfile=Feyy(0*yProfile,yProfile) ;
     
     
    
     figure 
     yyaxis left
     hold off
-    plot(yProfile,vProfile,'o-r')
+    plot(yProfile,vProfile,'o-b')
     axis normal tight
     xlabel('y (m)') ; ylabel('v (m/yr)')
     title(' y velocity ' )
     
     hold on
     yyaxis right
-    plot(yProfile,exxProfile,'x-b')
-    xlabel('y (m)') ; ylabel('\epsilon_{xx} (1/yr)')
+    plot(yProfile(2:end),exxProfile(2:end),'x-r')
+    plot(yProfile(2:end),eyyProfile(2:end),'+-g')
+    
+    xlabel('y (m)') ; ylabel('\epsilon_{xx} and \epsilon_{yy} (1/yr)')
     title(' velocity and strain rates ' )
     
-    legend('v_y','\epsilon_{xx}')
+    legend('v_y','\epsilon_{xx}','\epsilon_{yy}','location','northwest')
     
   
     
     
     
     r=yProfile-UserVar.Crack.b;
-    n=3; 
+    vProfile=vProfile-vProfile(1); 
+    n=mean(F.n); 
     f=abs(vProfile).^((n+1)/n)./r.^(1/n);
     f=abs(vProfile)./r.^(1/(n+1));
-    figure ; loglog(r,abs(vProfile),'x-m')
-    hold on
+    vTheory=r.^(1/(n+1)) ;
+    vTheory=vTheory.*(vProfile(2)-vProfile(1))/(vTheory(2)-vTheory(1));
     
-    vTheory=abs(vProfile(1)./((r/r(1)).^(1/(n+1))));
+    figure ; 
+    loglog(r,vProfile,'o-b')
+    hold on
     loglog(r,vTheory,'+-r')
     xlabel('log(r)')  ; ylabel('log(v)')
-    I=(r>0 & r< (10*UserVar.Crack.a));
-    
-    Fit=fit(log(r(I))',log(abs(vProfile(I)))','poly1')
+    legend('Modelled','Theory','location','northwest')
+    title('v_y velocity profile away from crack tip')
+    I=r<(5*UserVar.Crack.a) & r> 0;
+    Fit=fit(log(r(I))',log(vProfile(I))','poly1')
     
     
     
