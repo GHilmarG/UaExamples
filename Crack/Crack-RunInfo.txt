@@ -1,5 +1,0 @@
-NR-STREAM(uv):  1/0  g=1              , r/r0=3.747816e-29   ,  r0=929.8354       , r=3.484852e-26   , du=7.785415       , dl=Inf            , Assembly=0.134606 sec. Solution=0.055860 sec.
- NR-STREAM(uv):  2/0  g=1              , r/r0=0.1116757      ,  r0=3.484852e-26   , r=3.891732e-27   , du=1.192482e-14   , dl=3.021896e-14   , Assembly=0.266918 sec. Solution=0.106705 sec.
-  SSTREAM2dNR converged to given tolerance of 1e-15 with r=3.89173e-27 in 2 iterations.
-NR-STREAM(uv):  1/0  g=1              , r/r0=0.8253207      ,  r0=3.891732e-27   , r=3.211927e-27   , du=1.478257e-16   , dl=2.100011e-15   , Assembly=0.105435 sec. Solution=0.047387 sec.
-  SSTREAM2dNR converged to given tolerance of 1e-15 with r=3.21193e-27 in 1 iterations.
