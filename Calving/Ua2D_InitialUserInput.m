@@ -18,8 +18,8 @@ CtrlVar.Experiment=['MismipPlus-',UserVar.MisExperiment];
 %% Types of run
 %
 CtrlVar.TimeDependentRun=1; 
-CtrlVar.TotalNumberOfForwardRunSteps=5;
-CtrlVar.TotalTime=100;
+CtrlVar.TotalNumberOfForwardRunSteps=100;
+CtrlVar.TotalTime=0.25;
 CtrlVar.Restart=0;  
 CtrlVar.InfoLevelNonLinIt=0; 
 
