@@ -19,8 +19,8 @@ CtrlVar.Experiment="Calving"+UserVar.RunType;
 %
 CtrlVar.TimeDependentRun=1; 
 CtrlVar.TotalNumberOfForwardRunSteps=10000;
-CtrlVar.TotalTime=20;
-CtrlVar.Restart=1;  
+CtrlVar.TotalTime=5;
+CtrlVar.Restart=0;  
 CtrlVar.InfoLevelNonLinIt=1; 
 
 CtrlVar.dt=0.01; 
