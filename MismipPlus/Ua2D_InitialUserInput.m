@@ -7,16 +7,22 @@ UserVar.Outputsdirectory='ResultsFiles'; % This I use in UaOutputs
 UserVar.MassBalanceCase='ice0';
 %%
 
+CtrlVar.SlidingLaw="Coulomb" ;  % options:  {"Weertman","Budd","Tsai","Coulomb"}  ;
 CtrlVar.Experiment=['MismipPlus-',UserVar.MisExperiment];   
 %% Types of run
 %
 CtrlVar.TimeDependentRun=1; 
-CtrlVar.TotalNumberOfForwardRunSteps=1;
+CtrlVar.TotalNumberOfForwardRunSteps=2;
 CtrlVar.TotalTime=100;
 CtrlVar.Restart=0;  
 CtrlVar.InfoLevelNonLinIt=100; 
+CtrlVar.NRitmax=500;       % maximum number of NR iteration
+CtrlVar.dt=0.01;  
 
-CtrlVar.dt=0.01; 
+%% testing Coulomb convergence  
+% CtrlVar.dt=1e-3; CtrlVar.NRitmax=500;
+%%
+
 CtrlVar.time=0; 
 
 CtrlVar.UaOutputsDt=0; % interval between calling UaOutputs. 0 implies call it at each and every run step.

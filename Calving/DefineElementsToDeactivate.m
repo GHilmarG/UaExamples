@@ -30,6 +30,8 @@ function [UserVar,ElementsToBeDeactivated]=...
 % 
 
 
+
+
 fprintf(' DefineElementsToDeactivate \n')
 [GF,GLgeo,GLnodes,GLele]=IceSheetIceShelves(CtrlVar,MUA,GF);
 
@@ -38,6 +40,8 @@ CutOff=1e10;
 % Ctrl.time is the time of the beginning of the time step.
 % If the relevant time is the end of the time step 
 % then the time I want is CtrlVar.time+CtrlVar.dt
+
+
 
 if contains(UserVar.RunType,"-ManuallyDeactivateElements-")
     

@@ -3,34 +3,37 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar
 
 
 if isempty(UserVar)
-    UserVar.RunType="-ManuallyDeactivateElements-ManuallyModifyThickness-";
+    UserVar.RunType="-ManuallyDeactivateElements-ManuallyModifyThickness-HighMelt-";
     UserVar.RunType="-ManuallyModifyThickness-";
-    UserVar.RunType="-ManuallyDeactivateElements-";
+    UserVar.RunType="-HighMelt-";
+    % UserVar.RunType="-ManuallyDeactivateElements-";
 end
 
 %%
-UserVar.MisExperiment='ice0';  % This I use in DefineMassBalance
-UserVar.Outputsdirectory='ResultsFiles'; % This I use in UaOutputs
-UserVar.MassBalanceCase='ice0';
-%%
 
-CtrlVar.Experiment=['MismipPlus-',UserVar.MisExperiment];   
+UserVar.Outputsdirectory='ResultsFiles'; % This I use in UaOutputs
+
+
+CtrlVar.Experiment="Calving"+UserVar.RunType;
 %% Types of run
 %
 CtrlVar.TimeDependentRun=1; 
-CtrlVar.TotalNumberOfForwardRunSteps=100;
-CtrlVar.TotalTime=0.25;
-CtrlVar.Restart=0;  
-CtrlVar.InfoLevelNonLinIt=0; 
+CtrlVar.TotalNumberOfForwardRunSteps=10000;
+CtrlVar.TotalTime=20;
+CtrlVar.Restart=1;  
+CtrlVar.InfoLevelNonLinIt=1; 
 
 CtrlVar.dt=0.01; 
 CtrlVar.time=0; 
 
-CtrlVar.UaOutputsDt=0; % interval between calling UaOutputs. 0 implies call it at each and every run step.
+CtrlVar.UaOutputsDt=0.1; % interval between calling UaOutputs. 0 implies call it at each and every run step.
                        % setting CtrlVar.UaOutputsDt=1; causes UaOutputs to be called every 1 years.
                        % This is a more reasonable value once all looks OK.
 
-CtrlVar.ATStimeStepTarget=1;
+CtrlVar.ATStimeStepTarget=1;  % maximum time step allowed using the automated time stepping method
+CtrlVar.ATSTargetIterations=3;  % if the number of non-lin iteration in the NR solver falls below this value, dt is increased 
+
+
 CtrlVar.WriteRestartFile=1;
 
 %% Reading in mesh
@@ -49,7 +52,7 @@ CtrlVar.PlotXYscale=1000;
 CtrlVar.TriNodes=3;
 
 
-CtrlVar.NameOfRestartFiletoWrite=['Restart',CtrlVar.Experiment,'.mat'];
+CtrlVar.NameOfRestartFiletoWrite="Restart"+CtrlVar.Experiment+".mat";
 CtrlVar.NameOfRestartFiletoRead=CtrlVar.NameOfRestartFiletoWrite;
 
 
@@ -58,8 +61,7 @@ CtrlVar.NameOfRestartFiletoRead=CtrlVar.NameOfRestartFiletoWrite;
 %% mesh generation
 
 
-
-
+CtrlVar.MeshGenerator='gmsh';
 CtrlVar.GmshMeshingAlgorithm=8;     % see gmsh manual
                                     % 1=MeshAdapt
                                     % 2=Automatic
@@ -89,7 +91,8 @@ CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';    % can 
                                                    % 'explicit:local:red-green'
                                                    % 'explicit:local:newest vertex bisection';
 %  
-CtrlVar.SaveAdaptMeshFileName='AdaptMesh.mat'; 
+
+CtrlVar.SaveAdaptMeshFileName=[];          % file name for saving adapt mesh. If left empty, no file is written
 CtrlVar.AdaptMeshInitial=1 ;       % if true, then a remeshing will always be performed at the inital step
 CtrlVar.AdaptMeshAndThenStop=0;    % if true, then mesh will be adapted but no further calculations performed
                                    % usefull, for example, when trying out different remeshing options (then use CtrlVar.doRemeshPlots=1 to get plots)
