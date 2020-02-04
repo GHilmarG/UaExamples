@@ -1,5 +1,5 @@
 
-function  UserVar=UaOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFinalValues,Priors,Meas,BCsAdjoint,RunInfo);
+function  UserVar=UaOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFinalValues,Priors,Meas,BCsAdjoint,RunInfo)
 
 v2struct(F);
 
@@ -14,7 +14,7 @@ plots='-h(x)-ub(x)-dhdt(x)-';
 TRI=[];
 x=MUA.coordinates(:,1);  y=MUA.coordinates(:,2);
 
-if ~isempty(strfind(plots,'-save-'))
+if contains(plots,'-save-')
 
     % save data in files with running names
     % check if folder 'ResultsFiles' exists, if not create
@@ -39,7 +39,7 @@ if ~strcmp(CtrlVar.UaOutputsInfostring,'Last call') ; return ; end
 
 [~,I]=sort(x) ;
 
-if ~isempty(strfind(plots,'-txzb(x)-'))
+if contains(plots,'-txzb(x)-')
     
     [txzb,tyzb]=CalcNodalStrainRatesAndStresses(CtrlVar,MUA,AGlen,n,C,m,GF,s,b,ub,vb);
     
@@ -48,7 +48,7 @@ if ~isempty(strfind(plots,'-txzb(x)-'))
 end
 
 
-if ~isempty(strfind(plots,'-ub(x)-'))
+if contains(plots,'-ub(x)-')
     figure
     plot(x(I)/CtrlVar.PlotXYscale,ub(I)) ;
     title(sprintf('u_b(x) at t=%-g ',time)) ; xlabel('x') ; ylabel('u_b')
@@ -56,7 +56,7 @@ if ~isempty(strfind(plots,'-ub(x)-'))
 end
 
 
-if ~isempty(strfind(plots,'-dhdt(x)-'))
+if contains(plots,'-dhdt(x)-')
     figure
     plot(x(I)/CtrlVar.PlotXYscale,dhdt(I)) ;
     title(sprintf('dhdt(x) at t=%-g ',time)) ; xlabel('x') ; ylabel('dh/dt')
@@ -64,12 +64,12 @@ if ~isempty(strfind(plots,'-dhdt(x)-'))
 end
 
 
-if ~isempty(strfind(plots,'-h(x)-'))
+if contains(plots,'-h(x)-')
     figure;
     plotyy(x(I)/CtrlVar.PlotXYscale,h(I),x(I)/CtrlVar.PlotXYscale,GF.node(I)) ;
     
     if CtrlVar.Implicituvh
-        title(sprintf('fully-implicit h(x) at t=%-g (%s)',time,CtrlVar.uvhTimeSteppingMethod)) ;
+        title(sprintf('fully-implicit h(x) at t=%-g (%s)',time,CtrlVar.uvhImplicitTimeSteppingMethod)) ;
     else
         title(sprintf('semi-implicit h(x) at t=%-g (TG3=%i)',time,CtrlVar.TG3)) ;
     end
@@ -77,14 +77,14 @@ if ~isempty(strfind(plots,'-h(x)-'))
     drawnow
 end
 
-if ~isempty(strfind(plots,'-ud(x)-'))
+if contains(plots,'-ud(x)-')
     figure
    plot(x/CtrlVar.PlotXYscale,ud) ;
     title(sprintf('u_d(x) at t=%-g ',time)) ; xlabel('x') ; ylabel('u_d')
 end
 
 
-if ~isempty(strfind(plots,'-sbSB(x)-'))
+if contains(plots,'-sbSB(x)-')
     figure
     
     plot(x(I)/CtrlVar.PlotXYscale,S(I),'k--') ; hold on
@@ -97,7 +97,7 @@ if ~isempty(strfind(plots,'-sbSB(x)-'))
 end
 
 
-if ~isempty(strfind(plots,'-sbB-'))
+if contains(plots,'-sbB-')
     figure(5)
     hold off
     if isempty(TRI) ;  TRI = delaunay(x,y); end
@@ -115,7 +115,7 @@ if ~isempty(strfind(plots,'-sbB-'))
 end
 
 
-if ~isempty(strfind(plots,'-ubvb-'))
+if contains(plots,'-ubvb-')
     % plotting horizontal velocities
     figure
     N=1;
@@ -130,7 +130,7 @@ if ~isempty(strfind(plots,'-ubvb-'))
     
 end
 
-if ~isempty(strfind(plots,'-udvd-'))
+if contains(plots,'-udvd-')
     % plotting horizontal velocities
     figure
     N=1;
@@ -145,7 +145,7 @@ if ~isempty(strfind(plots,'-udvd-'))
     
 end
 
-if ~isempty(strfind(plots,'-e-'))
+if contains(plots,'-e-')
     % plotting effectiv strain rates
     
     % first get effective strain rates, e :
