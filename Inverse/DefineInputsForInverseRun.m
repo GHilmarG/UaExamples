@@ -62,7 +62,7 @@ Priors.CovC=CC;
 [UserVar,Priors.AGlen,Priors.n]=DefineAGlenDistribution(UserVar,CtrlVar,MUA,CtrlVar.time,F.s,F.b,F.s-F.b,F.S,F.B,F.rho,F.rhow,GF);
 
 [Priors.AGlen,Priors.n]=TestAGlenInputValues(CtrlVar,MUA,Priors.AGlen,Priors.n);
-[Priors.C,Priors.m]=TestSlipperinessInputValues(CtrlVar,MUA,Priors.C,Priors.m);
+[Priors.C,Priors.m]=TestSlipperinessInputValues(CtrlVar,MUA,Priors.C,Priors.m,Priors.q,Priors.muk);
 
 Priors.rho=F.rho;
 Priors.rhow=F.rhow;
@@ -83,7 +83,7 @@ CtrlVar.doDiagnostic=1;
 [UserVar,F.C,F.m]=DefineSlipperyDistribution(UserVar,CtrlVar,MUA,CtrlVar.time,F.s,F.b,F.s-F.b,F.S,F.B,F.rho,F.rhow,GF);
 [UserVar,F.AGlen,F.n]=DefineAGlenDistribution(UserVar,CtrlVar,MUA,CtrlVar.time,F.s,F.b,F.s-F.b,F.S,F.B,F.rho,F.rhow,GF);
 [F.AGlen,F.n]=TestAGlenInputValues(CtrlVar,MUA,F.AGlen,F.n);
-[F.C,F.m]=TestSlipperinessInputValues(CtrlVar,MUA,F.C,F.m);
+[F.C,F.m]=TestSlipperinessInputValues(CtrlVar,MUA,F.C,F.m,F.q,F.muk);
 
 
 [UserVar,RunInfo,F,l,Kuv,Ruv,Lubvb]= uv(UserVar,RunInfo,CtrlVar,MUA,BCs,F,l);

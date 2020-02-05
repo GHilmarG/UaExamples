@@ -10,7 +10,7 @@ if isempty(UserVar) || ~isfield(UserVar,'RunType')
     % UserVar.RunType='Inverse-ConjGrad';
     % UserVar.RunType='Inverse-SteepestDesent';
     % UserVar.RunType='Inverse-ConjGrad-FixPoint';
-    % UserVar.RunType='Forward-Diagnostic';
+    UserVar.RunType='Forward-Diagnostic';
     % UserVar.RunType='Forward-Transient';
     % UserVar.RunType='TestingMeshOptions';
 end
@@ -24,9 +24,9 @@ end
 % Put the OneDrive folder `Interpolants' into you directory so that it can be reaced as ../Interpolants with respect to you rundirectory. 
 %
 %
-UserVar.GeometryInterpolant='../Interpolants/Bedmap2GriddedInterpolantModifiedBathymetry.mat'; % this assumes you have downloaded the OneDrive folder `Interpolants'.
-UserVar.DensityInterpolant='../Interpolants/DepthAveragedDensityGriddedInterpolant.mat';
-UserVar.SurfaceVelocityInterpolant='../Interpolants/SurfVelMeasures990mInterpolants.mat';
+UserVar.GeometryInterpolant='../../Interpolants/Bedmap2GriddedInterpolantModifiedBathymetry.mat'; % this assumes you have downloaded the OneDrive folder `Interpolants'.
+UserVar.DensityInterpolant='../../Interpolants/DepthAveragedDensityGriddedInterpolant.mat';
+UserVar.SurfaceVelocityInterpolant='../../Interpolants/SurfVelMeasures990mInterpolants.mat';
 
 UserVar.CFile='FC5kGrid_m3.mat'; UserVar.AFile='FA5kGrid_n3.mat';
 UserVar.CFile='FC.mat'; UserVar.AFile='FA.mat';
@@ -89,7 +89,7 @@ switch UserVar.RunType
                
         CtrlVar.InverseRun=0;
         CtrlVar.TimeDependentRun=0;
-        CtrlVar.Restart=1;
+        CtrlVar.Restart=0;
         CtrlVar.InfoLevelNonLinIt=1;
         UserVar.Slipperiness.ReadFromFile=1;
         UserVar.AGlen.ReadFromFile=0;

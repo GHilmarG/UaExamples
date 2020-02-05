@@ -43,7 +43,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar
     
     CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';
     %CtrlVar.MeshRefinementMethod='explicit:local:red-green';
-    CtrlVar.MeshRefinementMethod='global';
+    CtrlVar.MeshRefinementMethod='explicit:global';
     CtrlVar.LocalAdaptMeshSmoothingIterations=0;
     
     I=1;

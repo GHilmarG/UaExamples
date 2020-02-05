@@ -14,7 +14,7 @@ function  UserVar=UaOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFin
 v2struct(F);
 time=CtrlVar.time;
 
-CtrlVar.UaOutputs='-ubvb-Speed-e-stresses-';
+CtrlVar.UaOutputs='-Speed-e-stresses-profile-';
 
 
 %%
@@ -121,18 +121,19 @@ if contains(plots,'-e-')
     
 end
 
+e=[];
+
 if contains(plots,'-stresses-')
     
     figure
 
-    [txzb,tyzb,txx,tyy,txy,exx,eyy,exy,e]=CalcNodalStrainRatesAndStresses(CtrlVar,MUA,AGlen,n,C,m,GF,s,b,ub,vb,ud,vd);
-    N=20;
-    I=1:N:MUA.Nnodes;
+    % [txzb,tyzb,txx,tyy,txy,exx,eyy,exy,e]=CalcNodalStrainRatesAndStresses(CtrlVar,MUA,AGlen,n,C,m,GF,s,b,ub,vb,ud,vd);
+    [txzb,tyzb,txx,tyy,txy,exx,eyy,exy,e]=CalcNodalStrainRatesAndStresses(CtrlVar,UserVar,MUA,F);
+    N=30;
     
-    [X,Y]=ndgrid(linspace(min(x),max(x),20),linspace(min(y),max(y),20));
-    I=nearestNeighbor(MUA.TR,[X(:) Y(:)]);  % find nodes within computational grid closest to the regularly scape X and Y grid points.
-    
-    
+    [X,Y]=ndgrid(linspace(min(x),max(x),N),linspace(min(y),max(y),N));
+    I=nearestNeighbor(MUA.TR,[X(:) Y(:)]);  % find nodes within computational grid closest to the regularly spaced X and Y grid points.
+
     
     scale=1e-3;
     PlotTensor(x(I)/CtrlVar.PlotXYscale,y(I)/CtrlVar.PlotXYscale,txx(I),txy(I),tyy(I),scale);
@@ -140,7 +141,83 @@ if contains(plots,'-stresses-')
     PlotMuaBoundary(CtrlVar,MUA,'k')
  
     axis equal
-
+    
+    title(' Deviatoric stresses ' )
     
 end
+
+save TestSave
+if contains(plots,'-profile-')
+    
+    
+    %%
+    if isempty(e)
+        [txzb,tyzb,txx,tyy,txy,exx,eyy,exy,e]=CalcNodalStrainRatesAndStresses(CtrlVar,MUA,AGlen,n,C,m,GF,s,b,ub,vb,ud,vd);
+    end
+    Fv=scatteredInterpolant(MUA.coordinates(:,1),MUA.coordinates(:,2),F.vb);
+    Fexx=scatteredInterpolant(MUA.coordinates(:,1),MUA.coordinates(:,2),exx);
+    Feyy=scatteredInterpolant(MUA.coordinates(:,1),MUA.coordinates(:,2),eyy);
+    N=200;
+    yProfile=linspace(UserVar.Crack.b,2*UserVar.Crack.b,N);  % start a bit away from edge, so use crack width
+    vProfile=Fv(0*yProfile,yProfile) ;  vProfile=vProfile ; 
+    exxProfile=Fexx(0*yProfile,yProfile) ;
+    eyyProfile=Feyy(0*yProfile,yProfile) ;
+    
+    
+   
+    figure 
+    yyaxis left
+    hold off
+    plot(yProfile,vProfile,'o-b')
+    axis normal tight
+    xlabel('y (m)') ; ylabel('v (m/yr)')
+    title(' y velocity ' )
+    
+    hold on
+    yyaxis right
+    plot(yProfile(2:end),exxProfile(2:end),'x-r')
+    plot(yProfile(2:end),eyyProfile(2:end),'+-g')
+    
+    xlabel('y (m)') ; ylabel('\epsilon_{xx} and \epsilon_{yy} (1/yr)')
+    title(' velocity and strain rates ' )
+    
+    legend('v_y','\epsilon_{xx}','\epsilon_{yy}','location','northwest')
+    
+  
+    
+    
+    
+    r=yProfile-UserVar.Crack.b;
+    vProfile=vProfile-vProfile(1); 
+    n=mean(F.n); 
+    f=abs(vProfile).^((n+1)/n)./r.^(1/n);
+    f=abs(vProfile)./r.^(1/(n+1));
+    vTheory=r.^(1/(n+1)) ;
+    vTheory=vTheory.*(vProfile(2)-vProfile(1))/(vTheory(2)-vTheory(1));
+    
+    figure ; 
+    loglog(r,vProfile,'o-b')
+    hold on
+    loglog(r,vTheory,'+-r')
+    xlabel('log(r)')  ; ylabel('log(v)')
+    legend('Modelled','Theory','location','northwest')
+    title('v_y velocity profile away from crack tip')
+    I=r<(5*UserVar.Crack.a) & r> 0;
+    Fit=fit(log(r(I))',log(vProfile(I))','poly1')
+    
+    
+    
+    %%
+end
+
+
+
+
+
+
+
+
+
+
+
 end

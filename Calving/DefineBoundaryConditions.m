@@ -1,6 +1,5 @@
-function  [UserVar,BCs]=DefineBoundaryConditions(UserVar,CtrlVar,MUA,BCs,time,s,b,h,S,B,ub,vb,ud,vd,GF)
+function  BCs=DefineBoundaryConditions(UserVar,CtrlVar,MUA,BCs,time,s,b,h,S,B,ub,vb,ud,vd,GF)
 %%
-% User m-file to define boundary conditions 
 % BCs=DefineBoundaryConditions(UserVar,CtrlVar,MUA,BCs,time,s,b,h,S,B,ub,vb,ud,vd,GF)
 %
 % BC is a matlab object with the following fields 
@@ -35,8 +34,13 @@ function  [UserVar,BCs]=DefineBoundaryConditions(UserVar,CtrlVar,MUA,BCs,time,s,
 %               hTiedNodeB: []
 %                 hPosNode: []
 %                hPosValue: []
-%                
-               
+%       
+%
+% see also BoundaryConditions.m
+%
+%
+%%
+
 x=MUA.coordinates(:,1); y=MUA.coordinates(:,2);
 
 % implementing periodic boundary conditions
@@ -47,12 +51,10 @@ nodesu=find(abs(x-xu)<1e-5); [~,ind]=sort(MUA.coordinates(nodesu,2)); nodesu=nod
 nodesl=find(abs(y-yl)<1e-5); [~,ind]=sort(MUA.coordinates(nodesl,1)); nodesl=nodesl(ind);
 nodesr=find(abs(y-yr)<1e-5); [~,ind]=sort(MUA.coordinates(nodesr,1)); nodesr=nodesr(ind);
 
+BCs.ubFixedNode=nodesu ; 
+BCs.ubFixedValue=BCs.ubFixedNode*0;
+BCs.vbFixedNode=[nodesu;nodesl;nodesr] ; 
+BCs.vbFixedValue=BCs.vbFixedNode*0;
 
-   U=10000;
-   BCs.ubFixedNode=[nodesu;nodesd]; BCs.ubFixedValue=[nodesu*0-U;nodesd*0+U]; 
-   BCs.vbFixedNode=[nodesu;nodesd;nodesl;nodesr]; BCs.vbFixedValue= BCs.vbFixedNode*0;
-
-% BCs.ubFixedNode=nodesu; BCs.ubFixedValue=nodesu;
-% BCs.vbFixedNode=[nodesu;nodesl;nodesr]; BCs.vbFixedValue= BCs.vbFixedNode*0;
 
 end

@@ -10,14 +10,9 @@ function [UserVar,AGlen,n]=DefineAGlenDistribution(UserVar,CtrlVar,MUA,time,s,b,
 % defined as an element variable. The user makes this decision by setting
 % CtrlVar.AGlenisElementBased to true or false in Ua2D_InitialUserInput
 
-n=3 ;
-
-if CtrlVar.AGlenisElementBased
-    AGlen=3.0e-9+zeros(MUA.Nele,1) ;  % kPa year about -20 degrees Celcius
-else
-    AGlen=3.0e-9+zeros(MUA.Nnodes,1) ; % kPa year about -20 degrees Celcius
-end
-
+n=3 ; AGlen=AGlenVersusTemp(-25);
+ 
+% n=1; eps=0.01 ; tau=100; AGlen=eps/tau ; %     % eps=A*tau^n ;  eps=0.01 ; tau=100; 
 
 end
 
