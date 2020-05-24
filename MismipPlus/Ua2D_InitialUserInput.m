@@ -6,8 +6,9 @@ UserVar.MisExperiment='ice0';  % This I use in DefineMassBalance
 UserVar.Outputsdirectory='ResultsFiles'; % This I use in UaOutputs
 UserVar.MassBalanceCase='ice0';
 %%
-
-CtrlVar.SlidingLaw="Coulomb" ;  % options:  {"Weertman","Budd","Tsai","Coulomb"}  ;
+CtrlVar.uvMinimisationQuantity="Work Residuals";  
+CtrlVar.InfoLevelNonLinIt=10 ; 
+CtrlVar.SlidingLaw="Weertman" ;  % options:  {"Weertman","Budd","Tsai","Coulomb"}  ;
 CtrlVar.Experiment=['MismipPlus-',UserVar.MisExperiment];   
 %% Types of run
 %
