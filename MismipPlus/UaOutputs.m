@@ -90,7 +90,7 @@ if contains(plots,'-plot-')
     
     fig300=figure(300);
     fig300.Position=[1200 700 figsWidth figHeights];
-    PlotMuaMesh(CtrlVar,MUA)
+    PlotMuaMesh(CtrlVar,MUA);
     hold on 
     
     [xGL,yGL,GLgeo]=PlotGroundingLines(CtrlVar,MUA,GF,GLgeo,xGL,yGL,'r','LineWidth',2);

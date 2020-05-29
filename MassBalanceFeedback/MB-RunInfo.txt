@@ -1,32 +1,10 @@
-  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0 , 0.01 , 01:41:56  ,  NaN , 0 , 04-Feb-2020 21:01:13 , 00:00:00 , 00:00:00 , 00:00:02 
-NR-STREAM(uv):  1/0  g=1              , r/r0=5.935105e-32   ,  r0=1              , r=5.935105e-32   , du=3.048213e-21   , dl=Inf            , Assembly=0.007714 sec. Solution=0.001778 sec.
-  SSTREAM2dNR converged to given tolerance of 1e-15 with r=5.93511e-32 in 1 iterations.
-NR-STREAM(uvh):  1/0  g=1              , r/r0=2.816112e-20   ,  r0=2.500005e-07   , r=7.040293e-27   , ruv=6.25e-18       , rh=1.8742e-31     , du=3.438736e-21   , dh=0.0005         , dl=0.020201       , BCsNormuv=0 , BCsNormh=0  
-  --->  SSTREAM(uvh/SUPG) 	 time=        0.00000 	 dt=0.01 	 r=7.04029e-27 	 #it= 1 	 CPUsec=0.0396759 
-  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.01 , 0.01 , 01:41:57  ,  1 , 1 , 04-Feb-2020 21:01:14 , 00:00:00 , 00:00:00 , 00:00:03 
-NR-STREAM(uvh):  1/0  g=1              , r/r0=2.872981e-20   ,  r0=2.550507e-07   , r=7.327559e-27   , ruv=6.25e-18       , rh=1.459594e-31   , du=4.663029e-21   , dh=0.000505025    , dl=0.020201       , BCsNormuv=0 , BCsNormh=0  
-  --->  SSTREAM(uvh/SUPG) 	 time=        0.01000 	 dt=0.01 	 r=7.32756e-27 	 #it= 1 	 CPUsec=0.040047 
-  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.02 , 0.01 , 01:41:57  ,  1 , 1 , 04-Feb-2020 21:01:14 , 00:00:00 , 00:00:00 , 00:00:03 
-NR-STREAM(uvh):  1/0  g=1              , r/r0=2.930964e-20   ,  r0=2.60203e-07    , r=7.626457e-27   , ruv=6.25e-18       , rh=1.191225e-32   , du=4.028002e-21   , dh=0.0005101005   , dl=0.020201       , BCsNormuv=0 , BCsNormh=0  
-  --->  SSTREAM(uvh/SUPG) 	 time=        0.02000 	 dt=0.01 	 r=7.62646e-27 	 #it= 1 	 CPUsec=0.0306787 
-  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.03 , 0.01 , 01:41:57  ,  1 , 1 , 04-Feb-2020 21:01:14 , 00:00:00 , 00:00:00 , 00:00:03 
-NR-STREAM(uvh):  1/0  g=1              , r/r0=2.990171e-20   ,  r0=2.654594e-07   , r=7.937689e-27   , ruv=6.25e-18       , rh=7.131162e-33   , du=4.21878e-21    , dh=0.000515227    , dl=0.020201       , BCsNormuv=0 , BCsNormh=0  
-  --->  SSTREAM(uvh/SUPG) 	 time=        0.03000 	 dt=0.01 	 r=7.93769e-27 	 #it= 1 	 CPUsec=0.0309697 
-  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.04 , 0.01 , 01:41:57  ,  1 , 1 , 04-Feb-2020 21:01:14 , 00:00:00 , 00:00:00 , 00:00:03 
-NR-STREAM(uvh):  1/0  g=1              , r/r0=3.05069e-20    ,  r0=2.708219e-07   , r=8.261939e-27   , ruv=6.25e-18       , rh=3.199851e-31   , du=3.854826e-21   , dh=0.000520405    , dl=0.020201       , BCsNormuv=0 , BCsNormh=0  
-  --->  SSTREAM(uvh/SUPG) 	 time=        0.04000 	 dt=0.01 	 r=8.26194e-27 	 #it= 1 	 CPUsec=0.0308118 
-  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.05 , 0.01 , 01:41:58  ,  1 , 1 , 04-Feb-2020 21:01:14 , 00:00:00 , 00:00:00 , 00:00:03 
-NR-STREAM(uvh):  1/0  g=1              , r/r0=3.112308e-20   ,  r0=2.762928e-07   , r=8.599085e-27   , ruv=6.25e-18       , rh=3.090167e-31   , du=3.602484e-21   , dh=0.0005256351   , dl=0.020201       , BCsNormuv=0 , BCsNormh=0  
-  --->  SSTREAM(uvh/SUPG) 	 time=        0.05000 	 dt=0.01 	 r=8.59908e-27 	 #it= 1 	 CPUsec=0.0312724 
-  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.06 , 0.01 , 01:41:58  ,  1 , 1 , 04-Feb-2020 21:01:14 , 00:00:00 , 00:00:00 , 00:00:03 
-NR-STREAM(uvh):  1/0  g=1              , r/r0=3.175163e-20   ,  r0=2.818742e-07   , r=8.949966e-27   , ruv=6.249999e-18   , rh=2.744047e-31   , du=4.195094e-21   , dh=0.0005309177   , dl=0.020201       , BCsNormuv=0 , BCsNormh=0  
-  --->  SSTREAM(uvh/SUPG) 	 time=        0.06000 	 dt=0.01 	 r=8.94997e-27 	 #it= 1 	 CPUsec=0.0308368 
-  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.07 , 0.01 , 01:41:58  ,  1 , 1 , 04-Feb-2020 21:01:14 , 00:00:00 , 00:00:00 , 00:00:03 
-NR-STREAM(uvh):  1/0  g=1              , r/r0=3.239278e-20   ,  r0=2.875684e-07   , r=9.315138e-27   , ruv=6.25e-18       , rh=2.07769e-31    , du=4.334015e-21   , dh=0.0005362535   , dl=0.020201       , BCsNormuv=0 , BCsNormh=0  
-  --->  SSTREAM(uvh/SUPG) 	 time=        0.07000 	 dt=0.01 	 r=9.31514e-27 	 #it= 1 	 CPUsec=0.0303932 
-  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.08 , 0.01 , 01:41:58  ,  1 , 1 , 04-Feb-2020 21:01:14 , 00:00:00 , 00:00:00 , 00:00:03 
-NR-STREAM(uvh):  1/0  g=1              , r/r0=3.304677e-20   ,  r0=2.933776e-07   , r=9.69518e-27    , ruv=6.25e-18       , rh=1.058469e-31   , du=4.420929e-21   , dh=0.0005416428   , dl=0.020201       , BCsNormuv=0 , BCsNormh=0  
-  --->  SSTREAM(uvh/SUPG) 	 time=        0.08000 	 dt=0.01 	 r=9.69518e-27 	 #it= 1 	 CPUsec=0.0309493 
-  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.09 , 0.01 , 01:41:58  ,  1 , 1 , 04-Feb-2020 21:01:14 , 00:00:00 , 00:00:00 , 00:00:03 
-NR-STREAM(uvh):  1/0  g=1              , r/r0=3.371437e-20   ,  r0=2.993041e-07   , r=1.009085e-26   , ruv=6.249999e-18   , rh=1.188423e-31   , du=4.774262e-21   , dh=0.0005470863   , dl=0.020201       , BCsNormuv=0 , BCsNormh=0  
-  --->  SSTREAM(uvh/SUPG) 	 time=        0.09000 	 dt=0.01 	 r=1.00908e-26 	 #it= 1 	 CPUsec=0.0313404 
+  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0 , 0.1 , 01:04:07  ,  NaN , 0 , 29-May-2020 12:40:47 , 00:00:00 , 00:00:00 , 00:00:01 
+  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.1 , 0.1 , 01:04:09  ,  1 , 1 , 29-May-2020 12:40:52 , 00:00:00 , 00:00:00 , 00:00:06 
+  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.2 , 0.1 , 01:04:10  ,  1 , 1 , 29-May-2020 12:40:53 , 00:00:00 , 00:00:00 , 00:00:07 
+  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.3 , 0.1 , 01:04:11  ,  1 , 1 , 29-May-2020 12:40:53 , 00:00:00 , 00:00:00 , 00:00:08 
+  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.4 , 0.1 , 01:04:12  ,  1 , 1 , 29-May-2020 12:40:54 , 00:00:00 , 00:00:00 , 00:00:08 
+  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.5 , 0.1 , 01:04:12  ,  1 , 1 , 29-May-2020 12:40:54 , 00:00:00 , 00:00:00 , 00:00:09 
+  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.6 , 0.1 , 01:04:13  ,  1 , 1 , 29-May-2020 12:40:55 , 00:00:00 , 00:00:00 , 00:00:09 
+  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.7 , 0.1 , 01:04:13  ,  1 , 1 , 29-May-2020 12:40:55 , 00:00:00 , 00:00:00 , 00:00:09 
+  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.8 , 0.1 , 01:04:14  ,  1 , 1 , 29-May-2020 12:40:56 , 00:00:00 , 00:00:00 , 00:00:10 
+  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.9 , 0.1 , 01:04:14  ,  1 , 1 , 29-May-2020 12:40:56 , 00:00:00 , 00:00:00 , 00:00:10 

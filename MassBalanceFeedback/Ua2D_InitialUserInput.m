@@ -16,7 +16,8 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar
 %%
 
 
-CtrlVar.FlowApproximation='SSTREAM' ;  % any off ['SSTREAM'|'SSHEET'|'Hybrid']  
+CtrlVar.FlowApproximation='SSHEET' ;  % any off ['SSTREAM'|'SSHEET'|'Hybrid']  
+CtrlVar.InfoLevelNonLinIt=10 ;
 CtrlVar.Experiment='MB';
 CtrlVar.TimeDependentRun=1 ;  % any of [0|1].  
 CtrlVar.time=0 ; 
