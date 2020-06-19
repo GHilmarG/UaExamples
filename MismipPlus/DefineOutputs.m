@@ -1,4 +1,4 @@
-function UserVar=UaOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFinalValues,Priors,Meas,BCsAdjoint,RunInfo)
+function UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFinalValues,Priors,Meas,BCsAdjoint,RunInfo)
 
 v2struct(F);
 time=CtrlVar.time; 
@@ -14,7 +14,7 @@ if contains(plots,'-save-')
         mkdir(CtrlVar.Outputsdirectory) ;
     end
     
-    if strcmp(CtrlVar.UaOutputsInfostring,'Last call')==0
+    if strcmp(CtrlVar.DefineOutputsInfostring,'Last call')==0
         
         %
         % 

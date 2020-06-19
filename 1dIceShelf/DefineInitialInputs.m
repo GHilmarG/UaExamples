@@ -44,7 +44,7 @@ CtrlVar.AdaptMesh=1;
 CtrlVar.GmshMeshingAlgorithm=8;     % see gmsh manual
 
 CtrlVar.AdaptMeshInitial=1  ; % remesh in first run-step irrespecitivy of the value of AdaptMeshInterval
-CtrlVar.AdaptMeshInterval=1 ; % Number of run-steps between mesh adaptation 
+CtrlVar.AdaptMeshRunStepInterval=1 ; % Number of run-steps between mesh adaptation 
 CtrlVar.AdaptMeshMaxIterations=10;  % Number of adapt mesh iterations within each run-step.
 CtrlVar.AdaptMeshUntilChangeInNumberOfElementsLessThan=0;  
                                 

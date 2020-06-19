@@ -1,78 +1,49 @@
-
-function  UserVar=UaOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFinalValues,Priors,Meas,BCsAdjoint,RunInfo);
-
+function  UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFinalValues,Priors,Meas,BCsAdjoint,RunInfo)
 
 v2struct(F);
 
-time=CtrlVar.time; 
 
 
-plots='-ubvb-e-save-';
-plots='-sbB-udvd-ubvb-ub-';
-%plots='-mesh-';
+switch CtrlVar.DefineOutputsInfostring
+    
+    case 'Start of Inverse Run'
+        
+        plots='-meas-';
+        
+    otherwise
+        
+        return;
+        
+end
 
-UserVar.CreateVideo=1;
+
+
+%plots='-sbB-udvd-ubvb-ub-';
+
 TRI=[];
 x=MUA.coordinates(:,1);  y=MUA.coordinates(:,2);
 
+  
 if contains(plots,'-save-')
 
     % save data in files with running names
     % check if folder 'ResultsFiles' exists, if not create
 
-    if strcmp(CtrlVar.UaOutputsInfostring,'First call ') && exist('ResultsFiles','dir')~=7 ;
+    if strcmp(CtrlVar.DefineOutputsInfostring,'First call ') && exist('ResultsFiles','dir')~=7 
         mkdir('ResultsFiles') ;
     end
     
-    if strcmp(CtrlVar.UaOutputsInfostring,'Last call')==0
+    if strcmp(CtrlVar.DefineOutputsInfostring,'Last call')==0
         %FileName=['ResultsFiles/',sprintf('%07i',round(100*time)),'-TransPlots-',CtrlVar.Experiment]; good for transient runs
         
-        FileName=['ResultsFiles/',sprintf('%07i',CtrlVar.UaOutputsCounter),'-TransPlots-',CtrlVar.Experiment];
+        FileName=['ResultsFiles/',sprintf('%07i',CtrlVar.DefineOutputsCounter),'-TransPlots-',CtrlVar.Experiment];
         
         fprintf(' Saving data in %s \n',FileName)
-        save(FileName,'CtrlVar','MUA','time','s','b','S','B','h','u','v','dhdt','dsdt','dbdt','C','AGlen','m','n','rho','rhow','as','ab','GF')
+        save(FileName,'CtrlVar','MUA','F')
         
     end
 end
 
-% 
-% if contains(plots,'-mesh-')
-%     
-%     
-%     if isempty(fig100)
-%         fig100=figure(100) ;
-%         %fig100.Position=[0 0 figsWidth 3*figHeights];
-%         fig100.Position=[1 1 2190 1160];% full laptop window
-%         
-%         if UserVar.CreateVideo
-%             Video100=VideoWriter('Video100.avi');
-%             open(Video100);
-%         end
-%     else
-%         fig100=figure(100) ;
-%         hold off
-%     end
-%     
-%     
-%     
-%     PlotMuaMesh(CtrlVar,MUA)
-%     title('')
-%     
-%     if UserVar.CreateVideo
-%         frame = getframe(gcf);
-%         writeVideo(Video100,frame);
-%         
-%         if strcmp(CtrlVar.UaOutputsInfostring,'Last call')
-%             close(Video100)
-%         end
-%     end
-%     
-% end
-% 
-
-
-% only do plots at end of run
-if ~strcmp(CtrlVar.UaOutputsInfostring,'Last call') ; return ; end
 
 
 if contains(plots,'-sbB-')
@@ -97,24 +68,39 @@ if contains(plots,'-ubvb-')
     % plotting horizontal velocities
     figure
     N=1;
-    %speed=sqrt(ub.*ub+vb.*vb);
-    %CtrlVar.MinSpeedWhenPlottingVelArrows=0; CtrlVar.MaxPlottedSpeed=max(speed); %CtrlVar.VelPlotIntervalSpacing='log10';
+    speed=sqrt(F.ub.*F.ub+F.vb.*F.vb);
+    CtrlVar.MinSpeedWhenPlottingVelArrows=0; CtrlVar.MaxPlottedSpeed=max(speed); %CtrlVar.VelPlotIntervalSpacing='log10';
     %CtrlVar.VelColorMap='hot';
-    %CtrlVar.RelativeVelArrowSize=10;
-    QuiverColorGHG(x(1:N:end),y(1:N:end),ub(1:N:end),vb(1:N:end),CtrlVar);
+    CtrlVar.RelativeVelArrowSize=10;
+    QuiverColorGHG(x(1:N:end),y(1:N:end),F.ub(1:N:end),F.vb(1:N:end),CtrlVar);
     hold on
-    title(sprintf('(ub,vb) t=%-g ',time)) ; xlabel('xps (km)') ; ylabel('yps (km)')
+    title(sprintf('(ub,vb) t=%-g ',CtrlVar.time)) ; xlabel('xps (km)') ; ylabel('yps (km)')
     axis equal tight
     
 end
+
+
+%%
+if contains(plots,'-meas-')
+    % plotting horizontal velocities
+    figure
+    N=1;
+    CtrlVar.VelPlotIntervalSpacing='log10';
+    QuiverColorGHG(x(1:N:end),y(1:N:end),Meas.us(1:N:end),Meas.vs(1:N:end),CtrlVar);
+    hold on
+    title(sprintf('(ub,vb) t=%-g ',CtrlVar.time)) ; xlabel('xps (km)') ; ylabel('yps (km)')
+    axis equal tight
+    
+end
+%%
 
 if contains(plots,'-udvd-')
     % plotting horizontal velocities
     figure
     N=1;
-    %speed=sqrt(ud.*ud+vd.*vd);
-    %CtrlVar.VelPlotIntervalSpacing='log10';
-    %CtrlVar.RelativeVelArrowSize=10;
+    speed=sqrt(ud.*ud+vd.*vd);
+    CtrlVar.MinSpeedWhenPlottingVelArrows=0; CtrlVar.MaxPlottedSpeed=max(speed); CtrlVar.VelPlotIntervalSpacing='log10';
+    CtrlVar.RelativeVelArrowSize=10;
     %CtrlVar.VelColorMap='hot';
     QuiverColorGHG(x(1:N:end),y(1:N:end),ud(1:N:end),vd(1:N:end),CtrlVar);
     hold on
@@ -127,7 +113,7 @@ if contains(plots,'-e-')
     % plotting effectiv strain rates
     
     % first get effective strain rates, e :
-    [etaInt,xint,yint,exx,eyy,exy,Eint,e,txx,tyy,txy]=calcStrainRatesEtaInt(CtrlVar,MUA,u,v,AGlen,n);
+    [etaInt,xint,yint,exx,eyy,exy,Eint,e,txx,tyy,txy]=calcStrainRatesEtaInt(CtrlVar,MUA,F.ub,F.vb,AGlen,n);
     % all these variables are are element variables defined on integration points
     % therfore if plotting on nodes, must first project these onto nodes
     eNod=ProjectFintOntoNodes(MUA,e);
@@ -142,7 +128,7 @@ if contains(plots,'-ub-')
     
     figure
     [FigHandle,ColorbarHandel,tri]=PlotNodalBasedQuantities(MUA.connectivity,MUA.coordinates,ub,CtrlVar)    ;
-    title(sprintf('ub t=%-g ',time)) ; xlabel('x (km)') ; ylabel('y (km)')
+    title(sprintf('ub t=%-g ',CtrlVar.time)) ; xlabel('x (km)') ; ylabel('y (km)')
     
 end
 

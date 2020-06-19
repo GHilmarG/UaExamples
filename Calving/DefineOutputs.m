@@ -1,5 +1,5 @@
 
-function UserVar=UaOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFinalValues,Priors,Meas,BCsAdjoint,RunInfo)
+function UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFinalValues,Priors,Meas,BCsAdjoint,RunInfo)
 
 
 
@@ -19,7 +19,7 @@ if contains(plots,'-save-')
         mkdir(CtrlVar.Outputsdirectory) ;
     end
     
-    if strcmp(CtrlVar.UaOutputsInfostring,'Last call')==0
+    if strcmp(CtrlVar.DefineOutputsInfostring,'Last call')==0
 
         FileName=sprintf('%s/%07i-Nodes%i-Ele%i-Tri%i-kH%i-%s.mat',...
             CtrlVar.Outputsdirectory,round(100*time),MUA.Nnodes,MUA.Nele,MUA.nod,1000*CtrlVar.kH,CtrlVar.Experiment);

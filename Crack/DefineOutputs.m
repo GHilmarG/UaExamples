@@ -1,8 +1,8 @@
-function  UserVar=UaOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFinalValues,Priors,Meas,BCsAdjoint,RunInfo)
+function  UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFinalValues,Priors,Meas,BCsAdjoint,RunInfo)
 
 
 %%
-% UaOutputs(CtrlVar,MUA,time,s,b,S,B,h,ub,vb,ud,vd,dhdt,dsdt,dbdt,C,AGlen,m,n,rho,rhow,g,as,ab,GF,BCs,l)
+% DefineOutputs(CtrlVar,MUA,time,s,b,S,B,h,ub,vb,ud,vd,dhdt,dsdt,dbdt,C,AGlen,m,n,rho,rhow,g,as,ab,GF,BCs,l)
 %
 %  This routine is called during the run and can be used for saving and/or
 %  plotting data.
@@ -14,17 +14,17 @@ function  UserVar=UaOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFin
 v2struct(F);
 time=CtrlVar.time;
 
-CtrlVar.UaOutputs='-Speed-e-stresses-profile-';
+CtrlVar.DefineOutputs='-Speed-e-stresses-profile-';
 
 
 %%
-if ~isfield(CtrlVar,'UaOutputs')
+if ~isfield(CtrlVar,'DefineOutputs')
     CtrlVar.uvPlotScale=[];
     %plots='-ubvb-udvd-log10(C)-log10(Surfspeed)-log10(DeformationalSpeed)-log10(BasalSpeed)-log10(AGlen)-';
     plots='-ubvb-log10(BasalSpeed)-sbB-';
     plots='-save-';
 else
-    plots=CtrlVar.UaOutputs;
+    plots=CtrlVar.DefineOutputs;
 end
 
 
@@ -43,11 +43,11 @@ if contains(plots,'-save-')
     % save data in files with running names
     % check if folder 'ResultsFiles' exists, if not create
 
-   if strcmp(CtrlVar.UaOutputsInfostring,'First call ') && exist(fullfile(cd,'ResultsFiles'),'dir')~=7 ;
+   if strcmp(CtrlVar.DefineOutputsInfostring,'First call ') && exist(fullfile(cd,'ResultsFiles'),'dir')~=7 ;
         mkdir('ResultsFiles') ;
     end
     
-    if strcmp(CtrlVar.UaOutputsInfostring,'Last call')==0
+    if strcmp(CtrlVar.DefineOutputsInfostring,'Last call')==0
                 
         FileName=sprintf('ResultsFiles/%07i-Nodes%i-Ele%i-Tri%i-kH%i-%s.mat',...
             round(100*time),MUA.Nnodes,MUA.Nele,MUA.nod,1000*CtrlVar.kH,CtrlVar.Experiment);
@@ -60,7 +60,7 @@ end
 
 
 % only do plots at end of run
-if ~strcmp(CtrlVar.UaOutputsInfostring,'Last call') ; return ; end
+if ~strcmp(CtrlVar.DefineOutputsInfostring,'Last call') ; return ; end
 
 if contains(plots,'-BCs-')
     figure ;

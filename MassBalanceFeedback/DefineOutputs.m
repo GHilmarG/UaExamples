@@ -1,9 +1,9 @@
-function  UserVar=UaOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFinalValues,Priors,Meas,BCsAdjoint,RunInfo);
+function  UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFinalValues,Priors,Meas,BCsAdjoint,RunInfo)
 v2struct(F);
 
 time=CtrlVar.time;
 
-if strcmp(CtrlVar.UaOutputsInfostring,'First call') 
+if strcmp(CtrlVar.DefineOutputsInfostring,'First call') 
     return
 end
 persistent nCalls Acc Surf Time
@@ -18,13 +18,13 @@ end
 
 
 %%
-if ~isfield(CtrlVar,'UaOutputs')
+if ~isfield(CtrlVar,'DefineOutputs')
     CtrlVar.uvPlotScale=[];
     %plots='-ubvb-udvd-log10(C)-log10(Surfspeed)-log10(DeformationalSpeed)-log10(BasalSpeed)-log10(AGlen)-';
-    plots='-ubvb-log10(BasalSpeed)-sbB-ab-log10(C)-log10(AGlen)-';
+    plots='-sbB-ab-';
     
 else
-    plots=CtrlVar.UaOutputs;
+    plots=CtrlVar.DefineOutputs;
 end
 
 
@@ -36,7 +36,7 @@ TRI=[]; DT=[];
 x=MUA.coordinates(:,1);  y=MUA.coordinates(:,2);
 
 %%
-if ~isempty(strfind(plots,'-stresses-'))
+if contains(plots,'-stresses-')
     
     figure
     %PathName='E:/GHG/Satellite Images/Landsat/Brunt/Landsat 8/2015-02-06/';
@@ -69,7 +69,7 @@ if ~isempty(strfind(plots,'-stresses-'))
 end
 
 
-if ~strcmp(CtrlVar.UaOutputsInfostring,'Last call')
+if ~strcmp(CtrlVar.DefineOutputsInfostring,'Last call')
     
     Acc=[Acc;mean(as)];
     Surf=[Surf;mean(s)];
@@ -78,18 +78,18 @@ if ~strcmp(CtrlVar.UaOutputsInfostring,'Last call')
    
 end
     
-if ~isempty(strfind(plots,'-save-'))
+if contains(plots,'-save-')
 
     % save data in files with running names
     % check if folder 'ResultsFiles' exists, if not create
 
-    if strcmp(CtrlVar.UaOutputsInfostring,'First call ') && exist('ResultsFiles','dir')~=7 ;
+    if strcmp(CtrlVar.DefineOutputsInfostring,'First call ') && exist('ResultsFiles','dir')~=7 ;
         mkdir('ResultsFiles') ;
     end
     
-    if strcmp(CtrlVar.UaOutputsInfostring,'Last call')==0
+    if strcmp(CtrlVar.DefineOutputsInfostring,'Last call')==0
         %FileName=['ResultsFiles/',sprintf('%07i',round(100*time)),'-',CtrlVar.Experiment]; good for transient runs
-        %FileName=['ResultsFiles/',sprintf('%07i',CtrlVar.UaOutputsCounter),'-',CtrlVar.Experiment];
+        %FileName=['ResultsFiles/',sprintf('%07i',CtrlVar.DefineOutputsCounter),'-',CtrlVar.Experiment];
         
         FileName=sprintf('ResultsFiles/%07i-Nodes%i-Ele%i-Tri%i-kH%i-%s.mat',...
             round(100*time),MUA.Nnodes,MUA.Nele,MUA.nod,1000*CtrlVar.kH,CtrlVar.Experiment);
@@ -100,10 +100,11 @@ if ~isempty(strfind(plots,'-save-'))
 end
 
 % only do plots at end of run
-if strcmp(CtrlVar.UaOutputsInfostring,'Last call')
+if strcmp(CtrlVar.DefineOutputsInfostring,'Last call')
     
     %load AccSurf ;
-    figure ; plot(Time,Surf,'or') ; xlabel('time (yr)') ; ylabel('Surface elevation (m)')
+    fig=FindOrCreateFigure("-Analytical/Numerical-")  ; clf(fig) ; 
+    plot(Time,Surf,'or') ; xlabel('time (yr)') ; ylabel('Surface elevation (m)')
     hold on ; plot(Time,10*exp(Time),'g'); legend('Numerical','Analytical')
     
     Analytical=10*exp(Time);
@@ -115,9 +116,9 @@ if strcmp(CtrlVar.UaOutputsInfostring,'Last call')
     
 end
 
-if ~isempty(strfind(plots,'-sbB-'))
+if contains(plots,'-sbB-')
 %%
-    figure
+    fig=FindOrCreateFigure("-sbB-")  ; clf(fig) ; 
     hold off
     AspectRatio=10; 
     ViewAndLight(1)=260 ;  ViewAndLight(2)=10 ;
@@ -127,7 +128,7 @@ if ~isempty(strfind(plots,'-sbB-'))
 end
 
 
-if ~isempty(strfind(plots,'-ubvb-'))
+if contains(plots,'-ubvb-')
     % plotting horizontal velocities
 %%
     figure
@@ -145,7 +146,7 @@ if ~isempty(strfind(plots,'-ubvb-'))
     
 end
 
-if ~isempty(strfind(plots,'-udvd-'))
+if contains(plots,'-udvd-')
     % plotting horizontal velocities
     figure
     N=1;
@@ -161,7 +162,7 @@ if ~isempty(strfind(plots,'-udvd-'))
     
 end
 
-if ~isempty(strfind(plots,'-e-'))
+if contains(plots,'-e-')
     % plotting effectiv strain rates
     
     % first get effective strain rates, e :
@@ -177,7 +178,7 @@ if ~isempty(strfind(plots,'-e-'))
     
 end
 
-if ~isempty(strfind(plots,'-ub-'))
+if contains(plots,'-ub-')
     
     figure
     [FigHandle,ColorbarHandel,tri]=PlotNodalBasedQuantities(MUA.connectivity,MUA.coordinates,ub,CtrlVar)    ;
@@ -187,7 +188,7 @@ if ~isempty(strfind(plots,'-ub-'))
 end
 
 
-if ~isempty(strfind(plots,'-log10(AGlen)-'))
+if contains(plots,'-log10(AGlen)-')
     
     figure
     PlotMeshScalarVariable(CtrlVar,MUA,log10(AGlen));
@@ -197,7 +198,7 @@ if ~isempty(strfind(plots,'-log10(AGlen)-'))
 end
 
 
-if ~isempty(strfind(plots,'-log10(C)-'))
+if contains(plots,'-log10(C)-')
     
     figure
     PlotMeshScalarVariable(CtrlVar,MUA,log10(C));
@@ -207,7 +208,7 @@ if ~isempty(strfind(plots,'-log10(C)-'))
 end
 
 
-if ~isempty(strfind(plots,'-C-'))
+if contains(plots,'-C-')
     
     figure
     PlotElementBasedQuantities(MUA.connectivity,MUA.coordinates,C,CtrlVar);
@@ -216,7 +217,7 @@ if ~isempty(strfind(plots,'-C-'))
 end
 
 
-if ~isempty(strfind(plots,'-log10(SurfSpeed)-'))
+if contains(plots,'-log10(SurfSpeed)-')
     
     us=ub+ud;  vs=vb+vd; 
     SurfSpeed=sqrt(us.*us+vs.*vs); 
@@ -231,9 +232,9 @@ end
 
 
 
-if ~isempty(strfind(plots,'-log10(BasalSpeed)-'))
+if contains(plots,'-log10(BasalSpeed)-')
     BasalSpeed=sqrt(ub.*ub+vb.*vb); 
-    figure
+    fig=FindOrCreateFigure("-log(basal speed)-")  ; clf(fig) ; 
     PlotNodalBasedQuantities(MUA.connectivity,MUA.coordinates,log10(BasalSpeed),CtrlVar);
     hold on
     plot(GLgeo(:,[3 4])'/CtrlVar.PlotXYscale,GLgeo(:,[5 6])'/CtrlVar.PlotXYscale,'k','LineWidth',1);
@@ -242,7 +243,7 @@ end
 
 
 
-if ~isempty(strfind(plots,'-log10(DeformationalSpeed)-'))
+if contains(plots,'-log10(DeformationalSpeed)-')
     DeformationalSpeed=sqrt(ud.*ud+vd.*vd); 
     figure
     PlotNodalBasedQuantities(MUA.connectivity,MUA.coordinates,log10(DeformationalSpeed),CtrlVar);
@@ -252,10 +253,10 @@ if ~isempty(strfind(plots,'-log10(DeformationalSpeed)-'))
 end
 
 
-if ~isempty(strfind(plots,'-ab-'))
+if contains(plots,'-ab-')
 %%
-    figure
-    PlotMeshScalarVariable(CtrlVar,MUA,ab)
+    fig=FindOrCreateFigure("-ab-")  ; clf(fig) ; 
+    PlotMeshScalarVariable(CtrlVar,MUA,ab) ; 
     hold on
     plot(GLgeo(:,[3 4])'/CtrlVar.PlotXYscale,GLgeo(:,[5 6])'/CtrlVar.PlotXYscale,'k','LineWidth',1);
     title(sprintf('ab t=%-g ',time)) ; xlabel('x (km)') ; ylabel('y (km)') ; title(colorbar,'(m/yr)')
@@ -264,10 +265,10 @@ if ~isempty(strfind(plots,'-ab-'))
 end
 
 
-if ~isempty(strfind(plots,'-as-'))
+if contains(plots,'-as-')
 %%
-    figure
-    PlotMeshScalarVariable(CtrlVar,MUA,as)
+    fig=FindOrCreateFigure("-as-")  ; clf(fig) ; 
+    PlotMeshScalarVariable(CtrlVar,MUA,as) ; 
     hold on
     plot(GLgeo(:,[3 4])'/CtrlVar.PlotXYscale,GLgeo(:,[5 6])'/CtrlVar.PlotXYscale,'k','LineWidth',1);
     title(sprintf('as t=%-g ',time)) ; xlabel('x (km)') ; ylabel('y (km)') ; title(colorbar,'(m/yr)')
@@ -275,10 +276,10 @@ if ~isempty(strfind(plots,'-as-'))
 %%
 end
 
-if ~isempty(strfind(plots,'-h-'))
+if contains(plots,'-h-')
 %%
-    figure
-    PlotMeshScalarVariable(CtrlVar,MUA,h)
+    fig=FindOrCreateFigure("-h-")  ; clf(fig) ; 
+    PlotMeshScalarVariable(CtrlVar,MUA,h) ; 
     hold on
     plot(GLgeo(:,[3 4])'/CtrlVar.PlotXYscale,GLgeo(:,[5 6])'/CtrlVar.PlotXYscale,'k','LineWidth',1);
     

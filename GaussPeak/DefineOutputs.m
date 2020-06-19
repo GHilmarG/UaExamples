@@ -1,5 +1,6 @@
 
-function  UserVar=UaOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFinalValues,Priors,Meas,BCsAdjoint,RunInfo)
+function  UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFinalValues,Priors,Meas,BCsAdjoint,RunInfo);
+
 
 v2struct(F);
 
@@ -7,10 +8,10 @@ time=CtrlVar.time;
 
 
 plots='-ubvb-e-save-';
-plots='-udvd-ubvb-ub(x)-sbSB(x)-txzb(x)-';
-plots='-ub(x)-h(x)-sbSB(x)-';
-plots='-h(x)-ub(x)-dhdt(x)-';
+plots='-sbB-udvd-ubvb-ub-';
+%plots='-mesh-';
 
+UserVar.CreateVideo=1;
 TRI=[];
 x=MUA.coordinates(:,1);  y=MUA.coordinates(:,2);
 
@@ -19,14 +20,14 @@ if contains(plots,'-save-')
     % save data in files with running names
     % check if folder 'ResultsFiles' exists, if not create
 
-    if strcmp(CtrlVar.UaOutputsInfostring,'First call ') && exist('ResultsFiles','dir')~=7 ;
+    if strcmp(CtrlVar.DefineOutputsInfostring,'First call ') && exist('ResultsFiles','dir')~=7 ;
         mkdir('ResultsFiles') ;
     end
     
-    if strcmp(CtrlVar.UaOutputsInfostring,'Last call')==0
+    if strcmp(CtrlVar.DefineOutputsInfostring,'Last call')==0
         %FileName=['ResultsFiles/',sprintf('%07i',round(100*time)),'-TransPlots-',CtrlVar.Experiment]; good for transient runs
         
-        FileName=['ResultsFiles/',sprintf('%07i',CtrlVar.UaOutputsCounter),'-TransPlots-',CtrlVar.Experiment];
+        FileName=['ResultsFiles/',sprintf('%07i',CtrlVar.DefineOutputsCounter),'-TransPlots-',CtrlVar.Experiment];
         
         fprintf(' Saving data in %s \n',FileName)
         save(FileName,'CtrlVar','MUA','time','s','b','S','B','h','u','v','dhdt','dsdt','dbdt','C','AGlen','m','n','rho','rhow','as','ab','GF')
@@ -34,67 +35,44 @@ if contains(plots,'-save-')
     end
 end
 
+% 
+% if contains(plots,'-mesh-')
+%     
+%     
+%     if isempty(fig100)
+%         fig100=figure(100) ;
+%         %fig100.Position=[0 0 figsWidth 3*figHeights];
+%         fig100.Position=[1 1 2190 1160];% full laptop window
+%         
+%         if UserVar.CreateVideo
+%             Video100=VideoWriter('Video100.avi');
+%             open(Video100);
+%         end
+%     else
+%         fig100=figure(100) ;
+%         hold off
+%     end
+%     
+%     
+%     
+%     PlotMuaMesh(CtrlVar,MUA)
+%     title('')
+%     
+%     if UserVar.CreateVideo
+%         frame = getframe(gcf);
+%         writeVideo(Video100,frame);
+%         
+%         if strcmp(CtrlVar.DefineOutputsInfostring,'Last call')
+%             close(Video100)
+%         end
+%     end
+%     
+% end
+% 
+
+
 % only do plots at end of run
-if ~strcmp(CtrlVar.UaOutputsInfostring,'Last call') ; return ; end
-
-[~,I]=sort(x) ;
-
-if contains(plots,'-txzb(x)-')
-    
-    [txzb,tyzb]=CalcNodalStrainRatesAndStresses(CtrlVar,MUA,AGlen,n,C,m,GF,s,b,ub,vb);
-    
-    figure ;  plot(x/CtrlVar.PlotXYscale,txzb) ; title('txzb(x)')
-    
-end
-
-
-if contains(plots,'-ub(x)-')
-    figure
-    plot(x(I)/CtrlVar.PlotXYscale,ub(I)) ;
-    title(sprintf('u_b(x) at t=%-g ',time)) ; xlabel('x') ; ylabel('u_b')
-    drawnow
-end
-
-
-if contains(plots,'-dhdt(x)-')
-    figure
-    plot(x(I)/CtrlVar.PlotXYscale,dhdt(I)) ;
-    title(sprintf('dhdt(x) at t=%-g ',time)) ; xlabel('x') ; ylabel('dh/dt')
-    drawnow
-end
-
-
-if contains(plots,'-h(x)-')
-    figure;
-    plotyy(x(I)/CtrlVar.PlotXYscale,h(I),x(I)/CtrlVar.PlotXYscale,GF.node(I)) ;
-    
-    if CtrlVar.Implicituvh
-        title(sprintf('fully-implicit h(x) at t=%-g (%s)',time,CtrlVar.uvhImplicitTimeSteppingMethod)) ;
-    else
-        title(sprintf('semi-implicit h(x) at t=%-g (TG3=%i)',time,CtrlVar.TG3)) ;
-    end
-    xlabel('x') ; ylabel('h')
-    drawnow
-end
-
-if contains(plots,'-ud(x)-')
-    figure
-   plot(x/CtrlVar.PlotXYscale,ud) ;
-    title(sprintf('u_d(x) at t=%-g ',time)) ; xlabel('x') ; ylabel('u_d')
-end
-
-
-if contains(plots,'-sbSB(x)-')
-    figure
-    
-    plot(x(I)/CtrlVar.PlotXYscale,S(I),'k--') ; hold on
-    plot(x(I)/CtrlVar.PlotXYscale,B(I),'k') ; 
-    plot(x(I)/CtrlVar.PlotXYscale,b(I),'b') ; 
-    plot(x(I)/CtrlVar.PlotXYscale,s(I),'b') ;
-    
-    title(sprintf('sbSB(x) at t=%-g ',time)) ; xlabel('x') ; ylabel('z')
-    drawnow
-end
+if ~strcmp(CtrlVar.DefineOutputsInfostring,'Last call') ; return ; end
 
 
 if contains(plots,'-sbB-')
@@ -120,7 +98,7 @@ if contains(plots,'-ubvb-')
     figure
     N=1;
     %speed=sqrt(ub.*ub+vb.*vb);
-    %CtrlVar.VelPlotIntervalSpacing='log10';
+    %CtrlVar.MinSpeedWhenPlottingVelArrows=0; CtrlVar.MaxPlottedSpeed=max(speed); %CtrlVar.VelPlotIntervalSpacing='log10';
     %CtrlVar.VelColorMap='hot';
     %CtrlVar.RelativeVelArrowSize=10;
     QuiverColorGHG(x(1:N:end),y(1:N:end),ub(1:N:end),vb(1:N:end),CtrlVar);
@@ -160,7 +138,7 @@ if contains(plots,'-e-')
     
 end
 
-if ~isempty(strfind(plots,'-ub-'))
+if contains(plots,'-ub-')
     
     figure
     [FigHandle,ColorbarHandel,tri]=PlotNodalBasedQuantities(MUA.connectivity,MUA.coordinates,ub,CtrlVar)    ;

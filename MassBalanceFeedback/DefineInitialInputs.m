@@ -23,7 +23,7 @@ CtrlVar.time=0 ;
 CtrlVar.dt=0.1; 
 CtrlVar.TotalNumberOfForwardRunSteps=10; 
 CtrlVar.TotalTime=1 ; 
-CtrlVar.AdaptiveTimeStepping=0 ; CtrlVar.ATStimeStepTarget=0.1;   % maximum time step allowed
+CtrlVar.AdaptiveTimeStepping=0 ; CtrlVar.ATSdtMax=0.1;   % maximum time step allowed
 CtrlVar.Restart=0;  CtrlVar.WriteRestartFile=1;
 
 CtrlVar.theta=0.5;    
