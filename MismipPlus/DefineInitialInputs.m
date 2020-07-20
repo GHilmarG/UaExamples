@@ -7,7 +7,7 @@ UserVar.Outputsdirectory='ResultsFiles'; % This I use in UaOutputs
 UserVar.MassBalanceCase='ice0';
 %%
 
-CtrlVar.SlidingLaw="Coulomb" ;  % options:  {"Weertman","Budd","Tsai","Coulomb"}  ;
+CtrlVar.SlidingLaw="W" ;  % options:  "W","W-N0","minCW-N0","C","rpCW-N0", and "rCW-N0"  
 CtrlVar.Experiment=['MismipPlus-',UserVar.MisExperiment];   
 %% Types of run
 %

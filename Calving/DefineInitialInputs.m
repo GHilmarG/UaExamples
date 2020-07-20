@@ -1,12 +1,9 @@
 
-function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar,CtrlVar)
+function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,CtrlVar)
 
 
 if isempty(UserVar)
-    UserVar.RunType="-ManuallyDeactivateElements-ManuallyModifyThickness-HighMelt-";
-    UserVar.RunType="-ManuallyModifyThickness-";
-    UserVar.RunType="-HighMelt-";
-    % UserVar.RunType="-ManuallyDeactivateElements-";
+    UserVar.RunType="-ManuallyDeactivateElements-";
 end
 
 %%
