@@ -1,20 +1,54 @@
-function  UserVar=UaOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFinalValues,Priors,Meas,BCsAdjoint,RunInfo)
-
-v2struct(F);
-
-
-CtrlVar.UaOutputs='-sbB-ubvb-BCs-';
+function UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,UaVars,l,GF)
 
 
 %%
-if ~isfield(CtrlVar,'UaOutputs')
-    CtrlVar.uvPlotScale=[];
-    %plots='-ubvb-udvd-log10(C)-log10(Surfspeed)-log10(DeformationalSpeed)-log10(BasalSpeed)-log10(AGlen)-';
-    plots='-ubvb-log10(BasalSpeed)-sbB-ab-log10(C)-log10(AGlen)-';
-    plots='-save-';
-else
-    plots=CtrlVar.UaOutputs;
-end
+%
+% This routine is called during the run and can be used for saving and/or
+% plotting data.
+%
+%   UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,UaVars,l,GF)
+%  
+% Write your own version of this routine and put it in you local run directory.
+%
+% Inputs:
+% 
+%
+%   BCs          Structure with all boundary conditions 
+%
+%
+%   UaVars      A structure with fields such as
+%               s, b, S, B, rho, rhow, ub, vb, ud, vd, AGlen, n , C, m , as, ab, g
+%
+%   l            Lagrange parameters related to the enforcement of boundary
+%                 conditions.
+%    
+%   GF           Grounding floating mask for nodes and elements.
+%
+%
+% If preferred to work direclty with the variables rather than the respective
+% fields of the structure `UaVars', then`UaVars' can easily be converted into
+% variables using v2struc.
+%
+% For example :
+%
+% Create variables from all the fields of UaVars with corresponding names:
+%
+%   v2struct(UaVars)
+%
+% Create selected variables only:
+%
+%   [s,b,S,B,ub,vb,ud,vd,C,m,AGlen,n,rho,rhow]=v2struct(UaVars,{'fieldNames','s','b','S','B','ub','vb','ud','vd','C','m','AGlen','n','rho','rhow'});
+%
+% See help v2struc for more information.
+%
+%%
+
+
+[s,b,S,B,ub,vb,ud,vd,C,m,AGlen,n,rho,rhow]=v2struct(UaVars,{'fieldNames','s','b','S','B','ub','vb','ud','vd','C','m','AGlen','n','rho','rhow'});
+
+
+
+plots='-sbB-ubvb-BCs-';
 
 
 
@@ -25,17 +59,18 @@ GLgeo=GLgeometry(MUA.connectivity,MUA.coordinates,GF,CtrlVar);
 TRI=[]; DT=[]; xGL=[] ; yGL=[] ;
 x=MUA.coordinates(:,1);  y=MUA.coordinates(:,2);
 
-%%
 
-if contains(plots,'-save-')
+
+if ~isempty(strfind(plots,'-save-'))
 
     % save data in files with running names
     % check if folder 'ResultsFiles' exists, if not create
-   if strcmp(CtrlVar.UaOutputsInfostring,'First call ') && exist(fullfile(cd,'ResultsFiles'),'dir')~=7 ;
+
+   if strcmp(CtrlVar.DefineOutputsInfostring,'First call ') && exist(fullfile(cd,'ResultsFiles'),'dir')~=7 ;
         mkdir('ResultsFiles') ;
     end
     
-    if strcmp(CtrlVar.UaOutputsInfostring,'Last call')==0
+    if strcmp(CtrlVar.DefineOutputsInfostring,'Last call')==0
                 
         FileName=sprintf('ResultsFiles/%07i-Nodes%i-Ele%i-Tri%i-kH%i-%s.mat',...
             round(100*CtrlVar.time),MUA.Nnodes,MUA.Nele,MUA.nod,1000*CtrlVar.kH,CtrlVar.Experiment);
@@ -48,31 +83,29 @@ end
 
 
 % only do plots at end of run
-if ~strcmp(CtrlVar.UaOutputsInfostring,'Last call') ; return ; end
+if ~strcmp(CtrlVar.DefineOutputsInfostring,'Last call') ; return ; end
 
-if contains(plots,'-BCs-')
-    %%
+if ~isempty(strfind(plots,'-BCs-'))
     figure ;
     PlotBoundaryConditions(CtrlVar,MUA,BCs)
     hold on ;
-    [xGL,yGL,GLgeo]=PlotGroundingLines(CtrlVar,MUA,GF,GLgeo,xGL,yGL,'r');
+    [xGL,yGL,GLgeo]=PlotGroundingLines(CtrlVar,MUA,GF,GLgeo,xGL,yGL,'k');
     PlotMuaBoundary(CtrlVar,MUA,'b')
-    %%
 end
 
 
-if contains(plots,'-sbB-')
+if ~isempty(strfind(plots,'-sbB-'))
 %%
     figure
     hold off
     AspectRatio=3; 
     ViewAndLight(1)=-40 ;  ViewAndLight(2)=20 ;
-    ViewAndLight(3)=30 ;  ViewAndLight(4)=50;
+    ViewAndLight(3)=90 ;  ViewAndLight(4)=50;
     [TRI,DT]=Plot_sbB(CtrlVar,MUA,s,b,B,TRI,DT,AspectRatio,ViewAndLight);
 %%   
 end
 
-if contains(plots,'-B-')
+if ~isempty(strfind(plots,'-B-'))
     figure ;
     PlotMeshScalarVariable(CtrlVar,MUA,B);
     hold on ;
@@ -81,14 +114,14 @@ if contains(plots,'-B-')
 end
 
 
-if contains(plots,'-ubvb-')
+if ~isempty(strfind(plots,'-ubvb-'))
     % plotting horizontal velocities
 %%
     figure
     N=1;
     %speed=sqrt(ub.*ub+vb.*vb);
     %CtrlVar.MinSpeedWhenPlottingVelArrows=0; CtrlVar.MaxPlottedSpeed=max(speed); %
-    CtrlVar.VelPlotIntervalSpacing='log10';
+    CtrlVar.VelPlotIntervalSpacing='lin';
     %CtrlVar.VelColorMap='hot';
     %CtrlVar.RelativeVelArrowSize=10;
     
@@ -101,7 +134,7 @@ if contains(plots,'-ubvb-')
     
 end
 
-if contains(plots,'-udvd-')
+if ~isempty(strfind(plots,'-udvd-'))
     % plotting horizontal velocities
     figure
     N=1;
@@ -119,7 +152,7 @@ if contains(plots,'-udvd-')
     
 end
 
-if contains(plots,'-e-')
+if ~isempty(strfind(plots,'-e-'))
     % plotting effectiv strain rates
     
     % first get effective strain rates, e :
@@ -137,7 +170,7 @@ if contains(plots,'-e-')
     
 end
 
-if contains(plots,'-ub-')
+if ~isempty(strfind(plots,'-ub-'))
     
     figure
     [FigHandle,ColorbarHandel,tri]=PlotNodalBasedQuantities(MUA.connectivity,MUA.coordinates,ub,CtrlVar)    ;
@@ -149,7 +182,7 @@ if contains(plots,'-ub-')
 end
 
 
-if contains(plots,'-log10(AGlen)-')
+if ~isempty(strfind(plots,'-log10(AGlen)-'))
 %%    
     figure
     PlotMeshScalarVariable(CtrlVar,MUA,log10(AGlen));
@@ -162,7 +195,7 @@ if contains(plots,'-log10(AGlen)-')
 end
 
 
-if contains(plots,'-log10(C)-')
+if ~isempty(strfind(plots,'-log10(C)-'))
 %%    
     figure
     PlotMeshScalarVariable(CtrlVar,MUA,log10(C));
@@ -175,7 +208,7 @@ if contains(plots,'-log10(C)-')
 end
 
 
-if contains(plots,'-C-')
+if ~isempty(strfind(plots,'-C-'))
     
     figure
     PlotElementBasedQuantities(MUA.connectivity,MUA.coordinates,C,CtrlVar);
@@ -184,7 +217,7 @@ if contains(plots,'-C-')
 end
 
 
-if contains(plots,'-log10(SurfSpeed)-')
+if ~isempty(strfind(plots,'-log10(SurfSpeed)-'))
     
     us=ub+ud;  vs=vb+vd;
     SurfSpeed=sqrt(us.*us+vs.*vs);
@@ -201,7 +234,7 @@ end
 
 
 
-if contains(plots,'-log10(BasalSpeed)-')
+if ~isempty(strfind(plots,'-log10(BasalSpeed)-'))
     BasalSpeed=sqrt(ub.*ub+vb.*vb); 
     figure
     PlotNodalBasedQuantities(MUA.connectivity,MUA.coordinates,log10(BasalSpeed),CtrlVar);
@@ -212,7 +245,7 @@ end
 
 
 
-if contains(plots,'-log10(DeformationalSpeed)-')
+if ~isempty(strfind(plots,'-log10(DeformationalSpeed)-'))
     DeformationalSpeed=sqrt(ud.*ud+vd.*vd); 
     figure
     PlotNodalBasedQuantities(MUA.connectivity,MUA.coordinates,log10(DeformationalSpeed),CtrlVar);
@@ -222,7 +255,7 @@ if contains(plots,'-log10(DeformationalSpeed)-')
 end
 
 
-if contains(plots,'-ab-')
+if ~isempty(strfind(plots,'-ab-'))
 %%
     figure
     
@@ -235,7 +268,7 @@ if contains(plots,'-ab-')
 end
 
 
-if contains(plots,'-as-')
+if ~isempty(strfind(plots,'-as-'))
 %%
     figure
     PlotMeshScalarVariable(CtrlVar,MUA,as)
@@ -246,7 +279,7 @@ if contains(plots,'-as-')
 %%
 end
 
-if contains(plots,'-h-')
+if ~isempty(strfind(plots,'-h-'))
 %%
     figure
     PlotMeshScalarVariable(CtrlVar,MUA,h)
@@ -260,7 +293,7 @@ if contains(plots,'-h-')
 %%
 end
 %%
-if contains(plots,'-stresses-')
+if ~isempty(strfind(plots,'-stresses-'))
     
     figure
 
