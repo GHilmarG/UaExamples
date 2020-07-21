@@ -1,139 +1,206 @@
 
 function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,CtrlVar)
-
-
-if isempty(UserVar)
-    UserVar.RunType="-ManuallyDeactivateElements-";
-end
-
-%%
-
-UserVar.Outputsdirectory='ResultsFiles'; % This I use in UaOutputs
-
-
-CtrlVar.Experiment="Calving"+UserVar.RunType;
-%% Types of run
-%
-CtrlVar.TimeDependentRun=1; 
-CtrlVar.TotalNumberOfForwardRunSteps=10000;
-CtrlVar.TotalTime=5;
-CtrlVar.Restart=0;  
-CtrlVar.InfoLevelNonLinIt=1; 
-
-CtrlVar.dt=0.01; 
-CtrlVar.time=0; 
-
-CtrlVar.DefineOutputsDt=0.1; % interval between calling UaOutputs. 0 implies call it at each and every run step.
-                       % setting CtrlVar.DefineOutputsDt=1; causes UaOutputs to be called every 1 years.
-                       % This is a more reasonable value once all looks OK.
-
-CtrlVar.ATSdtMax=1;  % maximum time step allowed using the automated time stepping method
-CtrlVar.ATSTargetIterations=3;  % if the number of non-lin iteration in the NR solver falls below this value, dt is increased 
-
-
-CtrlVar.WriteRestartFile=1;
-
-%% Reading in mesh
-CtrlVar.ReadInitialMesh=0;    % if true then read FE mesh (i.e the MUA variable) directly from a .mat file
-                              % unless the adaptive meshing option is used, no further meshing is done.
-% CtrlVar.ReadInitialMeshFileName='AdaptMesh.mat';
-% CtrlVar.SaveInitialMeshFileName='NewMeshFile.mat';
-%% Plotting options
-CtrlVar.PlotMesh=0; 
-CtrlVar.PlotBCs=0;
-CtrlVar.WhenPlottingMesh_PlotMeshBoundaryCoordinatesToo=1;
-
-CtrlVar.PlotXYscale=1000; 
-%%
-
-CtrlVar.TriNodes=3;
-
-
-CtrlVar.NameOfRestartFiletoWrite="Restart"+CtrlVar.Experiment+".mat";
-CtrlVar.NameOfRestartFiletoRead=CtrlVar.NameOfRestartFiletoWrite;
-
-
-
-
-%% mesh generation
-
-
-CtrlVar.MeshGenerator='gmsh';
-CtrlVar.GmshMeshingAlgorithm=8;     % see gmsh manual
-                                    % 1=MeshAdapt
-                                    % 2=Automatic
-                                    % 5=Delaunay
-                                    % 6=Frontal
-                                    % 7=bamg
-                                    % 8=DelQuad (experimental)
-% very coarse mesh resolution
-CtrlVar.MeshSize=10e3;       % over-all desired element size
-CtrlVar.MeshSizeMax=10e3;    % max element size
-CtrlVar.MeshSizeMin=0.01*CtrlVar.MeshSize;     % min element size
-
-% reasonably fine mesh resolution
-%CtrlVar.MeshSize=8e3;       % over-all desired element size
-%CtrlVar.MeshSizeMax=8e3;    % max element size
-%CtrlVar.MeshSizeMin=200;    % min element size
-
-CtrlVar.MaxNumberOfElements=250e3;           % max number of elements. If #elements larger then CtrlMeshSize/min/max are changed
-
-%% Adapt mesh
-
-CtrlVar.AdaptMesh=1;         
-CtrlVar.AdaptMeshMaxIterations=10;  % Number of adapt mesh iterations within each run-step.
-CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';    % can have any of these values:
-                                                   % 'explicit:global' 
-                                                   % 'explicit:local'
-                                                   % 'explicit:local:red-green'
-                                                   % 'explicit:local:newest vertex bisection';
-%  
-
-CtrlVar.SaveAdaptMeshFileName=[];          % file name for saving adapt mesh. If left empty, no file is written
-CtrlVar.AdaptMeshInitial=1 ;       % if true, then a remeshing will always be performed at the inital step
-CtrlVar.AdaptMeshAndThenStop=0;    % if true, then mesh will be adapted but no further calculations performed
-                                   % usefull, for example, when trying out different remeshing options (then use CtrlVar.doRemeshPlots=1 to get plots)
-
-CtrlVar.AdaptMeshUntilChangeInNumberOfElementsLessThan=5;
-CtrlVar.AdaptMeshRunStepInterval=1;  % number of run-steps between mesh adaptation
-CtrlVar.MeshAdapt.GLrange=[20000 5000 ; 5000 2000];
-%CtrlVar.MeshAdapt.GLrange=[20000 5000 ];
-
-
-
-%% Pos. thickness constr
-
-
-CtrlVar.ThickMin=1; % minimum allowed thickness without (potentially) doing something about it
-CtrlVar.ResetThicknessToMinThickness=0;  % if true, thickness values less than ThickMin will be set to ThickMin
-CtrlVar.ThicknessConstraints=1  ;        % if true, min thickness is enforced using active set method
-CtrlVar.ThicknessConstraintsItMax=5  ; 
-
-%%
-
-xd=640e3; xu=0e3 ; yr=0 ; yl=80e3 ;  
-MeshBoundaryCoordinates=[xu yr ; xu yl ; xd yl ; xd yr];
-
-%% Things that I´m testing and that are specifically realted to ideas around implementing calving
-
-if contains(UserVar.RunType,"-ManuallyDeactivateElements-")
-    CtrlVar.ManuallyDeactivateElements=1 ;
-else
-    CtrlVar.ManuallyDeactivateElements=0 ;
-end
-
-if contains(UserVar.RunType,"-ManuallyModifyThickness-")
-    CtrlVar.GeometricalVarsDefinedEachTransienRunStepByDefineGeometry="sb";
-else
-    CtrlVar.GeometricalVarsDefinedEachTransienRunStepByDefineGeometry="";
-end
-
-
-CtrlVar.doAdaptMeshPlots=1; 
-CtrlVar.InfoLevelAdaptiveMeshing=100;
-%CtrlVar.doplots=1;
-   
-
-
+    
+    %%
+    %
+    % Calving using the level-set method is (currenlty) not implemented.
+    %
+    % To describe/prescribe calving various other options are available.
+    %
+    % For example elements can be deactivated and then reactivated to simulate a calving
+    % event.
+    %
+    % Also, calving can be prescribed using a melt pertubation with a thickness feedback. 
+    %
+    % Note: 
+    % Here some input files are needed that give the steady-state
+    % (approximately) geometry for the MismipPlus experiment as obtained
+    % in previous runs with Ãša
+    %
+    % You can get these from:
+    %
+    % https://livenorthumbriaac-my.sharepoint.com/:f:/g/personal/hilmar_gudmundsson_northumbria_ac_uk/EgrEImnkQuJNmf1GEB80VbwB1hgKNnRMscUitVpBrghjRg
+    %
+    % Put these files in a folder and make sure that folder is in the
+    % matlab path
+    %
+    %  https://livenorthumbriaac-my.sharepoint.com/:f:/g/personal/hilmar_gudmundsson_northumbria_ac_uk/EgrEImnkQuJNmf1GEB80VbwB1hgKNnRMscUitVpBrghjRg
+    %%
+    
+    if isempty(UserVar)
+        
+        UserVar.RunType="Test-1dAnalyticalIceShelf-";           % numerical solution of a 1d unconfined ice shelf with automated remeshing
+        
+        % UserVar.RunType="Test-ManuallyDeactivateElements-" ;  % Example of prescribed
+        % calving using element deactivation.
+        
+        % UserVar.RunType="Test-CalvingThroughMassBalanceFeedback-"; % Calving implemented as a melt pertubation 
+        
+    end
+    
+    
+    CtrlVar.AdaptMesh=1;
+    CtrlVar.dt=0.01;
+    CtrlVar.TriNodes=3;
+    UserVar.InitialGeometry="-MismipPlus-" ;  % default)
+    UserVar.Plots="-plot-mapplane-" ;
+    CtrlVar.TotalTime=5000;
+    CtrlVar.TotalNumberOfForwardRunSteps=inf;
+    CtrlVar.AdaptMeshMaxIterations=1;  % Number of adapt mesh iterations within each run-step.
+    
+    
+    switch UserVar.RunType
+        
+        case {"-1dAnalyticalIceShelf-","Test-1dAnalyticalIceShelf-"}
+            
+            UserVar.InitialGeometry="-Constant-" ;
+            CtrlVar.doplots=0;
+            CtrlVar.LevelSetMethod=0;
+            CtrlVar.TotalNumberOfForwardRunSteps=inf;
+            CtrlVar.TotalTime=500;
+            UserVar.Plots="-plot-flowline-";
+            if contains(UserVar.RunType,"Test-")
+                CtrlVar.TotalTime=100;
+            end
+            CtrlVar.DefineOutputsDt=1;
+            
+        case "Test-ManuallyDeactivateElements-"
+            % This is an example of how manual deactivation of elements can be used to simulate a
+            % calving event.
+            
+            UserVar.InitialGeometry="-MismipPlus-" ;
+            CtrlVar.ManuallyDeactivateElements=1 ;
+            CtrlVar.doplots=1;
+            CtrlVar.LevelSetMethod=0;
+            CtrlVar.TotalNumberOfForwardRunSteps=inf;
+            CtrlVar.TotalTime=10;
+            UserVar.Plots="-plot-mapplane-" ;
+            CtrlVar.DefineOutputsDt=0;
+        case "Test-CalvingThroughMassBalanceFeedback-"
+            
+            % Here a fictitious basal melt distribution is applied over the ice shelf downstream
+            % of x=400km for the first few years to melt away all/most floating ice.
+            %
+            % The melt is prescribed as a function of ice thickness and to speed things up
+            % the mass-balance feedback is provided here as well. This requires setting
+            %
+            %   CtrlVar.MassBalanceGeometryFeedback=3;
+            %
+            % The mass-balance is defined in DefineMassBalance.m
+            
+            UserVar.InitialGeometry="-MismipPlus-" ;
+            CtrlVar.MassBalanceGeometryFeedback=3;
+            
+            CtrlVar.doplots=1;
+            CtrlVar.LevelSetMethod=0;
+            CtrlVar.TotalNumberOfForwardRunSteps=inf;
+            CtrlVar.TotalTime=10;
+            UserVar.Plots="-plot-mapplane-" ;
+            CtrlVar.DefineOutputsDt=0;
+            
+    end
+    
+    
+    
+    CtrlVar.InfoLevelNonLinIt=1; CtrlVar.uvhMinimisationQuantity="Force Residuals";
+    %%
+    
+    UserVar.Outputsdirectory='ResultsFiles'; % This I use in DefineOutputs
+    UserVar.MassBalanceCase='ice0';
+    
+    %%
+    
+    
+    
+    %% Types of run
+    %
+    CtrlVar.TimeDependentRun=1;
+    CtrlVar.time=0;
+    CtrlVar.ATSdtMax=1;
+    CtrlVar.ATSdtMin=0.01;
+    CtrlVar.WriteRestartFile=1;
+    
+    %% Reading in mesh
+    CtrlVar.ReadInitialMesh=0;    % if true then read FE mesh (i.e the MUA variable) directly from a .mat file
+    % unless the adaptive meshing option is used, no further meshing is done.
+    % CtrlVar.ReadInitialMeshFileName='AdaptMesh.mat';
+    % CtrlVar.SaveInitialMeshFileName='NewMeshFile.mat';
+    %% Plotting options
+    CtrlVar.PlotMesh=1;
+    CtrlVar.PlotBCs=1;
+    CtrlVar.WhenPlottingMesh_PlotMeshBoundaryCoordinatesToo=0;
+    
+    CtrlVar.PlotXYscale=1000;
+    %%
+    
+    
+    
+    
+    %% adapt mesh
+    
+    
+    CtrlVar.MeshGenerator='mesh2d'   ;   % 'gmsh';  % possible values: {mesh2d|gmsh}
+    CtrlVar.MeshSize=10e3;       % over-all desired element size
+    CtrlVar.MeshSizeMax=10e3;    % max element size
+    CtrlVar.MeshSizeMin=0.01*CtrlVar.MeshSize;     % min element size
+    
+    CtrlVar.MaxNumberOfElements=250e3;           % max number of elements. If #elements larger then CtrlMeshSize/min/max are changed
+    
+    CtrlVar.AdaptMeshRunStepInterval=1;  % number of run-steps between mesh adaptation
+    CtrlVar.AdaptMeshUntilChangeInNumberOfElementsLessThan=5;
+    CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';    % can have any of these values:
+    % 'explicit:global'
+    % 'explicit:local'
+    % 'explicit:local:red-green'
+    % 'explicit:local:newest vertex bisection';
+    %
+    CtrlVar.SaveAdaptMeshFileName=[] ; % no file written if left empty "AdaptMesh"+CtrlVar.Experiment+".mat";
+    CtrlVar.AdaptMeshAndThenStop=0;    % if true, then mesh will be adapted but no further calculations performed
+    % usefull, for example, when trying out different remeshing options (then use CtrlVar.doRemeshPlots=1 to get plots)
+    
+    
+    CtrlVar.MeshAdapt.GLrange=[20000 5000 ; 5000 2000];
+    
+    
+    if contains(UserVar.RunType,"-1dIceShelf-") || contains(UserVar.RunType,"-1dAnalyticalIceShelf-")
+        I=1;
+        CtrlVar.ExplicitMeshRefinementCriteria(I).Name='effective strain rates gradient';
+        CtrlVar.ExplicitMeshRefinementCriteria(I).Scale=0.001/1000;
+        CtrlVar.ExplicitMeshRefinementCriteria(I).EleMin=[];
+        CtrlVar.ExplicitMeshRefinementCriteria(I).EleMax=[];
+        CtrlVar.ExplicitMeshRefinementCriteria(I).p=1;
+        CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
+        CtrlVar.ExplicitMeshRefinementCriteria(I).Use=true;
+    end
+    %% Pos. thickness constr
+    
+    
+    CtrlVar.ThickMin=1; % minimum allowed thickness without (potentially) doing something about it
+    CtrlVar.ResetThicknessToMinThickness=0;  % if true, thickness values less than ThickMin will be set to ThickMin
+    CtrlVar.ThicknessConstraints=1  ;        % if true, min thickness is enforced using active set method
+    CtrlVar.ThicknessConstraintsItMax=5  ;
+    
+    %% MeshBoundaryCoordinates
+    
+    if contains(UserVar.RunType,"-1dAnalyticalIceShelf-")
+        xd=640e3; xu=0e3 ; yr=-10e3 ; yl=10e3 ;
+    else
+        xd=640e3; xu=0e3 ; yr=0 ; yl=80e3 ;
+    end
+    
+    MeshBoundaryCoordinates=[xu yr ; xu yl ; xd yl ; xd yr];
+    
+    
+    
+    
+    %% Experiment and file name
+    
+    CtrlVar.Experiment="Ex"+UserVar.RunType+"-MB"+UserVar.MassBalanceCase+"-Adapt"+num2str(CtrlVar.AdaptMesh);
+    CtrlVar.Experiment=replace(CtrlVar.Experiment,"--","-");
+    CtrlVar.NameOfRestartFiletoWrite="Restart"+CtrlVar.Experiment+".mat";
+    CtrlVar.NameOfRestartFiletoRead=CtrlVar.NameOfRestartFiletoWrite;
+    
+    
+    
 end
 
