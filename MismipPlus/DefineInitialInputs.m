@@ -1,4 +1,4 @@
-function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar,CtrlVar)
+function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,CtrlVar)
 
 
 %%
@@ -15,7 +15,7 @@ CtrlVar.TimeDependentRun=1;
 CtrlVar.TotalNumberOfForwardRunSteps=2;
 CtrlVar.TotalTime=100;
 CtrlVar.Restart=0;  
-CtrlVar.InfoLevelNonLinIt=100; 
+CtrlVar.InfoLevelNonLinIt=1;  % try setting to 100 for more info and plots on non-linear convergence  
 CtrlVar.NRitmax=500;       % maximum number of NR iteration
 CtrlVar.dt=0.01;  
 
@@ -56,7 +56,7 @@ CtrlVar.NameOfRestartFiletoRead=CtrlVar.NameOfRestartFiletoWrite;
 
 
 %% adapt mesh
-CtrlVar.InfoLevelAdaptiveMeshing=100;
+CtrlVar.InfoLevelAdaptiveMeshing=1;
 CtrlVar.doAdaptMeshPlots=1; 
 CtrlVar.MeshGenerator='gmsh';  % possible values: {mesh2d|gmsh}
 
