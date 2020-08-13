@@ -116,8 +116,10 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
     %
     CtrlVar.TimeDependentRun=1;
     CtrlVar.time=0;
+    
     CtrlVar.ATSdtMax=1;
-    CtrlVar.ATSdtMin=0.01;
+    CtrlVar.ATSdtMin=0.001;
+    
     CtrlVar.WriteRestartFile=1;
     
     %% Reading in mesh

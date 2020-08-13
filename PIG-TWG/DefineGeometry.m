@@ -27,7 +27,7 @@ x=MUA.coordinates(:,1); y=MUA.coordinates(:,2);
 alpha=0 ;
 
 if contains(FieldsToBeDefined,'S')
-    S=x*0;
+    S=zeros(MUA.Nnodes,1) ; 
 else
     S=NaN;
 end

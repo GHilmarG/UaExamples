@@ -10,7 +10,7 @@ if isempty(UserVar) || ~isfield(UserVar,'RunType')
     % UserVar.RunType='Inverse-ConjGrad';
     % UserVar.RunType='Inverse-SteepestDesent';
     % UserVar.RunType='Inverse-ConjGrad-FixPoint';
-    UserVar.RunType='Forward-Diagnostic';
+    % UserVar.RunType='Forward-Diagnostic';
     % UserVar.RunType='Forward-Transient';
     % UserVar.RunType='TestingMeshOptions';
 end
@@ -49,30 +49,44 @@ switch UserVar.RunType
     case {'Inverse-MatOpt','Inverse-ConjGrad','Inverse-MatOpt-FixPoint','Inverse-ConjGrad-FixPoint','Inverse-SteepestDesent'}
         
         CtrlVar.InverseRun=1;
+        
         CtrlVar.Restart=0;
         CtrlVar.Inverse.InfoLevel=1;
         CtrlVar.InfoLevelNonLinIt=0;
         CtrlVar.InfoLevel=0;
+        
         UserVar.Slipperiness.ReadFromFile=0;
         UserVar.AGlen.ReadFromFile=0;
+        
         CtrlVar.ReadInitialMesh=1;
         CtrlVar.AdaptMesh=0;
         
         CtrlVar.Inverse.Iterations=5;
+        
         CtrlVar.Inverse.InvertFor='logAGlenlogC' ; % {'C','logC','AGlen','logAGlen'}
         CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor;
+        
+        CtrlVar.Inverse.Measurements='-uv-' ;  % {'-uv-,'-uv-dhdt-','-dhdt-'}
+        
+        CtrlVar.Inverse.AdjointGradientPreMultiplier='I'; % {'I','M'}
+        
+        CtrlVar.Inverse.Regularize.logC.ga=1;
+        CtrlVar.Inverse.Regularize.logC.gs=1e3 ;
+        CtrlVar.Inverse.Regularize.logAGlen.ga=1;
+        CtrlVar.Inverse.Regularize.logAGlen.gs=1e3 ;
+        
         
         if contains(UserVar.RunType,'FixPoint')
             
             % FixPoint inversion is an ad-hoc method of estimating the gradient of the cost function with respect to C.
             % It can produce quite good estimates for C using just one or two inversion iterations, but then typically stagnates.
             % The FixPoint method can often be used right at the start of an inversion to get a reasonably good C estimate,
-            % after which in a restart step one can switch to gradient calculation using adjoint 
+            % after which in a restart step one can switch to gradient calculation using adjoint
             CtrlVar.Inverse.DataMisfit.GradientCalculation='FixPoint' ;
             CtrlVar.Inverse.InvertFor='logC' ;
             CtrlVar.Inverse.Iterations=1;
             CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor;
-          
+            
         end
         
         
@@ -104,7 +118,6 @@ switch UserVar.RunType
         CtrlVar.InverseRun=0;
         CtrlVar.Restart=0;
         CtrlVar.ReadInitialMesh=0;
-        CtrlVar.AdaptMesh=1;
         UserVar.Slipperiness.ReadFromFile=1;
         UserVar.AGlen.ReadFromFile=1;
         CtrlVar.AdaptMesh=1;
@@ -143,16 +156,19 @@ CtrlVar.MaxNumberOfElements=70e3;
 
 
 CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';   
-%CtrlVar.MeshRefinementMethod='explicit:local:red-green';
-%CtrlVar.MeshRefinementMethod='explicit:global';   
+% CtrlVar.MeshRefinementMethod='explicit:local:red-green';
+% CtrlVar.MeshRefinementMethod='explicit:global';   
 
 CtrlVar.MeshGenerator='gmsh' ; % 'mesh2d';
 CtrlVar.MeshGenerator='mesh2d' ; % 'mesh2d';
 CtrlVar.GmshMeshingAlgorithm=8; 
+
 CtrlVar.MeshSizeMax=20e3;
 CtrlVar.MeshSize=CtrlVar.MeshSizeMax/2;
 CtrlVar.MeshSizeMin=CtrlVar.MeshSizeMax/20;
+
 UserVar.MeshSizeIceShelves=CtrlVar.MeshSizeMax/5;
+
 MeshBoundaryCoordinates=CreateMeshBoundaryCoordinatesForPIGandTWG(CtrlVar);
                                          
 CtrlVar.AdaptMeshInitial=1  ;       % remesh in first iteration (Itime=1)  even if mod(Itime,CtrlVar.AdaptMeshRunStepInterval)~=0.
@@ -235,25 +251,9 @@ else
     
 end
 
-
-
-
-CtrlVar.Inverse.AdjointGradientPreMultiplier='I'; % {'I','M'}
-
-
-                                                    
+%%
 UserVar.AddDataErrors=0;
 
-
-CtrlVar.Inverse.Regularize.C.gs=1;
-CtrlVar.Inverse.Regularize.C.ga=1;
-CtrlVar.Inverse.Regularize.logC.ga=1;
-CtrlVar.Inverse.Regularize.logC.gs=1e3 ;
-
-CtrlVar.Inverse.Regularize.AGlen.gs=1;
-CtrlVar.Inverse.Regularize.AGlen.ga=1;
-CtrlVar.Inverse.Regularize.logAGlen.ga=1;
-CtrlVar.Inverse.Regularize.logAGlen.gs=1e3 ;
 
 
 %%
