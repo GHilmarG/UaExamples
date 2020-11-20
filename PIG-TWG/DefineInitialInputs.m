@@ -23,7 +23,7 @@ end
 %
 %   https://livenorthumbriaac-my.sharepoint.com/:f:/g/personal/hilmar_gudmundsson_northumbria_ac_uk/EgrEImnkQuJNmf1GEB80VbwB1hgKNnRMscUitVpBrghjRg?e=yMZEOs
 %
-% Put the OneDrive folder `Interpolants' into you directory so that it can be reaced as ../Interpolants with respect to you rundirectory. 
+% Put the OneDrive folder `Interpolants' into you directory so that it can be reached as ../Interpolants with respect to you rundirectory. 
 %
 %
 UserVar.GeometryInterpolant='../../Interpolants/Bedmap2GriddedInterpolantModifiedBathymetry.mat'; % this assumes you have downloaded the OneDrive folder `Interpolants'.
@@ -143,17 +143,12 @@ CtrlVar.PlotMesh=0;
 CtrlVar.PlotBCs=1 ;
 CtrlVar.PlotXYscale=1000;
 CtrlVar.doAdaptMeshPlots=5; 
-%%
+
+%% Meshing 
 
 CtrlVar.ReadInitialMeshFileName='PIG-TWG-Mesh.mat';
 CtrlVar.SaveInitialMeshFileName='MeshFile.mat';
 CtrlVar.MaxNumberOfElements=70e3;
-
-
-
-
-%% Meshing 
-
 
 CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';   
 % CtrlVar.MeshRefinementMethod='explicit:local:red-green';

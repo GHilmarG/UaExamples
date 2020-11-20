@@ -11,7 +11,7 @@ CtrlVar.SlidingLaw="W" ;  % options:  "W","W-N0","minCW-N0","C","rpCW-N0", and "
 CtrlVar.Experiment=['MismipPlus-',UserVar.MisExperiment];   
 %% Types of run
 %
-CtrlVar.TimeDependentRun=1; 
+CtrlVar.TimeDependentRun=0; 
 CtrlVar.TotalNumberOfForwardRunSteps=10;
 CtrlVar.TotalTime=100;
 CtrlVar.Restart=0;  
