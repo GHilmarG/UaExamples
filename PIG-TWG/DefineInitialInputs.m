@@ -7,6 +7,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
 if isempty(UserVar) || ~isfield(UserVar,'RunType')
     
     UserVar.RunType='Inverse-MatOpt';
+    UserVar.RunType='Inverse-HessianBased';
     % UserVar.RunType='Inverse-ConjGrad';
     % UserVar.RunType='Inverse-SteepestDesent';
     % UserVar.RunType='Inverse-ConjGrad-FixPoint';
@@ -46,7 +47,7 @@ CtrlVar.Experiment=UserVar.RunType;
 
 switch UserVar.RunType
     
-    case {'Inverse-MatOpt','Inverse-ConjGrad','Inverse-MatOpt-FixPoint','Inverse-ConjGrad-FixPoint','Inverse-SteepestDesent'}
+    case {'Inverse-MatOpt','Inverse-ConjGrad','Inverse-MatOpt-FixPoint','Inverse-ConjGrad-FixPoint','Inverse-SteepestDesent','Inverse-HessianBased'}
         
         CtrlVar.InverseRun=1;
         
@@ -233,18 +234,22 @@ CtrlVar.ExplicitMeshRefinementCriteria(I).Use=false;
 %CtrlVar.AGlenisElementBased=0;   
 
 
-
-
-if contains(UserVar.RunType,'MatOpt')
-    CtrlVar.Inverse.MinimisationMethod='MatlabOptimization';
+if contains(UserVar.RunType,"MatOpt")
+    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization";
 else
-    CtrlVar.Inverse.MinimisationMethod='UaOptimization';
-    if contains(UserVar.RunType,'ConjGrad')
-        CtrlVar.Inverse.GradientUpgradeMethod='ConjGrad' ; %{'SteepestDecent','ConjGrad'}
+    CtrlVar.Inverse.MinimisationMethod="UaOptimization";
+    if contains(UserVar.RunType,"ConjGrad")
+        CtrlVar.Inverse.GradientUpgradeMethod="ConjGrad" ; %{'SteepestDecent','ConjGrad'}
+    elseif contains(UserVar.RunType,"Hessian")
+        CtrlVar.Inverse.MinimisationMethod="UaOptimization:Hessian";
+        CtrlVar.Inverse.InvertFor="-C-" ; % {'C','logC','AGlen','logAGlen'}
+        CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor; 
+        CtrlVar.Inverse.Regularize.C.ga=1; 
+        CtrlVar.Inverse.Regularize.C.gs=1; 
+        CtrlVar.Inverse.AdjointGradientPreMultiplier="I";
     else
-        CtrlVar.Inverse.GradientUpgradeMethod='SteepestDecent' ; %{'SteepestDecent','ConjGrad'}
+        CtrlVar.Inverse.GradientUpgradeMethod="SteepestDecent" ; %{'SteepestDecent','ConjGrad'}
     end
-    
 end
 
 %%
