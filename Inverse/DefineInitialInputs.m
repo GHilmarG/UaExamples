@@ -29,18 +29,17 @@ CtrlVar.NameOfRestartFiletoWrite=CtrlVar.NameOfRestartFiletoRead;
 %% Inverse   -inverse
 CtrlVar.Inverse.MinimisationMethod='MatlabOptimization'; % {'MatlabOptimization','UaOptimization'}
 
-CtrlVar.Inverse.MinimisationMethod='UaOptimization'; % {'MatlabOptimization','UaOptimization'}
+CtrlVar.Inverse.MinimisationMethod='UaOptimization:Hessian'; % {'MatlabOptimization','UaOptimization'}
+CtrlVar.Inverse.DataMisfit.HessianEstimate='C'; 
+CtrlVar.Inverse.DataMisfit.GradientCalculation='FixPoint' ; % {'Adjoint','FixPoint'}
 CtrlVar.Inverse.GradientUpgradeMethod='SteepestDecent' ; %{'SteepestDecent','ConjGrad'}
 CtrlVar.Inverse.InfoLevelBackTrack=1000;  % info on backtracking within inverse step
 
-CtrlVar.Inverse.AdjointGradientPreMultiplier="Hanalytical" ; 
+CtrlVar.Inverse.AdjointGradientPreMultiplier="I" ; 
 CtrlVar.Inverse.InvertFor='-C-';
 CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor; 
 CtrlVar.Inverse.Iterations=200;
 
-if CtrlVar.Inverse.AdjointGradientPreMultiplier=="Hanalytical"
-    CtrlVar.Inverse.InitialLineSearchStepSize=1;
-end
 
 CtrlVar.Inverse.InfoLevel=1;  % Set to 1 to get some basic information, >=2 for additional info on backtrackgin,
 % >=100 for further info and plots
