@@ -30,7 +30,7 @@ Meas.vsCov=sparse(1:MUA.Nnodes,1:MUA.Nnodes,vsError.^2,MUA.Nnodes,MUA.Nnodes);
 %% Define Priors
 
 Priors.AGlen=AGlenVersusTemp(-10);
-Priors.n=3; 
+Priors.n=F.n; 
 
 % Come up with a rough guess for C based on measured velocities and typical basal stress
 SpeedMeasured=vecnorm([Meas.us Meas.vs],2,2) ; 
@@ -40,6 +40,9 @@ tau=50 ;  tauMin=5 ;
 CGuess=SpeedMeasured./tau.^F.m ;
 Cmax=max(SpeedMeasured.*F.GF.node./tauMin.^F.m) ;
 CGuess(CGuess>Cmax)=Cmax ; 
+
+% Or just give a rough initial uniform guess
+CGuess=100/50^F.m(1) ; 
 
 Priors.C=CGuess;
 Priors.rho=F.rho;

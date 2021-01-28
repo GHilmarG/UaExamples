@@ -28,17 +28,15 @@ CtrlVar.NameOfRestartFiletoWrite=CtrlVar.NameOfRestartFiletoRead;
 
 %% Inverse   -inverse
 CtrlVar.Inverse.MinimisationMethod='MatlabOptimization'; % {'MatlabOptimization','UaOptimization'}
+CtrlVar.Inverse.AdjointGradientPreMultiplier="M" ; 
 
-CtrlVar.Inverse.MinimisationMethod='UaOptimization:Hessian'; % {'MatlabOptimization','UaOptimization'}
-CtrlVar.Inverse.DataMisfit.HessianEstimate='C'; 
-CtrlVar.Inverse.DataMisfit.GradientCalculation='FixPoint' ; % {'Adjoint','FixPoint'}
-CtrlVar.Inverse.GradientUpgradeMethod='SteepestDecent' ; %{'SteepestDecent','ConjGrad'}
+CtrlVar.Inverse.MinimisationMethod='UaOptimization-Hessian'; % {'MatlabOptimization','UaOptimization'}
 CtrlVar.Inverse.InfoLevelBackTrack=1000;  % info on backtracking within inverse step
 
-CtrlVar.Inverse.AdjointGradientPreMultiplier="I" ; 
-CtrlVar.Inverse.InvertFor='-C-';
+
+CtrlVar.Inverse.InvertFor='-logC-';
 CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor; 
-CtrlVar.Inverse.Iterations=200;
+CtrlVar.Inverse.Iterations=40;
 
 
 CtrlVar.Inverse.InfoLevel=1;  % Set to 1 to get some basic information, >=2 for additional info on backtrackgin,
@@ -47,7 +45,7 @@ CtrlVar.Inverse.InfoLevel=1;  % Set to 1 to get some basic information, >=2 for 
 CtrlVar.InfoLevelNonLinIt=0; CtrlVar.InfoLevel=0;
 
 CtrlVar.Inverse.DataMisfit.Multiplier=1;
-CtrlVar.Inverse.Regularize.Multiplier=0;
+CtrlVar.Inverse.Regularize.Multiplier=1;
 % regularisation parameters
 CtrlVar.Inverse.Regularize.C.gs=1;
 CtrlVar.Inverse.Regularize.C.ga=1;

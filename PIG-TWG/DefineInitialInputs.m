@@ -7,7 +7,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
 if isempty(UserVar) || ~isfield(UserVar,'RunType')
     
     UserVar.RunType='Inverse-MatOpt';
-    UserVar.RunType='Inverse-HessianBased';
+    UserVar.RunType='Inverse-FixPoint';
     % UserVar.RunType='Inverse-ConjGrad';
     % UserVar.RunType='Inverse-SteepestDesent';
     % UserVar.RunType='Inverse-ConjGrad-FixPoint';
@@ -47,7 +47,7 @@ CtrlVar.Experiment=UserVar.RunType;
 
 switch UserVar.RunType
     
-    case {'Inverse-MatOpt','Inverse-ConjGrad','Inverse-MatOpt-FixPoint','Inverse-ConjGrad-FixPoint','Inverse-SteepestDesent','Inverse-HessianBased'}
+    case {'Inverse-MatOpt','Inverse-FixPoint'}
         
         CtrlVar.InverseRun=1;
         
@@ -62,7 +62,7 @@ switch UserVar.RunType
         CtrlVar.ReadInitialMesh=1;
         CtrlVar.AdaptMesh=0;
         
-        CtrlVar.Inverse.Iterations=1;
+        CtrlVar.Inverse.Iterations=2;
         
         CtrlVar.Inverse.InvertFor='logAGlenlogC' ; % {'C','logC','AGlen','logAGlen'}
         CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor;
@@ -75,19 +75,22 @@ switch UserVar.RunType
         CtrlVar.Inverse.Regularize.logC.gs=1e3 ;
         CtrlVar.Inverse.Regularize.logAGlen.ga=1;
         CtrlVar.Inverse.Regularize.logAGlen.gs=1e3 ;
-        
+        CtrlVar.Inverse.MinimisationMethod="MatlabOptimization";
         
         if contains(UserVar.RunType,'FixPoint')
             
-            % FixPoint inversion is an ad-hoc method of estimating the gradient of the cost function with respect to C.
-            % It can produce quite good estimates for C using just one or two inversion iterations, but then typically stagnates.
-            % The FixPoint method can often be used right at the start of an inversion to get a reasonably good C estimate,
-            % after which in a restart step one can switch to gradient calculation using adjoint
-            CtrlVar.Inverse.DataMisfit.GradientCalculation='FixPoint' ;
-            CtrlVar.Inverse.InvertFor='logC' ;
-            CtrlVar.Inverse.Iterations=1;
-            CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor;
+            % FixPoint inversion is an ad-hoc method of estimating the gradient of the cost function with respect to C. It can produce quite good
+            % estimates for C using just one or two inversion iterations, but then typically stagnates. The FixPoint method can often be used right
+            % at the start of an inversion to get a reasonably good C estimate, after which in a restart step one can switch to gradient
+            % calculation using adjoint
             
+            CtrlVar.Inverse.InvertFor='logC' ;
+            CtrlVar.Inverse.Iterations=10;
+            CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor;
+            CtrlVar.Inverse.MinimisationMethod='UaOptimization-Hessian'; % {'MatlabOptimization','UaOptimization'}
+            
+            CtrlVar.Inverse.DataMisfit.Multiplier=1;
+            CtrlVar.Inverse.Regularize.Multiplier=1;
         end
         
         % [----------- Testing adjoint gradents
@@ -225,32 +228,7 @@ CtrlVar.ExplicitMeshRefinementCriteria(I).p=[];
 CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
 CtrlVar.ExplicitMeshRefinementCriteria(I).Use=false;
 
-%%
-                                                        
-%%  Bounds on C and AGlen
-%CtrlVar.AGlenmin=1e-10; CtrlVar.AGlenmax=1e-5;
-%CtrlVar.Cmin=1e-6;  CtrlVar.Cmax=1e20;        
-%CtrlVar.CisElementBased=0;   
-%CtrlVar.AGlenisElementBased=0;   
 
-
-if contains(UserVar.RunType,"MatOpt")
-    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization";
-else
-    CtrlVar.Inverse.MinimisationMethod="UaOptimization";
-    if contains(UserVar.RunType,"ConjGrad")
-        CtrlVar.Inverse.GradientUpgradeMethod="ConjGrad" ; %{'SteepestDecent','ConjGrad'}
-    elseif contains(UserVar.RunType,"Hessian")
-        CtrlVar.Inverse.MinimisationMethod="UaOptimization:Hessian";
-        CtrlVar.Inverse.InvertFor="-C-" ; % {'C','logC','AGlen','logAGlen'}
-        CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor; 
-        CtrlVar.Inverse.Regularize.C.ga=1; 
-        CtrlVar.Inverse.Regularize.C.gs=1; 
-        CtrlVar.Inverse.AdjointGradientPreMultiplier="I";
-    else
-        CtrlVar.Inverse.GradientUpgradeMethod="SteepestDecent" ; %{'SteepestDecent','ConjGrad'}
-    end
-end
 
 %%
 UserVar.AddDataErrors=0;
