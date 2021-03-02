@@ -42,11 +42,12 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar
     CtrlVar.WhenPlottingMesh_PlotMeshBoundaryCoordinatesToo=0;  CtrlVar.PlotLabels=0;
     
     CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';
-    %CtrlVar.MeshRefinementMethod='explicit:local:red-green';
-    CtrlVar.MeshRefinementMethod='explicit:global';
+    % CtrlVar.MeshRefinementMethod='explicit:local:red-green';
+    % CtrlVar.MeshRefinementMethod='explicit:global';
     CtrlVar.LocalAdaptMeshSmoothingIterations=0;
     
-    I=1;
+    I=0 ; 
+    I=I+1;
     CtrlVar.ExplicitMeshRefinementCriteria(I).Name='effective strain rates gradient';
     CtrlVar.ExplicitMeshRefinementCriteria(I).Scale=1e-8;
     CtrlVar.ExplicitMeshRefinementCriteria(I).EleMin=[];
@@ -55,7 +56,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar
     CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
     CtrlVar.ExplicitMeshRefinementCriteria(I).Use=false;
     
-    I=2;
+    I=I+1;
     CtrlVar.ExplicitMeshRefinementCriteria(I).Name='effective strain rates';
     CtrlVar.ExplicitMeshRefinementCriteria(I).Scale=5e-5;
     CtrlVar.ExplicitMeshRefinementCriteria(I).EleMin=[];
@@ -63,6 +64,19 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar
     CtrlVar.ExplicitMeshRefinementCriteria(I).p=[];
     CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
     CtrlVar.ExplicitMeshRefinementCriteria(I).Use=true;
+    
+    I=I+1;
+    CtrlVar.ExplicitMeshRefinementCriteria(I).Name='lower surface gradient';
+    CtrlVar.ExplicitMeshRefinementCriteria(I).Scale=0.01;
+    CtrlVar.ExplicitMeshRefinementCriteria(I).EleMin=[];
+    CtrlVar.ExplicitMeshRefinementCriteria(I).EleMax=[];
+    CtrlVar.ExplicitMeshRefinementCriteria(I).p=[];
+    CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
+    CtrlVar.ExplicitMeshRefinementCriteria(I).Use=false;
+    
+    
+    
+    
     
     %%
     CtrlVar.LineSeachAllowedToUseExtrapolation=1;

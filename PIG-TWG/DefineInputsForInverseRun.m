@@ -32,23 +32,40 @@ Meas.vsCov=sparse(1:MUA.Nnodes,1:MUA.Nnodes,vsError.^2,MUA.Nnodes,MUA.Nnodes);
 Priors.AGlen=AGlenVersusTemp(-10);
 Priors.n=F.n; 
 
-% Come up with a rough guess for C based on measured velocities and typical basal stress
-SpeedMeasured=vecnorm([Meas.us Meas.vs],2,2) ; 
-SpeedMin=10 ; 
-SpeedMeasured(SpeedMeasured<SpeedMin)=SpeedMin ; 
-tau=50 ;  tauMin=5 ; 
-CGuess=SpeedMeasured./tau.^F.m ;
-Cmax=max(SpeedMeasured.*F.GF.node./tauMin.^F.m) ;
-CGuess(CGuess>Cmax)=Cmax ; 
 
-% Or just give a rough initial uniform guess
-CGuess=100/50^F.m(1) ; 
+switch CtrlVar.SlidingLaw
+    
+    case {"Weertman","Tsai","Cornford","Umbi"}
+        
+        % u=C tau^m
+        
+        tau=100 ; % units meters, year , kPa
+        MeasuredSpeed=sqrt(Meas.us.*Meas.us+Meas.vs.*Meas.vs);
+        Priors.m=F.m;
+        C0=(MeasuredSpeed+1)./(tau.^Priors.m);
+        Priors.C=C0;
+        
+        
+    case {"Budd","W-N0"}
 
-Priors.C=CGuess;
-Priors.rho=F.rho;
-Priors.rhow=F.rhow;
+        hf=F.rhow.*(F.S-F.B)./F.rho;
+        hf(hf<eps)=0;
+        Dh=(F.s-F.b)-hf; Dh(Dh<eps)=0;
+        N=F.rho.*F.g.*Dh;
+        
+        MeasuredSpeed=sqrt(Meas.us.*Meas.us+Meas.vs.*Meas.vs);
+        tau=100+zeros(MUA.Nnodes,1) ; 
+        C0=N.^F.q.*MeasuredSpeed./(tau.^F.m);
+        Priors.C=C0 ; 
+        Priors.m=F.m ; 
+        
+    otherwise
+        
+        error('asfd')
+end
 
-%% Define Start Values for the Inversion.
+
+%% Define Start Values 
 % This is only used at the very start of the inversion. (In an inverse restart run the initial value is always the last values from
 % previous run.)
 InvStartValues.C=Priors.C ;

@@ -3,11 +3,14 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
 
 
 %% Select the type of run by uncommenting one of the following options:
-
+%
+%  
+% close all ; job=batch("Ua","Pool",1)
+% 
 if isempty(UserVar) || ~isfield(UserVar,'RunType')
     
     UserVar.RunType='Inverse-MatOpt';
-    UserVar.RunType='Inverse-FixPoint';
+    % UserVar.RunType='Inverse-UaOpt';
     % UserVar.RunType='Inverse-ConjGrad';
     % UserVar.RunType='Inverse-SteepestDesent';
     % UserVar.RunType='Inverse-ConjGrad-FixPoint';
@@ -43,11 +46,14 @@ end
 
 %%
 
-CtrlVar.Experiment=UserVar.RunType;
+
+
+
+CtrlVar.SlidingLaw="Weertman" ; % "Tsai" ; % "Cornford" ;  "Umbi" ; "Cornford" ; % "Tsai" , "Budd" 
 
 switch UserVar.RunType
     
-    case {'Inverse-MatOpt','Inverse-FixPoint'}
+    case {'Inverse-MatOpt','Inverse-UaOpt'}
         
         CtrlVar.InverseRun=1;
         
@@ -62,32 +68,32 @@ switch UserVar.RunType
         CtrlVar.ReadInitialMesh=1;
         CtrlVar.AdaptMesh=0;
         
-        CtrlVar.Inverse.Iterations=2;
+        CtrlVar.Inverse.Iterations=500;
         
-        CtrlVar.Inverse.InvertFor='logAGlenlogC' ; % {'C','logC','AGlen','logAGlen'}
+        CtrlVar.DevelopmentVersion=1; 
+        CtrlVar.Inverse.DataMisfit.Hessian="RHA=E RHC=E IHC=FP IHA=FP";
+        CtrlVar.Inverse.InvertFor="-logA-logC-" ; % {'C','logC','AGlen','logAGlen'}
         CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor;
+        CtrlVar.Inverse.DataMisfit.GradientCalculation="-adjoint-" ; % "-FixpointC-"; "adjoint";
+        CtrlVar.Inverse.Measurements="-uv-" ;  % {'-uv-,'-uv-dhdt-','-dhdt-'}
         
-        CtrlVar.Inverse.Measurements='-uv-' ;  % {'-uv-,'-uv-dhdt-','-dhdt-'}
-        
-        CtrlVar.Inverse.AdjointGradientPreMultiplier='M'; % {'I','M'}
+        CtrlVar.Inverse.AdjointGradientPreMultiplier='I'; % {'I','M'}
         
         CtrlVar.Inverse.Regularize.logC.ga=1;
         CtrlVar.Inverse.Regularize.logC.gs=1e3 ;
         CtrlVar.Inverse.Regularize.logAGlen.ga=1;
         CtrlVar.Inverse.Regularize.logAGlen.gs=1e3 ;
-        CtrlVar.Inverse.MinimisationMethod="MatlabOptimization";
+        CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased";
+        CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";
         
-        if contains(UserVar.RunType,'FixPoint')
+        if contains(UserVar.RunType,"UaOpt")
             
-            % FixPoint inversion is an ad-hoc method of estimating the gradient of the cost function with respect to C. It can produce quite good
-            % estimates for C using just one or two inversion iterations, but then typically stagnates. The FixPoint method can often be used right
-            % at the start of an inversion to get a reasonably good C estimate, after which in a restart step one can switch to gradient
-            % calculation using adjoint
             
-            CtrlVar.Inverse.InvertFor='logC' ;
-            CtrlVar.Inverse.Iterations=10;
+            CtrlVar.Inverse.InvertFor="-logA-" ;
+            CtrlVar.Inverse.Iterations=5;
             CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor;
             CtrlVar.Inverse.MinimisationMethod='UaOptimization-Hessian'; % {'MatlabOptimization','UaOptimization'}
+            
             
             CtrlVar.Inverse.DataMisfit.Multiplier=1;
             CtrlVar.Inverse.Regularize.Multiplier=1;
@@ -161,8 +167,8 @@ CtrlVar.doAdaptMeshPlots=5;
 
 %% Meshing 
 
-CtrlVar.ReadInitialMeshFileName='PIG-TWG-Mesh.mat';
-CtrlVar.SaveInitialMeshFileName='MeshFile.mat';
+CtrlVar.ReadInitialMeshFileName='PIG-TWG-Mesh';
+CtrlVar.SaveInitialMeshFileName='MeshFile';
 CtrlVar.MaxNumberOfElements=70e3;
 
 CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';   
@@ -241,21 +247,32 @@ CtrlVar.ResetThicknessToMinThickness=1;  % change this later on
 CtrlVar.ThickMin=50;
 
 %%
-filename=sprintf('IR-%s-%s-Nod%i-%s-%s-Cga%f-Cgs%f-Aga%f-Ags%f-%i-%i-%s',...
-    UserVar.RunType,...
-    CtrlVar.Inverse.MinimisationMethod,...
-    CtrlVar.TriNodes,...
-    CtrlVar.Inverse.AdjointGradientPreMultiplier,...
-    CtrlVar.Inverse.DataMisfit.GradientCalculation,...
-    CtrlVar.Inverse.Regularize.logC.ga,...
-    CtrlVar.Inverse.Regularize.logC.gs,...
-    CtrlVar.Inverse.Regularize.logAGlen.ga,...
-    CtrlVar.Inverse.Regularize.logAGlen.gs,...
-    CtrlVar.CisElementBased,...
-    CtrlVar.AGlenisElementBased,...
-    CtrlVar.Inverse.InvertFor);
-filename=replace(filename,'.','k');
-CtrlVar.Inverse.NameOfRestartOutputFile=filename;
-CtrlVar.Inverse.NameOfRestartInputFile=CtrlVar.Inverse.NameOfRestartOutputFile;
+
+if CtrlVar.InverseRun
+    CtrlVar.Experiment="PIG-TWG-Inverse-"...
+       +CtrlVar.ReadInitialMeshFileName...
+        +CtrlVar.Inverse.InvertFor...
+        +CtrlVar.Inverse.MinimisationMethod...
+        +"-"+CtrlVar.Inverse.AdjointGradientPreMultiplier...
+        +CtrlVar.Inverse.DataMisfit.GradientCalculation...
+        +CtrlVar.Inverse.DataMisfit.Hessian...
+        +"-"+CtrlVar.SlidingLaw...
+        +"-"+num2str(CtrlVar.DevelopmentVersion);
+else
+    CtrlVar.Experiment="PIG-TWG-Forward"...
+        +CtrlVar.ReadInitialMeshFileName;
+    
+end
+
+CtrlVar.Experiment=replace(CtrlVar.Experiment," ","-"); 
+CtrlVar.Experiment=replace(CtrlVar.Experiment,".","k"); 
+
+
+CtrlVar.NameOfRestartFiletoWrite=CtrlVar.Experiment+"-ForwardRestartFile.mat";
+CtrlVar.NameOfRestartFiletoRead=CtrlVar.NameOfRestartFiletoWrite;
+
+CtrlVar.Inverse.NameOfRestartOutputFile=CtrlVar.Experiment+"-InverseRestartFile.mat";
+CtrlVar.Inverse.NameOfRestartInputFile=CtrlVar.Inverse.NameOfRestartOutputFile; 
+
 
 end
