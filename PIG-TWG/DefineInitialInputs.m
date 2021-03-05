@@ -11,10 +11,6 @@ if isempty(UserVar) || ~isfield(UserVar,'RunType')
     
     UserVar.RunType='Inverse-MatOpt';
     % UserVar.RunType='Inverse-UaOpt';
-    % UserVar.RunType='Inverse-ConjGrad';
-    % UserVar.RunType='Inverse-SteepestDesent';
-    % UserVar.RunType='Inverse-ConjGrad-FixPoint';
-    % UserVar.RunType='Forward-Diagnostic';
     % UserVar.RunType='Forward-Transient';
     % UserVar.RunType='TestingMeshOptions';
 end
@@ -68,10 +64,10 @@ switch UserVar.RunType
         CtrlVar.ReadInitialMesh=1;
         CtrlVar.AdaptMesh=0;
         
-        CtrlVar.Inverse.Iterations=500;
+        CtrlVar.Inverse.Iterations=10;
         
         CtrlVar.DevelopmentVersion=1; 
-        CtrlVar.Inverse.DataMisfit.Hessian="RHA=E RHC=E IHC=FP IHA=FP";
+        CtrlVar.Inverse.Hessian="RHA=E RHC=E IHC=FP IHA=FP";
         CtrlVar.Inverse.InvertFor="-logA-logC-" ; % {'C','logC','AGlen','logAGlen'}
         CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor;
         CtrlVar.Inverse.DataMisfit.GradientCalculation="-adjoint-" ; % "-FixpointC-"; "adjoint";
@@ -255,7 +251,7 @@ if CtrlVar.InverseRun
         +CtrlVar.Inverse.MinimisationMethod...
         +"-"+CtrlVar.Inverse.AdjointGradientPreMultiplier...
         +CtrlVar.Inverse.DataMisfit.GradientCalculation...
-        +CtrlVar.Inverse.DataMisfit.Hessian...
+        +CtrlVar.Inverse.Hessian...
         +"-"+CtrlVar.SlidingLaw...
         +"-"+num2str(CtrlVar.DevelopmentVersion);
 else
