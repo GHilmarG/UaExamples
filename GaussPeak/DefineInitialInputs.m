@@ -1,5 +1,5 @@
 
-function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar,CtrlVar)
+function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,CtrlVar)
     
   
     CtrlVar.Experiment='TestGaussPeak';
@@ -20,6 +20,8 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar
     %%
     xd=200e3; xu=-200e3 ; yl=200e3 ; yr=-200e3;
     MeshBoundaryCoordinates=flipud([xu yr ; xd yr ; xd yl ; xu yl]);
+
+
     CtrlVar.GmshGeoFileAdditionalInputLines{1}='Periodic Line {1,2} = {3,4};';  % these lines are added to the gmsh .geo input file each time such a file is created
     CtrlVar.MeshGenerator='gmsh';  % possible values: {mesh2d|gmsh}
     CtrlVar.OnlyMeshDomainAndThenStop=0;
