@@ -76,7 +76,7 @@ if ~strcmp(CtrlVar.DefineOutputsInfostring,'Last call') ; return ; end
 
 
 if contains(plots,'-sbB-')
-    figure(5)
+    FindOrCreateFigure("-sbB-")
     hold off
     if isempty(TRI) ;  TRI = delaunay(x,y); end
     trisurf(TRI,x/CtrlVar.PlotXYscale,y/CtrlVar.PlotXYscale,s,'EdgeColor','none') ; hold on
@@ -95,7 +95,7 @@ end
 
 if contains(plots,'-ubvb-')
     % plotting horizontal velocities
-    figure
+    FindOrCreateFigure("-ubvb-")
     N=1;
     %speed=sqrt(ub.*ub+vb.*vb);
     %CtrlVar.MinSpeedWhenPlottingVelArrows=0; CtrlVar.MaxPlottedSpeed=max(speed); %CtrlVar.VelPlotIntervalSpacing='log10';
@@ -110,7 +110,7 @@ end
 
 if contains(plots,'-udvd-')
     % plotting horizontal velocities
-    figure
+    FindOrCreateFigure("-udvd-")
     N=1;
     %speed=sqrt(ud.*ud+vd.*vd);
     %CtrlVar.VelPlotIntervalSpacing='log10';
@@ -132,7 +132,7 @@ if contains(plots,'-e-')
     % therfore if plotting on nodes, must first project these onto nodes
     eNod=ProjectFintOntoNodes(MUA,e);
     
-    figure
+    FindOrCreateFigure("-e-")
     [FigHandle,ColorbarHandel,tri]=PlotNodalBasedQuantities(MUA.connectivity,MUA.coordinates,eNod,CtrlVar)    ;
     title(sprintf('e t=%-g ',time)) ; xlabel('x (km)') ; ylabel('y (km)')
     
@@ -140,7 +140,7 @@ end
 
 if contains(plots,'-ub-')
     
-    figure
+    FindOrCreateFigure("-ub-")
     [FigHandle,ColorbarHandel,tri]=PlotNodalBasedQuantities(MUA.connectivity,MUA.coordinates,ub,CtrlVar)    ;
     title(sprintf('ub t=%-g ',time)) ; xlabel('x (km)') ; ylabel('y (km)')
     

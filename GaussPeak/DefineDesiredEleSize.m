@@ -33,10 +33,11 @@ function [UserVar,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened]=...
 %
 %
 %%
- 
-I=x>-150e3 & x<150e3 & y<150e3 & y>-150e3 ;  
+
+I=x>-120e3 & x<120e3 & y<120e3 & y>-120e3 ;
 
 EleSizeDesired(~I)=CtrlVar.MeshSizeMax;
+ElementsToBeRefined(~I)=false;
+ElementsToBeCoarsened(~I)=false;
 
-    
 end
