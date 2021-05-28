@@ -12,10 +12,6 @@ if isempty(nCalls)
     nCalls=0;
 end
 
-if nargin==1
-    load(CtrlVar) ; CtrlVar=CtrlVarInRestartFile;
-end
-
 
 %%
 if ~isfield(CtrlVar,'DefineOutputs')

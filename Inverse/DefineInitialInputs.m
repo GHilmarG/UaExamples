@@ -1,9 +1,10 @@
-function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar,CtrlVar)
+function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,CtrlVar)
 
 
 
 if ~isfield(UserVar,'RunType')
-    UserVar.RunType='IceStream';
+    UserVar.RunType='IceShelf';   %  A pertubation only
+    UserVar.RunType='IceStream';  %  C pertubation only
 end
 
 UserVar.AddDataErrors=0;
@@ -27,32 +28,39 @@ CtrlVar.NameOfRestartFiletoWrite=CtrlVar.NameOfRestartFiletoRead;
 
 %% Inverse   -inverse
 CtrlVar.Inverse.MinimisationMethod='MatlabOptimization'; % {'MatlabOptimization','UaOptimization'}
+CtrlVar.Inverse.AdjointGradientPreMultiplier="M" ; 
 
-CtrlVar.Inverse.InvertFor='-logA-logC-'; 
-CtrlVar.Inverse.Regularize.Field='-logA-logC-' ;
-CtrlVar.Inverse.Iterations=4;
+CtrlVar.Inverse.MinimisationMethod='UaOptimization-Hessian'; % {'MatlabOptimization','UaOptimization'}
+CtrlVar.Inverse.InfoLevelBackTrack=1000;  % info on backtracking within inverse step
+
+
+CtrlVar.Inverse.InvertFor='-logC-';
+CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor; 
+CtrlVar.Inverse.Iterations=40;
+
 
 CtrlVar.Inverse.InfoLevel=1;  % Set to 1 to get some basic information, >=2 for additional info on backtrackgin,
-                                 % >=100 for further info and plots
+% >=100 for further info and plots
 
 CtrlVar.InfoLevelNonLinIt=0; CtrlVar.InfoLevel=0;
 
-                                                    
+CtrlVar.Inverse.DataMisfit.Multiplier=1;
+CtrlVar.Inverse.Regularize.Multiplier=1;
 % regularisation parameters
 CtrlVar.Inverse.Regularize.C.gs=1;
 CtrlVar.Inverse.Regularize.C.ga=1;
-CtrlVar.Inverse.Regularize.logC.ga=1;
-CtrlVar.Inverse.Regularize.logC.gs=1 ; % 1e6  works well with I
+CtrlVar.Inverse.Regularize.logC.ga=0;
+CtrlVar.Inverse.Regularize.logC.gs=1000 ; % 1e6  works well with I
 
-CtrlVar.Inverse.Regularize.AGlen.gs=1;
-CtrlVar.Inverse.Regularize.AGlen.ga=1;
-CtrlVar.Inverse.Regularize.logAGlen.ga=1;
-CtrlVar.Inverse.Regularize.logAGlen.gs=1 ;
+CtrlVar.Inverse.Regularize.AGlen.gs=1000;
+CtrlVar.Inverse.Regularize.AGlen.ga=0;
+CtrlVar.Inverse.Regularize.logAGlen.ga=0;
+CtrlVar.Inverse.Regularize.logAGlen.gs=1000 ;
 
 
 %% Mesh generation and remeshing parameters
 
-CtrlVar.TriNodes=3;
+CtrlVar.TriNodes=6;
 CtrlVar.meshgeneration=1;
 CtrlVar.GmshMeshingAlgorithm=8;    % see gmsh manual
 % 1=MeshAdapt

@@ -34,9 +34,9 @@ cd ..
 
 cd PIG-TWG\
 UserVar.RunType='Inverse-MatOpt'; Ua(UserVar) ;
-UserVar.RunType='Inverse-ConjGrad' ; Ua(UserVar) ;
-UserVar.RunType='Inverse-SteepestDesent' ; Ua(UserVar) ;
-UserVar.RunType='Inverse-ConjGrad-FixPoint'; Ua(UserVar) ;
+UserVar.RunType='Inverse-UaOpt' ; Ua(UserVar) ;
+UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased"; Ua(UserVar,CtrlVar) ;
+UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased"; Ua(UserVar,CtrlVar) ;
 UserVar.RunType='TestingMeshOptions' ; Ua(UserVar) ;
 cd ..
 

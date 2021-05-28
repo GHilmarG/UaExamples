@@ -8,7 +8,7 @@ dasdh=zeros(MUA.Nnodes,1)+1;
 ab=s*0;
 dabdh=zeros(MUA.Nnodes,1);
 
-
+%  as = as_0 + das/dh  dh
 
 
 %fprintf('time=%f \t as=%f \t h=%f \n ',time,mean(as),mean(h))

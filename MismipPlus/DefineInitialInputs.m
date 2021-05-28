@@ -1,4 +1,4 @@
-function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar,CtrlVar)
+function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,CtrlVar)
 
 
 %%
@@ -10,12 +10,12 @@ CtrlVar.SlidingLaw="W" ;  % options:  "W","W-N0","minCW-N0","C","rpCW-N0", and "
 CtrlVar.Experiment=['MismipPlus-',UserVar.MisExperiment];   
 %% Types of run
 %
-CtrlVar.TimeDependentRun=1; 
-CtrlVar.TotalNumberOfForwardRunSteps=2;
+CtrlVar.TimeDependentRun=0; 
+CtrlVar.TotalNumberOfForwardRunSteps=10;
 CtrlVar.TotalTime=100;
 CtrlVar.Restart=0;  
-CtrlVar.InfoLevelNonLinIt=100; 
-CtrlVar.NRitmax=500;       % maximum number of NR iteration
+CtrlVar.InfoLevelNonLinIt=1;  % try setting to 100 for more info and plots on non-linear convergence  
+CtrlVar.NRitmax=500;            % maximum number of NR iteration
 CtrlVar.dt=0.01;  
 
 %% testing Coulomb convergence  
@@ -55,9 +55,9 @@ CtrlVar.NameOfRestartFiletoRead=CtrlVar.NameOfRestartFiletoWrite;
 
 
 %% adapt mesh
-CtrlVar.InfoLevelAdaptiveMeshing=100;
+CtrlVar.InfoLevelAdaptiveMeshing=1;
 CtrlVar.doAdaptMeshPlots=1; 
-CtrlVar.MeshGenerator='gmsh';  % possible values: {mesh2d|gmsh}
+CtrlVar.MeshGenerator='mesh2d' ; % 'gmsh';  % possible values: {mesh2d|gmsh}
 
 CtrlVar.GmshMeshingAlgorithm=8;     % see gmsh manual
                                     % 1=MeshAdapt
@@ -78,7 +78,7 @@ CtrlVar.MeshSizeMin=0.01*CtrlVar.MeshSize;     % min element size
 
 CtrlVar.MaxNumberOfElements=250e3;           % max number of elements. If #elements larger then CtrlMeshSize/min/max are changed
 
-CtrlVar.AdaptMesh=0;         
+CtrlVar.AdaptMesh=1;         
 CtrlVar.AdaptMeshMaxIterations=10;  % Number of adapt mesh iterations within each run-step.
 CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';    % can have any of these values:
                                                    % 'explicit:global' 
@@ -96,7 +96,8 @@ CtrlVar.AdaptMeshAndThenStop=0;    % if true, then mesh will be adapted but no f
 
 
 CtrlVar.AdaptMeshRunStepInterval=1;  % number of run-steps between mesh adaptation
-CtrlVar.MeshAdapt.GLrange=[20000 5000 ; 5000 500];
+
+CtrlVar.MeshAdapt.GLrange=[20000 5000 ; 10000 500 ];
 
 
 

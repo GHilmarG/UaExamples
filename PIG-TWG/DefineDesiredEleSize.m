@@ -71,7 +71,7 @@ switch lower(CtrlVar.MeshRefinementMethod)
 
         EleSizeIndicator=EleSizeDesired;
         
-        EleSizeIndicator(GF.node<0.1)=UserVar.MeshSizeIceShelves;
+        EleSizeIndicator(GF.node<0.1)=UserVar.MeshSizeIceShelves; 
         EleSizeDesired=min(EleSizeDesired,EleSizeIndicator);
         
         EleSizeIndicator(s<1500)=CtrlVar.MeshSizeMax/5;
@@ -79,7 +79,7 @@ switch lower(CtrlVar.MeshRefinementMethod)
         
         xmin=-1727e3   ; xmax=-1100e3 ; ymin=-600e3 ; ymax=-20.e3;
         ind=x< xmax & x>xmin & y>ymin & y< ymax ;
-        EleSizeDesired(~ind)=CtrlVar.MeshSizeMax;
+        EleSizeDesired(~ind)=CtrlVar.MeshSizeMax;  
         
     case {'explicit:local:newest vertex bisection','explicit:local:red-green'}
         

@@ -1,5 +1,5 @@
 
-function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar,CtrlVar)
+function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,CtrlVar)
     
   
     CtrlVar.Experiment='TestGaussPeak';
@@ -20,6 +20,8 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar
     %%
     xd=200e3; xu=-200e3 ; yl=200e3 ; yr=-200e3;
     MeshBoundaryCoordinates=flipud([xu yr ; xd yr ; xd yl ; xu yl]);
+
+
     CtrlVar.GmshGeoFileAdditionalInputLines{1}='Periodic Line {1,2} = {3,4};';  % these lines are added to the gmsh .geo input file each time such a file is created
     CtrlVar.MeshGenerator='gmsh';  % possible values: {mesh2d|gmsh}
     CtrlVar.OnlyMeshDomainAndThenStop=0;
@@ -42,11 +44,12 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar
     CtrlVar.WhenPlottingMesh_PlotMeshBoundaryCoordinatesToo=0;  CtrlVar.PlotLabels=0;
     
     CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';
-    %CtrlVar.MeshRefinementMethod='explicit:local:red-green';
-    CtrlVar.MeshRefinementMethod='explicit:global';
+    % CtrlVar.MeshRefinementMethod='explicit:local:red-green';
+    % CtrlVar.MeshRefinementMethod='explicit:global';
     CtrlVar.LocalAdaptMeshSmoothingIterations=0;
     
-    I=1;
+    I=0 ; 
+    I=I+1;
     CtrlVar.ExplicitMeshRefinementCriteria(I).Name='effective strain rates gradient';
     CtrlVar.ExplicitMeshRefinementCriteria(I).Scale=1e-8;
     CtrlVar.ExplicitMeshRefinementCriteria(I).EleMin=[];
@@ -55,7 +58,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar
     CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
     CtrlVar.ExplicitMeshRefinementCriteria(I).Use=false;
     
-    I=2;
+    I=I+1;
     CtrlVar.ExplicitMeshRefinementCriteria(I).Name='effective strain rates';
     CtrlVar.ExplicitMeshRefinementCriteria(I).Scale=5e-5;
     CtrlVar.ExplicitMeshRefinementCriteria(I).EleMin=[];
@@ -63,6 +66,19 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar
     CtrlVar.ExplicitMeshRefinementCriteria(I).p=[];
     CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
     CtrlVar.ExplicitMeshRefinementCriteria(I).Use=true;
+    
+    I=I+1;
+    CtrlVar.ExplicitMeshRefinementCriteria(I).Name='lower surface gradient';
+    CtrlVar.ExplicitMeshRefinementCriteria(I).Scale=0.01;
+    CtrlVar.ExplicitMeshRefinementCriteria(I).EleMin=[];
+    CtrlVar.ExplicitMeshRefinementCriteria(I).EleMax=[];
+    CtrlVar.ExplicitMeshRefinementCriteria(I).p=[];
+    CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
+    CtrlVar.ExplicitMeshRefinementCriteria(I).Use=false;
+    
+    
+    
+    
     
     %%
     CtrlVar.LineSeachAllowedToUseExtrapolation=1;

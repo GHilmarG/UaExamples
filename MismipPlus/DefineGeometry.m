@@ -4,6 +4,7 @@ function [UserVar,s,b,S,B,alpha]=DefineGeometry(UserVar,CtrlVar,MUA,time,FieldsT
 
 % Defines model geometry
 
+
 x=MUA.coordinates(:,1); y=MUA.coordinates(:,2);
 alpha=0.;
 
