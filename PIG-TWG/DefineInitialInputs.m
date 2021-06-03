@@ -26,11 +26,12 @@ end
 % Put the OneDrive folder `Interpolants' into you directory so that it can be reached as ../Interpolants with respect to you rundirectory. 
 %
 %
-UserVar.GeometryInterpolant='../../Interpolants/Bedmap2GriddedInterpolantModifiedBathymetry.mat'; % this assumes you have downloaded the OneDrive folder `Interpolants'.
+%UserVar.GeometryInterpolant='../../Interpolants/Bedmap2GriddedInterpolantModifiedBathymetry.mat'; % this assumes you have downloaded the OneDrive folder `Interpolants'.
+UserVar.GeometryInterpolant='../../Interpolants/BedMachineGriddedInterpolants.mat';                       
 UserVar.DensityInterpolant='../../Interpolants/DepthAveragedDensityGriddedInterpolant.mat';
 UserVar.SurfaceVelocityInterpolant='../../Interpolants/SurfVelMeasures990mInterpolants.mat';
 
-UserVar.CFile='FC5kGrid_m3.mat'; UserVar.AFile='FA5kGrid_n3.mat';
+
 UserVar.CFile='FC.mat'; UserVar.AFile='FA.mat';
 
 if ~isfile(UserVar.GeometryInterpolant) || ~isfile(UserVar.DensityInterpolant) || ~isfile(UserVar.SurfaceVelocityInterpolant)
