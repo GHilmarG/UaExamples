@@ -10,8 +10,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
 if isempty(UserVar) || ~isfield(UserVar,'RunType')
     
     UserVar.RunType='Inverse-MatOpt';
-    % UserVar.RunType='Inverse-UaOpt';
-    % UserVar.RunType='Forward-Transient';
+    % UserVar.RunType='Inverse-UaOpt';meshb    % UserVar.RunType='Forward-Transient';
     % UserVar.RunType='TestingMeshOptions';
 end
 
@@ -28,13 +27,12 @@ end
 %
 %UserVar.GeometryInterpolant='../../Interpolants/Bedmap2GriddedInterpolantModifiedBathymetry.mat'; % this assumes you have downloaded the OneDrive folder `Interpolants'.
 UserVar.GeometryInterpolant='../../Interpolants/BedMachineGriddedInterpolants.mat';                       
-UserVar.DensityInterpolant='../../Interpolants/DepthAveragedDensityGriddedInterpolant.mat';
 UserVar.SurfaceVelocityInterpolant='../../Interpolants/SurfVelMeasures990mInterpolants.mat';
-
-
+UserVar.MeshBoundaryCoordinatesFile='../../Interpolants/MeshBoundaryCoordinatesForAntarcticaBasedOnBedmachine'; 
+UserVar.DistanceBetweenPointsAlongBoundary=5e3 ; 
 UserVar.CFile='FC.mat'; UserVar.AFile='FA.mat';
 
-if ~isfile(UserVar.GeometryInterpolant) || ~isfile(UserVar.DensityInterpolant) || ~isfile(UserVar.SurfaceVelocityInterpolant)
+if ~isfile(UserVar.GeometryInterpolant) || ~isfile(UserVar.SurfaceVelocityInterpolant)
      
      fprintf('\n This run requires the additional input files: \n %s \n %s \n %s  \n \n',UserVar.GeometryInterpolant,UserVar.DensityInterpolant,UserVar.SurfaceVelocityInterpolant)
      fprintf('You can download these file from : https://1drv.ms/f/s!Anaw0Iv-oEHTloRzWreBMDBFCJ0R4Q \n')
@@ -67,21 +65,17 @@ switch UserVar.RunType
         
         CtrlVar.Inverse.Iterations=10;
         
-        CtrlVar.DevelopmentVersion=1; 
-        CtrlVar.Inverse.Hessian="RHA=E RHC=E IHC=FP IHA=FP";
         CtrlVar.Inverse.InvertFor="-logA-logC-" ; % {'C','logC','AGlen','logAGlen'}
         CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor;
         CtrlVar.Inverse.DataMisfit.GradientCalculation="-adjoint-" ; % "-FixpointC-"; "adjoint";
         CtrlVar.Inverse.Measurements="-uv-" ;  % {'-uv-,'-uv-dhdt-','-dhdt-'}
-        
-        CtrlVar.Inverse.AdjointGradientPreMultiplier='I'; % {'I','M'}
+  
         
         CtrlVar.Inverse.Regularize.logC.ga=1;
         CtrlVar.Inverse.Regularize.logC.gs=1e3 ;
         CtrlVar.Inverse.Regularize.logAGlen.ga=1;
         CtrlVar.Inverse.Regularize.logAGlen.gs=1e3 ;
-        CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased";
-        CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";
+        
         
         if contains(UserVar.RunType,"UaOpt")
             
@@ -136,8 +130,10 @@ switch UserVar.RunType
         CtrlVar.InverseRun=0;
         CtrlVar.Restart=0;
         CtrlVar.ReadInitialMesh=0;
+        
         UserVar.Slipperiness.ReadFromFile=1;
         UserVar.AGlen.ReadFromFile=1;
+        
         CtrlVar.AdaptMesh=1;
         CtrlVar.AdaptMeshInitial=1  ;       % remesh in first iteration (Itime=1)  even if mod(Itime,CtrlVar.AdaptMeshRunStepInterval)~=0.
         CtrlVar.AdaptMeshAndThenStop=1;    % if true, then mesh will be adapted but no further calculations performed
@@ -170,7 +166,7 @@ CtrlVar.MaxNumberOfElements=70e3;
 
 CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';   
 % CtrlVar.MeshRefinementMethod='explicit:local:red-green';
-% CtrlVar.MeshRefinementMethod='explicit:global';   
+CtrlVar.MeshRefinementMethod='explicit:global';   
 
 CtrlVar.MeshGenerator='gmsh' ; % 'mesh2d';
 CtrlVar.MeshGenerator='mesh2d' ; % 'mesh2d';
@@ -182,7 +178,7 @@ CtrlVar.MeshSizeMin=CtrlVar.MeshSizeMax/20;
 
 UserVar.MeshSizeIceShelves=CtrlVar.MeshSizeMax/5;
 
-MeshBoundaryCoordinates=CreateMeshBoundaryCoordinatesForPIGandTWG(CtrlVar);
+MeshBoundaryCoordinates=CreateMeshBoundaryCoordinatesForPIGandTWG(UserVar,CtrlVar);
                                          
 CtrlVar.AdaptMeshInitial=1  ;       % remesh in first iteration (Itime=1)  even if mod(Itime,CtrlVar.AdaptMeshRunStepInterval)~=0.
 CtrlVar.AdaptMeshAndThenStop=1;    % if true, then mesh will be adapted but no further calculations performed

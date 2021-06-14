@@ -104,13 +104,16 @@ if ~UserVar.Slipperiness.ReadFromFile
     load(UserVar.CFile,'FC')
     fprintf(' done \n')
     InvStartValues.C=FC(F.x,F.y) ;
-    
+    % make sure that interpolation/extrapolation does not violate parameter value constraints
+    InvStartValues.C=kk_proj(InvStartValues.C,CtrlVar.Cmax,CtrlVar.Cmin) ;
 end
 if ~UserVar.AGlen.ReadFromFile
     fprintf('DefineSlipperyDistribution: loading file: %-s ',UserVar.AFile)
     load(UserVar.AFile,'FA')
     fprintf(' done \n')
     InvStartValues.AGlen=FA(F.x,F.y);
+    % make sure that interpolation/extrapolation does not violate parameter value constraints
+    InvStartValues.AGlen=kk_proj(InvStartValues.AGlen,CtrlVar.AGlenmax,CtrlVar.AGlenmin) ;
 end
 
 

@@ -8,7 +8,11 @@ if isempty(AA)
   
     % load points that define the line-segments along which the BCs are to be defined
     load AdditionalBoundaryPoints xx yy
-    AA=[xx(1:end-1) yy(1:end-1)] ; BB=[xx(2:end) yy(2:end)];
+    % AA=[xx(1:end-1) yy(1:end-1)] ; BB=[xx(2:end) yy(2:end)];
+    
+    CP=readmatrix('DomainCornerPoints.csv'); 
+    AA=CP(1:end-1,:) ; BB=CP(2:end,:) ; 
+    
 
 end
 
@@ -26,5 +30,8 @@ BCs.ubFixedNode=MUA.Boundary.Nodes(I);
 BCs.ubFixedValue=BCs.ubFixedNode*0;
 BCs.vbFixedValue=BCs.vbFixedNode*0;
 %
+
+%
+FindOrCreateFigure("BCs") ; PlotBoundaryConditions(CtrlVar,MUA,BCs);
 
 end
