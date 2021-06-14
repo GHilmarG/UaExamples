@@ -30,7 +30,19 @@ UserVar.GeometryInterpolant='../../Interpolants/BedMachineGriddedInterpolants.ma
 UserVar.SurfaceVelocityInterpolant='../../Interpolants/SurfVelMeasures990mInterpolants.mat';
 UserVar.MeshBoundaryCoordinatesFile='../../Interpolants/MeshBoundaryCoordinatesForAntarcticaBasedOnBedmachine'; 
 UserVar.DistanceBetweenPointsAlongBoundary=5e3 ; 
-UserVar.CFile='FC.mat'; UserVar.AFile='FA.mat';
+
+
+CtrlVar.SlidingLaw="Umbi" ; % "Weertman" ; % "Tsai" ; % "Cornford" ;  "Umbi" ; "Cornford" ; % "Tsai" , "Budd"
+
+switch CtrlVar.SlidingLaw
+    
+    case "Weertman"
+        UserVar.CFile='FC-Weertman.mat'; UserVar.AFile='FA-Weertman.mat';
+    case "Umbi"
+        UserVar.CFile='FC-Umbi.mat'; UserVar.AFile='FA-Umbi.mat';
+    otherwise
+        error('A and C fields not available')
+end
 
 if ~isfile(UserVar.GeometryInterpolant) || ~isfile(UserVar.SurfaceVelocityInterpolant)
      
@@ -44,7 +56,7 @@ end
 
 
 
-CtrlVar.SlidingLaw="Weertman" ; % "Tsai" ; % "Cornford" ;  "Umbi" ; "Cornford" ; % "Tsai" , "Budd" 
+
 
 switch UserVar.RunType
     
