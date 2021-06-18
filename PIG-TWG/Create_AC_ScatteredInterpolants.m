@@ -1,7 +1,7 @@
 %% Create scattered A and C interpolants
 
 
-load('C-Estimate.mat')
+load('C-EstimateWeertman.mat');
 FC=scatteredInterpolant(xC,yC,C); 
 save('FC-Weertman.mat','FC')
 

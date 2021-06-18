@@ -32,7 +32,7 @@ UserVar.MeshBoundaryCoordinatesFile='../../Interpolants/MeshBoundaryCoordinatesF
 UserVar.DistanceBetweenPointsAlongBoundary=5e3 ; 
 
 
-CtrlVar.SlidingLaw="Umbi" ; % "Weertman" ; % "Tsai" ; % "Cornford" ;  "Umbi" ; "Cornford" ; % "Tsai" , "Budd"
+CtrlVar.SlidingLaw="Weertman" ; % "Umbi" ; % "Weertman" ; % "Tsai" ; % "Cornford" ;  "Umbi" ; "Cornford" ; % "Tsai" , "Budd"
 
 switch CtrlVar.SlidingLaw
     
@@ -75,7 +75,7 @@ switch UserVar.RunType
         CtrlVar.ReadInitialMesh=1;
         CtrlVar.AdaptMesh=0;
         
-        CtrlVar.Inverse.Iterations=10;
+        CtrlVar.Inverse.Iterations=2;
         
         CtrlVar.Inverse.InvertFor="-logA-logC-" ; % {'C','logC','AGlen','logAGlen'}
         CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor;
