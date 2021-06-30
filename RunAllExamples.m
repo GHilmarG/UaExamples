@@ -1,4 +1,4 @@
-%%
+%%  Beta 30/06/2021
 cd 1dIceShelf
 Ua
 cd ..
