@@ -1,14 +1,20 @@
-%%
-%load C-Estimate.mat ; 
-load('E:\Runs\PIG-TWG\C-Estimate.mat')
+%% Create scattered A and C interpolants
+
+
+load('C-EstimateWeertman.mat');
 FC=scatteredInterpolant(xC,yC,C); 
-save('FC.mat','FC')
+save('FC-Weertman.mat','FC')
 
-
-
-%load AGlen-Estimate.mat ; 
-load('E:\Runs\PIG-TWG\AGlen-Estimate.mat')
+load('AGlen-Estimate.mat')
 FA=scatteredInterpolant(xA,yA,AGlen); 
-save('FA.mat','FA')
+save('FA-Weertman.mat','FA')
 
+%%
 
+load('C-Estimate.mat')
+FC=scatteredInterpolant(xC,yC,C); 
+save('FC-Umbi.mat','FC')
+
+load('AGlen-Estimate.mat')
+FA=scatteredInterpolant(xA,yA,AGlen); 
+save('FA-Umbi.mat','FA')
