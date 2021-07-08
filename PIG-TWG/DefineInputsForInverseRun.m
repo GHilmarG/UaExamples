@@ -98,6 +98,7 @@ InvStartValues.n=F.n ;
 % OK, here I'm allowing for the initial A and C to be read from a file, overwriting the previous values
 % The A and C estimates in these file could, for example, have been obtained from a previous inversion.
 %
+% NOte the ~ here, make sure this is what you want
 if ~UserVar.Slipperiness.ReadFromFile
     
     fprintf('DefineInputsForInverseRun: loading start values for C from the file: %-s ',UserVar.CFile)
