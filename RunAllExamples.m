@@ -21,7 +21,7 @@ close all
 cd IceShelf\
 Ua
 cd ..
-
+close all
 
 cd Inverse
 Ua
@@ -39,6 +39,7 @@ UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="Matlab
 UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased"; Ua(UserVar,CtrlVar) ;
 UserVar.RunType='TestingMeshOptions' ; Ua(UserVar) ;
 cd ..
+close all
 
 cd MassBalanceFeedback\
 Ua
