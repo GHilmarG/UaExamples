@@ -24,7 +24,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
     % Put these files in a folder and make sure that folder is in the
     % matlab path
     %
-    %  https://livenorthumbriaac-my.sharepoint.com/:f:/g/personal/hilmar_gudmundsson_northumbria_ac_uk/EgrEImnkQuJNmf1GEB80VbwB1hgKNnRMscUitVpBrghjRg
+    %
     %%
     
     if isempty(UserVar)
@@ -51,11 +51,11 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
     
     switch UserVar.RunType
         
-        case {"-1dAnalyticalIceShelf-","Test-1dAnalyticalIceShelf-"}
+        case {"-1dAnalyticalIceShelf-","Test-1dAnalyticalIceShelf-CalvingThroughMassBalanceFeedback-"}
             
             UserVar.InitialGeometry="-Constant-" ;
             CtrlVar.doplots=0;
-            CtrlVar.LevelSetMethod=0;
+            
             CtrlVar.TotalNumberOfForwardRunSteps=inf;
             CtrlVar.TotalTime=500;
             UserVar.Plots="-plot-flowline-";
@@ -63,6 +63,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
                 CtrlVar.TotalTime=100;
             end
             CtrlVar.DefineOutputsDt=1;
+            CtrlVar.MassBalanceGeometryFeedback=3;
             
         case "Test-ManuallyDeactivateElements-"
             % This is an example of how manual deactivation of elements can be used to simulate a
@@ -71,9 +72,9 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
             UserVar.InitialGeometry="-MismipPlus-" ;
             CtrlVar.ManuallyDeactivateElements=1 ;
             CtrlVar.doplots=1;
-            CtrlVar.LevelSetMethod=0;
+            
             CtrlVar.TotalNumberOfForwardRunSteps=inf;
-            CtrlVar.TotalTime=10;
+            CtrlVar.TotalTime=0.1;
             UserVar.Plots="-plot-mapplane-" ;
             CtrlVar.DefineOutputsDt=0;
         case "Test-CalvingThroughMassBalanceFeedback-"
@@ -92,7 +93,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
             CtrlVar.MassBalanceGeometryFeedback=3;
             
             CtrlVar.doplots=1;
-            CtrlVar.LevelSetMethod=0;
+            
             CtrlVar.TotalNumberOfForwardRunSteps=inf;
             CtrlVar.TotalTime=10;
             UserVar.Plots="-plot-mapplane-" ;

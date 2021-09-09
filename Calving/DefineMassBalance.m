@@ -13,16 +13,17 @@ if contains(UserVar.RunType,"-1dAnalyticalIceShelf-") || contains(UserVar.RunTyp
     dasdh=zeros(MUA.Nnodes,1) ;
     dabdh=zeros(MUA.Nnodes,1) ;
     
-%     if contains(UserVar.RunType,"-MeltFeedback-") 
-%         
-%         x=MUA.coordinates(:,1) ; 
-%         I=x>200e3 ; 
-%         hmin=1; 
-%         ab(I) = (hmin-h(I)) ; 
-%         as(I)= 0 ; 
-%         dabdh(I) = -1; 
-%         
-%     end
+    if contains(UserVar.RunType,"CalvingThroughMassBalanceFeedback") && time>10
+        
+        
+        x=MUA.coordinates(:,1) ; 
+        I=x>500e3 ; 
+        hmin=1; 
+        ab(I) = (hmin-h(I)) ; 
+        as(I)= 0 ; 
+        dabdh(I) = -1; 
+        
+    end
     
     return
 end

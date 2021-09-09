@@ -23,9 +23,9 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
 
 
     CtrlVar.GmshGeoFileAdditionalInputLines{1}='Periodic Line {1,2} = {3,4};';  % these lines are added to the gmsh .geo input file each time such a file is created
-    CtrlVar.MeshGenerator='gmsh';  % possible values: {mesh2d|gmsh}
+    %CtrlVar.MeshGenerator='gmsh';  % possible values: {mesh2d|gmsh} 
     CtrlVar.OnlyMeshDomainAndThenStop=0;
-    CtrlVar.GmshMeshingAlgorithm=8;  % see gmsh manual
+    CtrlVar.GmshMeshingAlgorithm=8;  % only relevant if using gmsh, see gmsh manual
     CtrlVar.TriNodes=6;   % [3,6,10]
     CtrlVar.MeshSize=50e3;
     CtrlVar.MeshSizeMin=0.0001*CtrlVar.MeshSize;
