@@ -3,14 +3,19 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
     
     %%
     %
-    % Calving using the level-set method is (currenlty) not implemented.
+    % 
     %
     % To describe/prescribe calving various other options are available.
     %
-    % For example elements can be deactivated and then reactivated to simulate a calving
-    % event.
+    % For example elements can be deactivated and then reactivated to simulate a calving event.
     %
-    % Also, calving can be prescribed using a melt pertubation with a thickness feedback. 
+    % Also, calving can be prescribed using a melt pertubation with a thickness feedback.
+    %
+    % Currently the best approach seems to be to use the level set method with the level set being prescribed by the user at each
+    % time step using 'DefineCalving.m'.  (Dynamically updating the level set based on a calving law is in preparaton but not
+    % ready for general use)
+    %
+    %
     %
     % Note: 
     % Here some input files are needed that give the steady-state
@@ -34,7 +39,11 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
         % UserVar.RunType="Test-ManuallyDeactivateElements-" ;  % Example of prescribed
         % calving using element deactivation.
         
-        % UserVar.RunType="Test-CalvingThroughMassBalanceFeedback-"; % Calving implemented as a melt pertubation 
+        % UserVar.RunType="Test-CalvingThroughMassBalanceFeedback-"; % Calving implemented as a melt pertubation (does not use the
+        % level set method, just prescribe mass balance accordingly and use the mass-balance feedback option).
+        UserVar.RunType="Test-1dAnalyticalIceShelf-CalvingThroughPrescribedLevelSet-" ; 
+        UserVar.RunType="Test-CalvingThroughMassBalanceFeedback-"; 
+        UserVar.RunType="Test-CalvingThroughPrescribedLevelSet-"    ;
         
     end
     
@@ -51,7 +60,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
     
     switch UserVar.RunType
         
-        case {"-1dAnalyticalIceShelf-","Test-1dAnalyticalIceShelf-CalvingThroughMassBalanceFeedback-"}
+        case {"-1dAnalyticalIceShelf-","Test-1dAnalyticalIceShelf-CalvingThroughMassBalanceFeedback-","Test-1dAnalyticalIceShelf-CalvingThroughPrescribedLevelSet-"}
             
             UserVar.InitialGeometry="-Constant-" ;
             CtrlVar.doplots=0;
@@ -65,6 +74,10 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
             CtrlVar.DefineOutputsDt=1;
             CtrlVar.MassBalanceGeometryFeedback=3;
             
+            if contains(UserVar.RunType,"LevelSet-")
+                CtrlVar.LevelSetMethod=1;
+            end
+            
         case "Test-ManuallyDeactivateElements-"
             % This is an example of how manual deactivation of elements can be used to simulate a
             % calving event.
@@ -77,6 +90,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
             CtrlVar.TotalTime=0.1;
             UserVar.Plots="-plot-mapplane-" ;
             CtrlVar.DefineOutputsDt=0;
+            
         case "Test-CalvingThroughMassBalanceFeedback-"
             
             % Here a fictitious basal melt distribution is applied over the ice shelf downstream
@@ -91,13 +105,28 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
             
             UserVar.InitialGeometry="-MismipPlus-" ;
             CtrlVar.MassBalanceGeometryFeedback=3;
+            UserVar.MassBalanceCase='ice0';
             
             CtrlVar.doplots=1;
             
             CtrlVar.TotalNumberOfForwardRunSteps=inf;
             CtrlVar.TotalTime=10;
             UserVar.Plots="-plot-mapplane-" ;
-            CtrlVar.DefineOutputsDt=0;
+            CtrlVar.DefineOutputsDt=0.25;
+            
+         case "Test-CalvingThroughPrescribedLevelSet-"    
+             
+            % Here the MismipPlus geometry is used again, but now with the calving realized by prescribing a level-set function, done in
+            % DefineCalving.m
+                 
+            UserVar.InitialGeometry="-MismipPlus-" ;
+            UserVar.MassBalanceCase='ice0';
+            CtrlVar.doplots=1;
+            CtrlVar.TotalNumberOfForwardRunSteps=inf;
+            CtrlVar.TotalTime=10;
+            UserVar.Plots="-plot-mapplane-" ;
+            CtrlVar.DefineOutputsDt=0.25;
+            CtrlVar.LevelSetMethod=1;
             
     end
     
@@ -107,7 +136,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
     %%
     
     UserVar.Outputsdirectory='ResultsFiles'; % This I use in DefineOutputs
-    UserVar.MassBalanceCase='ice0';
+    
     
     %%
     
