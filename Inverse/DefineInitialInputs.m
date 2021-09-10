@@ -3,11 +3,22 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
 
 
 if ~isfield(UserVar,'RunType')
-    UserVar.RunType='IceShelf';   %  A pertubation only
-    UserVar.RunType='IceStream';  %  C pertubation only
+    UserVar.RunType="IceShelf";   %  A pertubation only
+    UserVar.RunType="IceStream";  %  C pertubation only
 end
 
 UserVar.AddDataErrors=0;
+
+%%
+
+switch     UserVar.RunType
+    case "IceStream"
+        CtrlVar.alpha=0.01;
+    case "IceShelf"
+        CtrlVar.alpha=0;
+    otherwise
+        error("case not found")
+end
 
 %%
 CtrlVar.doplots=1;
@@ -36,7 +47,7 @@ CtrlVar.Inverse.InfoLevelBackTrack=1000;  % info on backtracking within inverse 
 
 CtrlVar.Inverse.InvertFor='-logC-';
 CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor; 
-CtrlVar.Inverse.Iterations=40;
+CtrlVar.Inverse.Iterations=10;
 
 
 CtrlVar.Inverse.InfoLevel=1;  % Set to 1 to get some basic information, >=2 for additional info on backtrackgin,
