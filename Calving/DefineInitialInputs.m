@@ -34,16 +34,14 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
     
     if isempty(UserVar)
         
-        UserVar.RunType="Test-1dAnalyticalIceShelf-";           % numerical solution of a 1d unconfined ice shelf with automated remeshing
+       %% 1-d flow-line geometry, unconfined ice shelf 
+       % UserVar.RunType="Test-1dAnalyticalIceShelf-";           % numerical solution of a 1d unconfined ice shelf with automated remeshing
+       % UserVar.RunType="Test-1dAnalyticalIceShelf-CalvingThroughPrescribedLevelSet-" ; 
         
-        % UserVar.RunType="Test-ManuallyDeactivateElements-" ;  % Example of prescribed
-        % calving using element deactivation.
-        
-        % UserVar.RunType="Test-CalvingThroughMassBalanceFeedback-"; % Calving implemented as a melt pertubation (does not use the
-        % level set method, just prescribe mass balance accordingly and use the mass-balance feedback option).
-        UserVar.RunType="Test-1dAnalyticalIceShelf-CalvingThroughPrescribedLevelSet-" ; 
-        UserVar.RunType="Test-CalvingThroughMassBalanceFeedback-"; 
-        UserVar.RunType="Test-CalvingThroughPrescribedLevelSet-"    ;
+       %% MismipPlus geometry.
+        UserVar.RunType="Test-CalvingThroughMassBalanceFeedback-"; % MismipPlus: Calving using additional user defined mass-balance term (done in DefineMassBalance.m)
+        UserVar.RunType="Test-CalvingThroughPrescribedLevelSet-" ; % MismipPlus: Calving using prescribed ice/ocean mask (done in DefineCalving.m)
+        % UserVar.RunType="Test-ManuallyDeactivateElements-"       ; % MismipPlus: Calving using element deactivation (done in DefineElementsToDeactivate.m)
         
     end
     
@@ -84,12 +82,13 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
             
             UserVar.InitialGeometry="-MismipPlus-" ;
             CtrlVar.ManuallyDeactivateElements=1 ;
+            UserVar.MassBalanceCase='ice0';  
             CtrlVar.doplots=1;
             
             CtrlVar.TotalNumberOfForwardRunSteps=inf;
-            CtrlVar.TotalTime=0.1;
+            CtrlVar.TotalTime=10;
             UserVar.Plots="-plot-mapplane-" ;
-            CtrlVar.DefineOutputsDt=0;
+            CtrlVar.DefineOutputsDt=0.1;
             
         case "Test-CalvingThroughMassBalanceFeedback-"
             
@@ -112,7 +111,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
             CtrlVar.TotalNumberOfForwardRunSteps=inf;
             CtrlVar.TotalTime=10;
             UserVar.Plots="-plot-mapplane-" ;
-            CtrlVar.DefineOutputsDt=0.25;
+            CtrlVar.DefineOutputsDt=1;
             
          case "Test-CalvingThroughPrescribedLevelSet-"    
              
@@ -125,9 +124,12 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
             CtrlVar.TotalNumberOfForwardRunSteps=inf;
             CtrlVar.TotalTime=10;
             UserVar.Plots="-plot-mapplane-" ;
-            CtrlVar.DefineOutputsDt=0.25;
+            CtrlVar.DefineOutputsDt=1;
             CtrlVar.LevelSetMethod=1;
-            
+            % CtrlVar.MeshAdapt.CFrange=[10e3 1e3 ] ; % This refines the mesh around the
+            % calving front. This kind or calving front remeshing is only possible when
+            % using the LevelSetMethod.
+           
     end
     
     

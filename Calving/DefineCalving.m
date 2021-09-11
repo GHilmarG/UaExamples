@@ -42,7 +42,7 @@ function [UserVar,LSF,c]=DefineCalving(UserVar,CtrlVar,MUA,F,BCs)
 %
 %   pdist2
 %
-% usefull to do this. Also look at
+% usefull to do this.
 %
 % Note: Currenlty only prescribed calving front movements are allowed. 
 %       So define LSF in every call. 
@@ -60,9 +60,7 @@ if F.time > 2
         
         
         F.GF=IceSheetIceShelves(CtrlVar,MUA,F.GF);
-        NodesSelected=MUA.coordinates(:,1)>500e3 & F.GF.NodesDownstreamOfGroundingLines;
-        % ab = -(h-hmin)  , dab=-1 ;
-        
+        NodesSelected=F.x>500e3 & F.GF.NodesDownstreamOfGroundingLines;
         LSF=zeros(MUA.Nnodes,1)+ 1 ; 
         LSF(NodesSelected)=-1;
         
