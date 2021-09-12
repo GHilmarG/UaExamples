@@ -31,7 +31,8 @@ else
     end
     
     AGlen=FA(MUA.coordinates(:,1),MUA.coordinates(:,2));
-    
+    % make sure that interpolation/extrapolation does not violate parameter value constraints
+    AGlen=kk_proj(AGlen,CtrlVar.AGlenmax,CtrlVar.AGlenmin) ;
     n=3;
     
 end

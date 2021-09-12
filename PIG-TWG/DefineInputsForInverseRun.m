@@ -98,8 +98,7 @@ InvStartValues.n=F.n ;
 % OK, here I'm allowing for the initial A and C to be read from a file, overwriting the previous values
 % The A and C estimates in these file could, for example, have been obtained from a previous inversion.
 %
-% NOte the ~ here, make sure this is what you want
-if ~UserVar.Slipperiness.ReadFromFile
+if UserVar.Slipperiness.ReadFromFile
     
     fprintf('DefineInputsForInverseRun: loading start values for C from the file: %-s ',UserVar.CFile)
     load(UserVar.CFile,'FC')
@@ -108,7 +107,8 @@ if ~UserVar.Slipperiness.ReadFromFile
     % make sure that interpolation/extrapolation does not violate parameter value constraints
     InvStartValues.C=kk_proj(InvStartValues.C,CtrlVar.Cmax,CtrlVar.Cmin) ;
 end
-if ~UserVar.AGlen.ReadFromFile
+
+if UserVar.AGlen.ReadFromFile
     fprintf('DefineSlipperyDistribution: loading file: %-s ',UserVar.AFile)
     load(UserVar.AFile,'FA')
     fprintf(' done \n')

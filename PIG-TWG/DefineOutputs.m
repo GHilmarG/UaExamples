@@ -1,6 +1,6 @@
 function  UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFinalValues,Priors,Meas,BCsAdjoint,RunInfo)
 
-v2struct(F);  % create seperate variables for each subfield in F, so we for example get a variable "s" that is the same as the field "F.s" 
+v2struct(F);
 
 
 CtrlVar.DefineOutputs='-sbB-ubvb-BCs-';
@@ -40,7 +40,7 @@ if contains(plots,'-save-')
         FileName=sprintf('ResultsFiles/%07i-Nodes%i-Ele%i-Tri%i-kH%i-%s.mat',...
             round(100*CtrlVar.time),MUA.Nnodes,MUA.Nele,MUA.nod,1000*CtrlVar.kH,CtrlVar.Experiment);
         fprintf(' Saving data in %s \n',FileName)
-        save(FileName,"CtrlVar","MUA","F")
+        save(FileName,'CtrlVar','MUA','s','b','S','B','h','ub','vb','C','dhdt','AGlen','m','n','rho','rhow','as','ab','GF')
         
     end
 end
