@@ -13,7 +13,7 @@ if isempty(UserVar) || ~isfield(UserVar,'RunType')
     % UserVar.RunType='Inverse-SteepestDesent';
     % UserVar.RunType='Inverse-ConjGrad-FixPoint';
     % UserVar.RunType='Inverse-MatOpt-FixPoint';
-    UserVar.RunType='Forward-Diagnostic';
+    % UserVar.RunType='Forward-Diagnostic';
     % UserVar.RunType='Forward-Transient';
     % UserVar.RunType='TestingMeshOptions';
 end
@@ -82,7 +82,7 @@ switch UserVar.RunType
         CtrlVar.ReadInitialMesh=1;
         CtrlVar.AdaptMesh=0;
         
-        CtrlVar.Inverse.Iterations=100;
+        CtrlVar.Inverse.Iterations=5;
         CtrlVar.Inverse.InvertFor='logA-logC' ; % '-logAGlen-logC-' ; % {'-C-','-logC-','-AGlen-','-logAGlen-'}
         CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor;
         
