@@ -106,10 +106,10 @@ if contains(UserVar.RunType,"-CalvingThroughMassBalanceFeedback-")
     dabdh=zeros(MUA.Nnodes,1) ;
     dasdh=zeros(MUA.Nnodes,1) ;
     
-    if (CtrlVar.time+CtrlVar.dt)  < 5
+    if (CtrlVar.time+CtrlVar.dt)  > 2
         
         GF=IceSheetIceShelves(CtrlVar,MUA,GF);
-        NodesSelected=MUA.coordinates(:,1)>400e3 & GF.NodesDownstreamOfGroundingLines;
+        NodesSelected=MUA.coordinates(:,1)>500e3 & GF.NodesDownstreamOfGroundingLines;
         
         % ab = -(h-hmin)  , dab=-1 ;
         ab(NodesSelected)=-(h(NodesSelected)-CtrlVar.ThickMin) ;

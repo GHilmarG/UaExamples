@@ -48,8 +48,9 @@ cd ..
 cd Calving\
 
 UserVar.RunType="Test-1dAnalyticalIceShelf-CalvingThroughMassBalanceFeedback-";               Ua(UserVar) ;
+UserVar.RunType="Test-1dAnalyticalIceShelf-CalvingThroughPrescribedLevelSet-" ;               Ua(UserVar) ;
 UserVar.RunType="Test-ManuallyDeactivateElements-" ;                                          Ua(UserVar) ;
 UserVar.RunType="Test-CalvingThroughMassBalanceFeedback-";                                    Ua(UserVar) ;
-
+UserVar.RunType="Test-CalvingThroughPrescribedLevelSet-"  ;                                   Ua(UserVar) ;
 cd ..
 

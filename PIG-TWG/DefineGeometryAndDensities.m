@@ -14,6 +14,11 @@ if isempty(FB)
     
 end
 
+if isempty(F.x)
+    F.x=MUA.coordinates(:,1);  % get rid of this later
+    F.y=MUA.coordinates(:,2);
+end
+
 g=9.81/1000;
 
 if contains(FieldsToBeDefined,'S')

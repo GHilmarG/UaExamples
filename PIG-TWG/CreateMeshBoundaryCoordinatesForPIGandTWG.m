@@ -13,7 +13,18 @@ CtrlVar.GLds=UserVar.DistanceBetweenPointsAlongBoundary;
 
 [xB,yB] = Smooth2dPos(Boundary(:,1),Boundary(:,2),CtrlVar);
 
+%%
+% There is an annoying irregularity in the outlines of Thwaites ice shelf, which can give rise to sharp corners in elements
+% at low resolution. Here I get rid of this, but this needs ot be done more carfully by considering sat imagery
 
+% get rid points within this box 
+Box=[-1590635.96870572         -1547926.50725233         -488172.175219281         -454486.809653623] ; 
+InBox= find(xB<Box(2) & xB>Box(1) &  yB<Box(4) &   yB>Box(3)) ;
+xB(InBox(1))=-1.55e6 ; yB(InBox(1))=-4.6e5 ; % add this new corner point which replaced all the other ones within the box
+xB(InBox(2:end))=[] ; yB(InBox(2:end))=[] ; 
+
+
+%%
 
 % Corner Points defining the interior points of the computational domain
 % CP=flipud([ ...
