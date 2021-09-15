@@ -37,8 +37,8 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
        %% 1-d flow-line geometry, unconfined ice shelf 
        % UserVar.RunType="Test-1dAnalyticalIceShelf-";           % numerical solution of a 1d unconfined ice shelf with automated remeshing
        
-       UserVar.RunType="Test-1dAnalyticalIceShelf-CalvingThroughMassBalanceFeedback-" ; 
-       %UserVar.RunType="Test-1dAnalyticalIceShelf-CalvingThroughPrescribedLevelSet-" ; 
+       %UserVar.RunType="Test-1dAnalyticalIceShelf-CalvingThroughMassBalanceFeedback-" ; 
+       UserVar.RunType="Test-1dAnalyticalIceShelf-CalvingThroughPrescribedLevelSet-" ; 
         
        %% MismipPlus geometry.
        % UserVar.RunType="Test-CalvingThroughMassBalanceFeedback-"; % MismipPlus: Calving using additional user defined mass-balance term (done in DefineMassBalance.m)
@@ -69,7 +69,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
             CtrlVar.doplots=0;
             
             CtrlVar.TotalNumberOfForwardRunSteps=inf;
-            CtrlVar.TotalTime=10;
+            CtrlVar.TotalTime=100;
             UserVar.Plots="-plot-flowline-";
             CtrlVar.DefineOutputsDt=1;
             CtrlVar.MassBalanceGeometryFeedback=3;
@@ -111,7 +111,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
             CtrlVar.doplots=1;
             
             CtrlVar.TotalNumberOfForwardRunSteps=inf;
-            CtrlVar.TotalTime=10;
+            CtrlVar.TotalTime=100;
             UserVar.Plots="-plot-mapplane-" ;
             CtrlVar.DefineOutputsDt=1;
             
@@ -124,18 +124,30 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
             
             CtrlVar.doplots=1;
             CtrlVar.TotalNumberOfForwardRunSteps=inf;
-            CtrlVar.TotalTime=10;
+            CtrlVar.TotalTime=100;
             UserVar.Plots="-plot-mapplane-" ;
             CtrlVar.DefineOutputsDt=1;
             CtrlVar.LevelSetMethod=1;
-            % CtrlVar.MeshAdapt.CFrange=[10e3 1e3 ] ; % This refines the mesh around the
+            CtrlVar.MeshAdapt.CFrange=[10e3 1e3 ] ; % This refines the mesh around the
             % calving front. This kind or calving front remeshing is only possible when
             % using the LevelSetMethod.
            
     end
     
     
+    % if CtrlVar.LevelSetMethod=, then these level-set parameters are relevant and need to be defined.
+                                                           % When using the LSF option the ice is removed/calved through melting.
+                                                           % The melt is decribed as a= a_1 (h-hmin)
+    CtrlVar.LevelSetMethodMassBalanceFeedbackCoeffLin=-1;  % This is the constant a1, it has units 1/time.  
+                                                           % Default value is -1
     
+    CtrlVar.LevelSetMinIceThickness=CtrlVar.ThickMin+1;    % this is the hmin constant, i.e. the accepted min ice thickness 
+                                                           % over the 'ice-free' areas. 
+                                                           % Default value is CtrlVar.ThickMin+1
+    
+                                                           
+                                                           
+                                                           
     CtrlVar.InfoLevelNonLinIt=1; CtrlVar.uvhMinimisationQuantity="Force Residuals";
     %%
     

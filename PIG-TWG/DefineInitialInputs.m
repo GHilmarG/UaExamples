@@ -13,8 +13,8 @@ if isempty(UserVar) || ~isfield(UserVar,'RunType')
     % UserVar.RunType='Inverse-SteepestDesent';
     % UserVar.RunType='Inverse-ConjGrad-FixPoint';
     % UserVar.RunType='Inverse-MatOpt-FixPoint';
-    % UserVar.RunType='Forward-Diagnostic';
-    % UserVar.RunType='Forward-Transient';
+     UserVar.RunType='Forward-Diagnostic';
+     UserVar.RunType='Forward-Transient';
     % UserVar.RunType='TestingMeshOptions';
 end
 
@@ -145,11 +145,13 @@ switch UserVar.RunType
 end
 
 
-CtrlVar.dt=1e-10; % For some reason with bedmachine I need much smaller initial time step than with bedmap2...?
+CtrlVar.dt=1e-5; 
 CtrlVar.time=0;
-CtrlVar.TotalNumberOfForwardRunSteps=1; 
+CtrlVar.TotalNumberOfForwardRunSteps=10; 
 CtrlVar.TotalTime=10;
 
+% time interval between calls to DefineOutputs.m
+CtrlVar.DefineOutputsDt=1; 
 % Element type
 CtrlVar.TriNodes=3 ;
 
