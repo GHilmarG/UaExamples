@@ -13,7 +13,7 @@ dabdh=zeros(MUA.Nnodes,1);
 
 %fprintf('time=%f \t as=%f \t h=%f \n ',time,mean(as),mean(h))
 
-% if as=h and h=h0 at t=t0=0 and velocities are effectily zero, then:
+% if as=h and h=h0 at t=t0=0 and velocities are  zero, then:
 % dh/dt=a=h
 % h=h0 exp(t)  
 
