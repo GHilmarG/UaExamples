@@ -38,10 +38,11 @@ CtrlVar.NameOfRestartFiletoWrite=CtrlVar.NameOfRestartFiletoRead;
 
 
 %% Inverse   -inverse
-CtrlVar.Inverse.MinimisationMethod='MatlabOptimization'; % {'MatlabOptimization','UaOptimization'}
-CtrlVar.Inverse.AdjointGradientPreMultiplier="M" ; 
+%CtrlVar.Inverse.MinimisationMethod='MatlabOptimization'; % {'MatlabOptimization','UaOptimization'}
+% CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased"; % 
+% CtrlVar.Inverse.AdjointGradientPreMultiplier="M" ; 
 
-CtrlVar.Inverse.MinimisationMethod='UaOptimization-Hessian'; % {'MatlabOptimization','UaOptimization'}
+% CtrlVar.Inverse.MinimisationMethod='UaOptimization-Hessian'; % {'MatlabOptimization','UaOptimization'}
 CtrlVar.Inverse.InfoLevelBackTrack=1000;  % info on backtracking within inverse step
 
 

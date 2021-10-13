@@ -105,7 +105,7 @@ if UserVar.Slipperiness.ReadFromFile
     fprintf(' done \n')
     InvStartValues.C=FC(F.x,F.y) ;
     % make sure that interpolation/extrapolation does not violate parameter value constraints
-    InvStartValues.C=kk_proj(InvStartValues.C,CtrlVar.Cmax,CtrlVar.Cmin) ;
+    InvStartValues.C=kk_proj(InvStartValues.C,CtrlVar.Cmax,CtrlVar.Cmin) ;)e
 end
 
 if UserVar.AGlen.ReadFromFile

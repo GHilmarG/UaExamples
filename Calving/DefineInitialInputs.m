@@ -38,12 +38,12 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
        % UserVar.RunType="Test-1dAnalyticalIceShelf-";           % numerical solution of a 1d unconfined ice shelf with automated remeshing
        
        %UserVar.RunType="Test-1dAnalyticalIceShelf-CalvingThroughMassBalanceFeedback-" ; 
-       UserVar.RunType="Test-1dAnalyticalIceShelf-CalvingThroughPrescribedLevelSet-" ; 
+       % UserVar.RunType="Test-1dAnalyticalIceShelf-CalvingThroughPrescribedLevelSet-" ; 
         
        %% MismipPlus geometry.
        % UserVar.RunType="Test-CalvingThroughMassBalanceFeedback-"; % MismipPlus: Calving using additional user defined mass-balance term (done in DefineMassBalance.m)
        % UserVar.RunType="Test-CalvingThroughPrescribedLevelSet-" ; % MismipPlus: Calving using prescribed ice/ocean mask (done in DefineCalving.m)
-       % UserVar.RunType="Test-ManuallyDeactivateElements-"       ; % MismipPlus: Calving using element deactivation (done in DefineElementsToDeactivate.m)
+       UserVar.RunType="Test-ManuallyDeactivateElements-"       ; % MismipPlus: Calving using element deactivation (done in DefineElementsToDeactivate.m)
         
     end
     
