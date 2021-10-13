@@ -98,7 +98,7 @@ CtrlVar.AdaptMeshAndThenStop=0;    % if true, then mesh will be adapted but no f
 
 CtrlVar.AdaptMeshRunStepInterval=1;  % number of run-steps between mesh adaptation
 
-CtrlVar.MeshAdapt.GLrange=[20000 5000 ; 10000 500 ];
+CtrlVar.MeshAdapt.GLrange=[20000 5000 ; 10000 2000 ; 5000 500];
 
 
 

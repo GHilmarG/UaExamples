@@ -15,7 +15,7 @@ if isempty(UserVar) || ~isfield(UserVar,'RunType')
     % UserVar.RunType='Inverse-MatOpt-FixPoint';
      UserVar.RunType='Forward-Diagnostic';
      UserVar.RunType='Forward-Transient';
-    % UserVar.RunType='TestingMeshOptions';
+    UserVar.RunType='TestingMeshOptions';
 end
 
 if isempty(UserVar) || ~isfield(UserVar,'m')
@@ -139,7 +139,7 @@ switch UserVar.RunType
         CtrlVar.AdaptMesh=1;
         CtrlVar.AdaptMeshInitial=1  ;      
         CtrlVar.AdaptMeshRunStepInterval=1 ; 
-        CtrlVar.AdaptMeshAndThenStop=0;    % if true, then mesh will be adapted but no further calculations performed
+        CtrlVar.AdaptMeshAndThenStop=1;    % if true, then mesh will be adapted but no further calculations performed
         % useful, for example, when trying out different remeshing options (then use CtrlVar.doAdaptMeshPlots=1 to get plots)
         CtrlVar.InfoLevelAdaptiveMeshing=10;
 end
@@ -177,7 +177,7 @@ CtrlVar.MaxNumberOfElements=70e3;
 
 CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';   
 %CtrlVar.MeshRefinementMethod='explicit:local:red-green';
-CtrlVar.MeshRefinementMethod='explicit:global';   
+% CtrlVar.MeshRefinementMethod='explicit:global';   
 
 CtrlVar.MeshGenerator='gmsh' ; % 'mesh2d';
 %CtrlVar.MeshGenerator='mesh2d' ; % 'mesh2d';
