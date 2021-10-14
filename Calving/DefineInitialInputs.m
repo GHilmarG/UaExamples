@@ -81,9 +81,10 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
         case "Test-ManuallyDeactivateElements-"
             % This is an example of how manual deactivation of elements can be used to simulate a
             % calving event.
-            
-            UserVar.InitialGeometry="-MismipPlus-" ;
+
             CtrlVar.ManuallyDeactivateElements=1 ;
+            UserVar.InitialGeometry="-MismipPlus-" ;
+
 
             CtrlVar.doplots=1;
             
@@ -104,12 +105,11 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
             %
             % The mass-balance is defined in DefineMassBalance.m
             
-            UserVar.InitialGeometry="-MismipPlus-" ;
             CtrlVar.MassBalanceGeometryFeedback=3;
-            
-            
+
+
+            UserVar.InitialGeometry="-MismipPlus-" ;
             CtrlVar.doplots=1;
-            
             CtrlVar.TotalNumberOfForwardRunSteps=inf;
             CtrlVar.TotalTime=100;
             UserVar.Plots="-plot-mapplane-" ;
@@ -119,7 +119,8 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
              
             % Here the MismipPlus geometry is used again, but now with the calving realized by prescribing a level-set function, done in
             % DefineCalving.m
-                 
+            CtrlVar.LevelSetMethod=1;
+
             UserVar.InitialGeometry="-MismipPlus-" ;
             
             CtrlVar.doplots=1;
@@ -127,7 +128,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
             CtrlVar.TotalTime=100;
             UserVar.Plots="-plot-mapplane-" ;
             CtrlVar.DefineOutputsDt=1;
-            CtrlVar.LevelSetMethod=1;
+            
             CtrlVar.MeshAdapt.CFrange=[10e3 1e3 ] ; % This refines the mesh around the
             % calving front. This kind or calving front remeshing is only possible when
             % using the LevelSetMethod.
