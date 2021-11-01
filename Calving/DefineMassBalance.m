@@ -1,4 +1,5 @@
 function [UserVar,as,ab,dasdh,dabdh]=DefineMassBalance(UserVar,CtrlVar,MUA,time,s,b,h,S,B,rho,rhow,GF)
+% function [UserVar,as,ab,dasdh,dabdh]=DefineMassBalance(UserVar,CtrlVar,MUA,F) 
 
 
 
@@ -13,7 +14,7 @@ if contains(UserVar.RunType,"-1dAnalyticalIceShelf-") || contains(UserVar.RunTyp
     dasdh=zeros(MUA.Nnodes,1) ;
     dabdh=zeros(MUA.Nnodes,1) ;
     
-    if contains(UserVar.RunType,"CalvingThroughMassBalanceFeedback") && time>10
+    if contains(UserVar.RunType,"CalvingThroughMassBalanceFeedback") && time>2
         
         
         x=MUA.coordinates(:,1) ; 

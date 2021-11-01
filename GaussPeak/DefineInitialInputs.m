@@ -91,6 +91,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
     CtrlVar.PlotNodes=1;       % If true then nodes are plotted when FE mesh is shown
     CtrlVar.PlotXYscale=1000;     % used to scale x and y axis of some of the figures, only used for plotting purposes
     CtrlVar.PlotLabels=0 ; CtrlVar.PlotMesh=1; CtrlVar.PlotBCs=00;CtrlVar.PlotNodes=1;
-    CtrlVar.InfoLevelNonLinIt=1;
+    
+    CtrlVar.InfoLevelNonLinIt=1000;
     
 end

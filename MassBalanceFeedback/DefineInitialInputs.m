@@ -1,5 +1,5 @@
 
-function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar,CtrlVar)
+function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,CtrlVar)
 
 %
 %   Testing mass-balance feedback
@@ -50,7 +50,7 @@ CtrlVar.PlotLabels=0 ; CtrlVar.PlotMesh=1; CtrlVar.PlotBCs=1;
 CtrlVar.UaOutputs='-saveAcc-';
 
 %%
-CtrlVar.MassBalanceGeometryFeedback=3; 
+CtrlVar.MassBalanceGeometryFeedback=0; 
 %CtrlVar.MassBalanceGeometryFeedback=0; 
 CtrlVar.MassBalanceGeometryFeedbackDamping=0;
 

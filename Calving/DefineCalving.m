@@ -27,7 +27,7 @@ function [UserVar,LSF,c]=DefineCalving(UserVar,CtrlVar,MUA,F,BCs)
 %   LSF=F.LSF
 %
 %
-% Also, if you do not want to modify c, you could in prinicple set
+% Also, if you do not want to modify c, you could set
 %
 %   c=F.c
 %
