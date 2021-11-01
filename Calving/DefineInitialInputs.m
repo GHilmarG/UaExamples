@@ -68,7 +68,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
             UserVar.InitialGeometry="-Constant-" ;
             CtrlVar.doplots=0;
             
-            CtrlVar.TotalNumberOfForwardRunSteps=inf;
+            CtrlVar.TotalNumberOfForwardRunSteps=100;
             CtrlVar.TotalTime=100;
             UserVar.Plots="-plot-flowline-";
             CtrlVar.DefineOutputsDt=1;
@@ -88,7 +88,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
 
             CtrlVar.doplots=1;
             
-            CtrlVar.TotalNumberOfForwardRunSteps=inf;
+            CtrlVar.TotalNumberOfForwardRunSteps=100;
             CtrlVar.TotalTime=10;
             UserVar.Plots="-plot-mapplane-" ;
             CtrlVar.DefineOutputsDt=0.1;
@@ -124,7 +124,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
             UserVar.InitialGeometry="-MismipPlus-" ;
             
             CtrlVar.doplots=1;
-            CtrlVar.TotalNumberOfForwardRunSteps=inf;
+            CtrlVar.TotalNumberOfForwardRunSteps=100;
             CtrlVar.TotalTime=100;
             UserVar.Plots="-plot-mapplane-" ;
             CtrlVar.DefineOutputsDt=1;
