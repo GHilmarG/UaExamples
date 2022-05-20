@@ -34,6 +34,11 @@ cd ..
 
 cd PIG-TWG\
 UserVar.RunType='Inverse-MatOpt'; Ua(UserVar) ;   % working 08/09/2021
+                                                  % Not working on20/05/2021 with alpha branch and 2022a. Need to look at
+                                                  % Error using message/getString
+                                                  % In 'optimlib:diagnose:HessFun', data type supplied is incorrect for parameter {0}.
+
+
 % UserVar.RunType='Inverse-UaOpt' ; Ua(UserVar) ;  % 08/09/2021 convergnece issues with the new Bedmachine based outline of Thwaites
 UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased"; Ua(UserVar,CtrlVar) ;
 UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased"; Ua(UserVar,CtrlVar) ;
