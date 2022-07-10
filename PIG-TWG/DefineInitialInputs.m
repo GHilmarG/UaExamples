@@ -257,9 +257,8 @@ CtrlVar.Inverse.TestAdjoint.iRange=[100,121] ;  % range of nodes/elements over w
 % end, testing adjoint parameters. 
 
 
-if contains(UserVar.RunType,'MatOpt')
-    CtrlVar.Inverse.MinimisationMethod='MatlabOptimization';
-else
+if contains(UserVar.RunType,'UatOpt')
+    
     CtrlVar.Inverse.MinimisationMethod='UaOptimization';
     if contains(UserVar.RunType,'ConjGrad')
         CtrlVar.Inverse.GradientUpgradeMethod='ConjGrad' ; %{'SteepestDecent','ConjGrad'}
@@ -274,10 +273,10 @@ end
 CtrlVar.Inverse.Regularize.C.gs=1;
 CtrlVar.Inverse.Regularize.C.ga=1;
 CtrlVar.Inverse.Regularize.logC.ga=1;
-CtrlVar.Inverse.Regularize.logC.gs=1e3 ;
+CtrlVar.Inverse.Regularize.logC.gs=1e5 ;
 
-CtrlVar.Inverse.Regularize.logC.ga=0;  % testing for Budd
-CtrlVar.Inverse.Regularize.logC.gs=1e3 ; % testing for Budd
+CtrlVar.Inverse.Regularize.logC.ga=1; 
+CtrlVar.Inverse.Regularize.logC.gs=1e5 ; 
 
 CtrlVar.Inverse.Regularize.AGlen.gs=1;
 CtrlVar.Inverse.Regularize.AGlen.ga=1;
@@ -288,7 +287,7 @@ CtrlVar.Inverse.Regularize.logAGlen.gs=1e3 ;
 %%
 CtrlVar.ThicknessConstraints=0;
 CtrlVar.ResetThicknessToMinThickness=1;  % change this later on
-CtrlVar.ThickMin=50;
+CtrlVar.ThickMin=1;
 
 %% Filenames
 
