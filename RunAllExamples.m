@@ -54,12 +54,11 @@ Ua
 cd ..
 
 cd Calving\
-% Note 2002-07-10: These now mostly broken, but we now have a much more flexible approach to this. 
-%                  But new examples for the use of the level-set methods need to be created.
-% UserVar.RunType="Test-1dAnalyticalIceShelf-CalvingThroughMassBalanceFeedback-";               Ua(UserVar) ;
-% UserVar.RunType="Test-1dAnalyticalIceShelf-CalvingThroughPrescribedLevelSet-" ;               Ua(UserVar) ;
+
+UserVar.RunType="Test-1dAnalyticalIceShelf-CalvingThroughMassBalanceFeedback-";               Ua(UserVar) ;
+UserVar.RunType="Test-1dAnalyticalIceShelf-CalvingThroughPrescribedLevelSet-" ;               Ua(UserVar) ;
 UserVar.RunType="Test-ManuallyDeactivateElements-" ;                                          Ua(UserVar) ;
-% UserVar.RunType="Test-CalvingThroughMassBalanceFeedback-";                                    Ua(UserVar) ;
+UserVar.RunType="Test-CalvingThroughMassBalanceFeedback-";                                    Ua(UserVar) ;
 UserVar.RunType="Test-CalvingThroughPrescribedLevelSet-"  ;                                   Ua(UserVar) ;
 cd ..
 

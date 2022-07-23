@@ -98,7 +98,8 @@ function UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,Inv
         
         [xGL,yGL,GLgeo]=PlotGroundingLines(CtrlVar,MUA,F.GF,GLgeo,xGL,yGL,'b');
         [xc,yc]=PlotCalvingFronts(CtrlVar,MUA,F,'r') ;
-        colormap(othercolor('BuOr_12',2048)); ModifyColormap();
+        colormap(othercolor('BuOr_12',2048)); 
+        ModifyColormap();
         xlabel('x (km)') ; ylabel('y (km)')
         hold off
         
@@ -165,7 +166,7 @@ function UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,Inv
         bProfile=F.b(Iy);
         BProfile=F.B(Iy);
         uProfile=F.ub(Iy) ;
-        if isfield(F,'c') && ~isempty(F.c)
+        if isfield(F,'c') && ~isempty(F.c) && ~isnan(F.c)
             cProfile=F.c(Iy);
             cProfile=cProfile(Ix);
         else
@@ -240,6 +241,12 @@ function UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,Inv
             else
                 Mask=u*0+1;
             end
+
+           if isempty(MUA.M)
+                MUA=UpdateMUA(CtrlVar,MUA) ; 
+           end
+
+
             FERMSE=FE_RootMeanSquareError(u.*Mask,F.ub.*Mask,MUA.M,u.*Mask);
             fprintf(' Finite-Element Root-Mean-Square-Deviation between u analytical and numerical is %g \n',FERMSE)
         end
