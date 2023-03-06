@@ -1,4 +1,4 @@
-%%  Beta 30/06/2021
+%%  Master 6 March 2023
 cd 1dIceShelf
 Ua
 cd ..
