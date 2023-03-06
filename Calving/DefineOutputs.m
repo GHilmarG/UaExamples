@@ -39,6 +39,14 @@ function UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,Inv
         return
     end
     
+
+if ~(isfield(MUA,'Deriv') && isfield(MUA,'DetJ') && ~isempty(MUA.Deriv) && ~isempty(MUA.DetJ)  && ~isfield(MUA,'TR') && ~isempty(MUA.TR))
+    fprintf("DefineOutputs: MUA updated to include fields that were deleted previously to reduce its size. \n")
+    fprintf("             MUA=UpdateMUA(CtrlVar,MUA)   \n")
+    MUA=UpdateMUA(CtrlVar,MUA) ;
+end
+
+
     figsWidth=1000 ; figHeights=300;
     GLgeo=[]; xGL=[] ; yGL=[];
     %%
@@ -165,7 +173,7 @@ function UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,Inv
         bProfile=F.b(Iy);
         BProfile=F.B(Iy);
         uProfile=F.ub(Iy) ;
-        if isfield(F,'c') && ~isempty(F.c)
+        if isfield(F,'c') &&  ~isnan(F.c)  &&  ~isempty(F.c)
             cProfile=F.c(Iy);
             cProfile=cProfile(Ix);
         else

@@ -69,7 +69,7 @@ CtrlVar.Experiment=UserVar.RunType;
 
 switch UserVar.RunType
     
-    case {'Inverse-MatOpt','Inverse-ConjGrad','Inverse-MatOpt-FixPoint','Inverse-ConjGrad-FixPoint','Inverse-SteepestDesent'}
+    case {'Inverse-MatOpt','Inverse-ConjGrad','Inverse-MatOpt-FixPoint','Inverse-ConjGrad-FixPoint','Inverse-SteepestDesent','Inverse-UaOpt'}
         
         CtrlVar.InverseRun=1;
         CtrlVar.Restart=0;
@@ -181,7 +181,7 @@ CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';
 % CtrlVar.MeshRefinementMethod='explicit:global';   
 
 CtrlVar.MeshGenerator='gmsh' ; % 'mesh2d';
-%CtrlVar.MeshGenerator='mesh2d' ; % 'mesh2d';
+CtrlVar.MeshGenerator='mesh2d' ; % 'mesh2d';
 CtrlVar.GmshMeshingAlgorithm=8; 
 CtrlVar.MeshSizeMax=20e3;
 CtrlVar.MeshSize=CtrlVar.MeshSizeMax/2;
