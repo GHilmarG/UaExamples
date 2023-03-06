@@ -1,0 +1,12 @@
+NR-STREAM(uv):  1/1  g=1              , r/r0=0.6045759      ,  r0=33.53085       , r=20.27194       , du=124.4909       , dl=Inf            , Assembly=0.143844 sec. Solution=0.151224 sec.
+ NR-STREAM(uv):  2/1  g=1              , r/r0=0.8871634      ,  r0=20.27194       , r=17.98452       , du=240.5409       , dl=0.3266053      , Assembly=0.271698 sec. Solution=0.304623 sec.
+ NR-STREAM(uv):  3/1  g=1.5            , r/r0=0.7144798      ,  r0=17.98452       , r=12.84958       , du=334.3158       , dl=0.4656305      , Assembly=0.401557 sec. Solution=0.460751 sec.
+ NR-STREAM(uv):  4/0  g=1              , r/r0=0.2644573      ,  r0=12.84958       , r=3.398165       , du=3198.889       , dl=0.9905245      , Assembly=0.526377 sec. Solution=0.597029 sec.
+ NR-STREAM(uv):  5/1  g=0.5972148      , r/r0=0.1048478      ,  r0=3.398165       , r=0.3562901      , du=524.8772       , dl=0.9605211      , Assembly=0.657840 sec. Solution=0.742791 sec.
+ NR-STREAM(uv):  6/0  g=1              , r/r0=0.007381688    ,  r0=0.3562901      , r=0.002630023    , du=94.4629        , dl=1.235906       , Assembly=0.805934 sec. Solution=0.890295 sec.
+ NR-STREAM(uv):  7/0  g=1              , r/r0=0.001896587    ,  r0=0.002630023    , r=4.988066e-06   , du=12.62977       , dl=0.2015411      , Assembly=0.942679 sec. Solution=1.037155 sec.
+ NR-STREAM(uv):  8/0  g=1              , r/r0=9.284755e-06   ,  r0=4.988066e-06   , r=4.631297e-11   , du=0.404866       , dl=0.01067076     , Assembly=1.067614 sec. Solution=1.170173 sec.
+ NR-STREAM(uv):  9/0  g=1              , r/r0=1.065922e-10   ,  r0=4.631297e-11   , r=4.936599e-21   , du=0.001001182    , dl=3.213152e-05   , Assembly=1.186020 sec. Solution=1.321349 sec.
+  SSTREAM2dNR converged to given tolerance of 1e-15 with r=4.9366e-21 in 9 iterations.
+NR-STREAM(uv):  1/0  g=1              , r/r0=2.048129e-08   ,  r0=4.936599e-21   , r=1.011079e-28   , du=9.448302e-09   , dl=3.573771e-10   , Assembly=0.126001 sec. Solution=0.134428 sec.
+  SSTREAM2dNR converged to given tolerance of 1e-15 with r=1.01108e-28 in 1 iterations.

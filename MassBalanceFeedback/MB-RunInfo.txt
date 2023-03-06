@@ -1,0 +1,10 @@
+  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0 , 0.1 , 01:04:07  ,  NaN , 0 , 29-May-2020 12:40:47 , 00:00:00 , 00:00:00 , 00:00:01 
+  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.1 , 0.1 , 01:04:09  ,  1 , 1 , 29-May-2020 12:40:52 , 00:00:00 , 00:00:00 , 00:00:06 
+  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.2 , 0.1 , 01:04:10  ,  1 , 1 , 29-May-2020 12:40:53 , 00:00:00 , 00:00:00 , 00:00:07 
+  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.3 , 0.1 , 01:04:11  ,  1 , 1 , 29-May-2020 12:40:53 , 00:00:00 , 00:00:00 , 00:00:08 
+  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.4 , 0.1 , 01:04:12  ,  1 , 1 , 29-May-2020 12:40:54 , 00:00:00 , 00:00:00 , 00:00:08 
+  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.5 , 0.1 , 01:04:12  ,  1 , 1 , 29-May-2020 12:40:54 , 00:00:00 , 00:00:00 , 00:00:09 
+  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.6 , 0.1 , 01:04:13  ,  1 , 1 , 29-May-2020 12:40:55 , 00:00:00 , 00:00:00 , 00:00:09 
+  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.7 , 0.1 , 01:04:13  ,  1 , 1 , 29-May-2020 12:40:55 , 00:00:00 , 00:00:00 , 00:00:09 
+  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.8 , 0.1 , 01:04:14  ,  1 , 1 , 29-May-2020 12:40:56 , 00:00:00 , 00:00:00 , 00:00:10 
+  t-dt-tCPU-it-itTotal-date-uvhAssembly-uvhSolution-WallTime , 0.9 , 0.1 , 01:04:14  ,  1 , 1 , 29-May-2020 12:40:56 , 00:00:00 , 00:00:00 , 00:00:10 

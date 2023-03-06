@@ -1,3 +1,4 @@
+
 %% Alpha 3 March 2023
 
 cd 1dIceShelf
@@ -36,6 +37,7 @@ cd ..
 
 cd PIG-TWG\
 
+
 UserVar.RunType='Inverse-MatOpt'; Ua(UserVar) ;                                                                                         % working 06/03/2023
 UserVar.RunType='Inverse-UaOpt' ; Ua(UserVar) ;                                                                                         % working 06/03/2023
 UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased"; Ua(UserVar,CtrlVar) ;       % working 06/03/2023
@@ -46,7 +48,9 @@ UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="Matlab
                                                                                                                                         % This is not too much of an issue as the default option is the HessianBased approach anyhonw, 
                                                                                                                                         % which is also the better option.
                                                                                                                                         
-                                                                                                                                        UserVar.RunType='TestingMeshOptions' ; Ua(UserVar) ;                                                                                    % working 06/03/2023
+                                                                                                                                       
+UserVar.RunType='TestingMeshOptions' ; Ua(UserVar) ;                                                                                    % working 06/03/2023
+
 cd ..                   
 close all
 
@@ -61,6 +65,7 @@ Ua
 cd ..
 
 cd Calving\
+
 
 % A few examples: 
 

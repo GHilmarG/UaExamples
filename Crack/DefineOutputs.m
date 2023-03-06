@@ -62,6 +62,18 @@ end
 % only do plots at end of run
 if ~strcmp(CtrlVar.DefineOutputsInfostring,'Last call') ; return ; end
 
+
+
+if ~(isfield(MUA,'Deriv') && isfield(MUA,'DetJ') && ~isempty(MUA.Deriv) && ~isempty(MUA.DetJ)  && ~isfield(MUA,'TR') && ~isempty(MUA.TR))
+    fprintf("DefineOutputs: MUA updated to include fields that were deleted previously to reduce its size. \n")
+    fprintf("             MUA=UpdateMUA(CtrlVar,MUA)   \n")
+    MUA=UpdateMUA(CtrlVar,MUA) ;
+end
+
+
+
+
+
 if contains(plots,'-BCs-')
     figure ;
     PlotBoundaryConditions(CtrlVar,MUA,BCs)
@@ -152,7 +164,7 @@ if contains(plots,'-stresses-')
     
 end
 
-save TestSave
+
 if contains(plots,'-profile-')
     
     
