@@ -39,6 +39,14 @@ function UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,Inv
         return
     end
     
+
+if ~(isfield(MUA,'Deriv') && isfield(MUA,'DetJ') && ~isempty(MUA.Deriv) && ~isempty(MUA.DetJ)  && ~isfield(MUA,'TR') && ~isempty(MUA.TR))
+    fprintf("DefineOutputs: MUA updated to include fields that were deleted previously to reduce its size. \n")
+    fprintf("             MUA=UpdateMUA(CtrlVar,MUA)   \n")
+    MUA=UpdateMUA(CtrlVar,MUA) ;
+end
+
+
     figsWidth=1000 ; figHeights=300;
     GLgeo=[]; xGL=[] ; yGL=[];
     %%
@@ -98,7 +106,8 @@ function UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,Inv
         
         [xGL,yGL,GLgeo]=PlotGroundingLines(CtrlVar,MUA,F.GF,GLgeo,xGL,yGL,'b');
         [xc,yc]=PlotCalvingFronts(CtrlVar,MUA,F,'r') ;
-        colormap(othercolor('BuOr_12',2048)); ModifyColormap();
+        colormap(othercolor('BuOr_12',2048)); 
+        ModifyColormap();
         xlabel('x (km)') ; ylabel('y (km)')
         hold off
         
@@ -165,7 +174,11 @@ function UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,Inv
         bProfile=F.b(Iy);
         BProfile=F.B(Iy);
         uProfile=F.ub(Iy) ;
-        if isfield(F,'c') && ~isempty(F.c)
+<<<<<<< HEAD
+        if isfield(F,'c') && ~isempty(F.c) && ~isnan(F.c)
+=======
+        if isfield(F,'c') &&  ~isnan(F.c)  &&  ~isempty(F.c)
+>>>>>>> master
             cProfile=F.c(Iy);
             cProfile=cProfile(Ix);
         else
@@ -240,6 +253,12 @@ function UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,Inv
             else
                 Mask=u*0+1;
             end
+
+           if isempty(MUA.M)
+                MUA=UpdateMUA(CtrlVar,MUA) ; 
+           end
+
+
             FERMSE=FE_RootMeanSquareError(u.*Mask,F.ub.*Mask,MUA.M,u.*Mask);
             fprintf(' Finite-Element Root-Mean-Square-Deviation between u analytical and numerical is %g \n',FERMSE)
         end
