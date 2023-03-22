@@ -1,0 +1,30 @@
+NR-STREAM(uv):  1/0  g=1              , r/r0=0.05997469     ,  r0=1              , r=0.05997469     , du=0.004493696    , dl=Inf            , Assembly=0.209832 sec. Solution=0.348037 sec.
+ NR-STREAM(uv):  2/1  g=1.5            , r/r0=0.6558315      ,  r0=0.05997469     , r=0.03933329     , du=0.3488663      , dl=0.2755486      , Assembly=0.437361 sec. Solution=0.694159 sec.
+ NR-STREAM(uv):  3/0  g=1              , r/r0=0.4186777      ,  r0=0.03933329     , r=0.01646797     , du=9.234099       , dl=0.09803156     , Assembly=0.653174 sec. Solution=1.222430 sec.
+ NR-STREAM(uv):  4/0  g=1              , r/r0=0.2005657      ,  r0=0.01646797     , r=0.00330291     , du=55.28809       , dl=0.001873731    , Assembly=0.894112 sec. Solution=1.634407 sec.
+ NR-STREAM(uv):  5/0  g=1              , r/r0=0.0592227      ,  r0=0.00330291     , r=0.0001956072   , du=120.6263       , dl=0.0009608429   , Assembly=1.152494 sec. Solution=2.173677 sec.
+ NR-STREAM(uv):  6/0  g=1              , r/r0=0.008294289    ,  r0=0.0001956072   , r=1.622423e-06   , du=92.26062       , dl=0.0006040413   , Assembly=1.403338 sec. Solution=2.738319 sec.
+ NR-STREAM(uv):  7/0  g=1              , r/r0=0.004925332    ,  r0=1.622423e-06   , r=7.990973e-09   , du=20.3325        , dl=3.765887e-05   , Assembly=1.650043 sec. Solution=3.147171 sec.
+ NR-STREAM(uv):  8/1  g=0.5483545      , r/r0=0.1697625      ,  r0=7.990973e-09   , r=1.356567e-09   , du=0.7973556      , dl=4.296223e-07   , Assembly=1.883044 sec. Solution=3.494049 sec.
+ NR-STREAM(uv):  9/1  g=0.2685611      , r/r0=0.4511512      ,  r0=1.356567e-09   , r=6.120169e-10   , du=0.3613752      , dl=9.52147e-08    , Assembly=2.163628 sec. Solution=3.887154 sec.
+ NR-STREAM(uv): 10/1  g=0.2541486      , r/r0=0.4907974      ,  r0=6.120169e-10   , r=3.003763e-10   , du=0.264474       , dl=6.592698e-08   , Assembly=2.418689 sec. Solution=4.255469 sec.
+ NR-STREAM(uv): 11/1  g=0.3954418      , r/r0=0.259645       ,  r0=3.003763e-10   , r=7.799119e-11   , du=0.1973349      , dl=7.652506e-08   , Assembly=2.643618 sec. Solution=4.637939 sec.
+ NR-STREAM(uv): 12/0  g=1              , r/r0=0.1174731      ,  r0=7.799119e-11   , r=9.161865e-12   , du=0.1193614      , dl=1.170259e-07   , Assembly=2.896477 sec. Solution=5.045583 sec.
+ NR-STREAM(uv): 13/0  g=1              , r/r0=0.005218844    ,  r0=9.161865e-12   , r=4.781435e-14   , du=3.664927e-05   , dl=1.907508e-11   , Assembly=3.144283 sec. Solution=5.443762 sec.
+ NR-STREAM(uv): 14/0  g=1              , r/r0=5.658909e-05   ,  r0=4.781435e-14   , r=2.70577e-18    , du=8.796183e-08   , dl=4.315432e-13   , Assembly=3.401484 sec. Solution=5.813918 sec.
+  SSTREAM2dNR converged to given tolerance of 1e-15 with r=2.70577e-18 in 14 iterations.
+NR-STREAM(uv):  1/0  g=1              , r/r0=0.05677725     ,  r0=1              , r=0.05677725     , du=0.004465632    , dl=Inf            , Assembly=0.226856 sec. Solution=0.525864 sec.
+ NR-STREAM(uv):  2/1  g=1.5            , r/r0=0.6512094      ,  r0=0.05677725     , r=0.03697388     , du=0.3420769      , dl=0.2755489      , Assembly=0.524211 sec. Solution=0.927196 sec.
+ NR-STREAM(uv):  3/0  g=1              , r/r0=0.4144319      ,  r0=0.03697388     , r=0.01532315     , du=8.821919       , dl=0.09803166     , Assembly=0.767041 sec. Solution=1.283420 sec.
+ NR-STREAM(uv):  4/0  g=1              , r/r0=0.1982352      ,  r0=0.01532315     , r=0.003037588    , du=50.60748       , dl=0.001873741    , Assembly=1.024869 sec. Solution=1.777897 sec.
+ NR-STREAM(uv):  5/0  g=1              , r/r0=0.05851396     ,  r0=0.003037588    , r=0.0001777413   , du=103.3705       , dl=0.000960843    , Assembly=1.377704 sec. Solution=2.289658 sec.
+ NR-STREAM(uv):  6/0  g=1              , r/r0=0.008305117    ,  r0=0.0001777413   , r=1.476162e-06   , du=70.8325        , dl=0.0006040413   , Assembly=1.743034 sec. Solution=2.695553 sec.
+ NR-STREAM(uv):  7/0  g=1              , r/r0=0.005353288    ,  r0=1.476162e-06   , r=7.902322e-09   , du=12.72156       , dl=3.76588e-05    , Assembly=2.003596 sec. Solution=3.096709 sec.
+ NR-STREAM(uv):  8/1  g=0.5446903      , r/r0=0.1665074      ,  r0=7.902322e-09   , r=1.315795e-09   , du=0.3384625      , dl=4.267516e-07   , Assembly=2.436728 sec. Solution=3.569795 sec.
+ NR-STREAM(uv):  9/1  g=0.2640709      , r/r0=0.4598183      ,  r0=1.315795e-09   , r=6.050267e-10   , du=0.1544407      , dl=9.438009e-08   , Assembly=2.682354 sec. Solution=3.952137 sec.
+ NR-STREAM(uv): 10/1  g=0.2491226      , r/r0=0.4999606      ,  r0=6.050267e-10   , r=3.024895e-10   , du=0.1136979      , dl=6.554562e-08   , Assembly=2.935151 sec. Solution=4.323809 sec.
+ NR-STREAM(uv): 11/1  g=0.3790425      , r/r0=0.2834138      ,  r0=3.024895e-10   , r=8.57297e-11    , du=0.08539412     , dl=7.48997e-08    , Assembly=3.180329 sec. Solution=4.696459 sec.
+ NR-STREAM(uv): 12/0  g=1              , r/r0=0.1510287      ,  r0=8.57297e-11    , r=1.294765e-11   , du=0.05304273     , dl=1.227361e-07   , Assembly=3.422050 sec. Solution=5.107776 sec.
+ NR-STREAM(uv): 13/0  g=1              , r/r0=0.006778228    ,  r0=1.294765e-11   , r=8.77621e-14    , du=1.13604e-05    , dl=2.098297e-11   , Assembly=3.666449 sec. Solution=5.478057 sec.
+ NR-STREAM(uv): 14/0  g=1              , r/r0=0.0001100021   ,  r0=8.77621e-14    , r=9.654017e-18   , du=1.55267e-07    , dl=5.611162e-13   , Assembly=3.901698 sec. Solution=5.831770 sec.
+  SSTREAM2dNR converged to given tolerance of 1e-15 with r=9.65402e-18 in 14 iterations.

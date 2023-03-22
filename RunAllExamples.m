@@ -1,4 +1,5 @@
-%% Alpha 20 May 2022
+
+%% Alpha 9 March 2023
 
 cd 1dIceShelf
 Ua
@@ -33,16 +34,26 @@ cd MismipPlus
 Ua
 cd ..
 
+
 cd PIG-TWG\
 
-% UserVar.RunType='Inverse-UaOpt' ; Ua(UserVar) ;  % 08/09/2021 convergnece issues with the new Bedmachine based outline of Thwaites
-UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased"; Ua(UserVar,CtrlVar) ;
 
-% UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased"; Ua(UserVar,CtrlVar) ;  
-                                     % Note on 2022-05-20. For some reason this no longer runs using the Matlab optimization toolbox with MATLAB2022a.
-                                     % This DOES work with MATLAB2021b
-                                     % The reasons are unclear, but for the time being gradient-based optimisation with the Matlab toolbox can not be done with MATLAB2022a.
-                                     % This is not too much of an issue as the default option is the HessianBased approach anyhonw, which is also the better option.
+UserVar.RunType='Inverse-MatOpt'; Ua(UserVar) ;                                                                                         % working 06/03/2023
+UserVar.RunType='Inverse-UaOpt' ; Ua(UserVar) ;                                                                                         % working 06/03/2023
+UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased"; Ua(UserVar,CtrlVar) ;       % working 06/03/2023
+
+% UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased"; Ua(UserVar,CtrlVar) ;    % no-longer working as of Matlab 2021b...?
+                                                                                                                                        % The reasons are unclear, but for the time being gradient-based optimisation 
+                                                                                                                                        % with the Matlab toolbox can not be done with MATLAB2022a.
+                                                                                                                                        % This is not too much of an issue as the default option is the HessianBased approach anyhonw, 
+                                                                                                                                        % which is also the better option.
+                                                                                                                                        
+                                                                                                                                       
+UserVar.RunType='TestingMeshOptions' ; Ua(UserVar) ;                                                                                    % working 06/03/2023
+
+cd ..                   
+close all
+
 
 
 UserVar.RunType='TestingMeshOptions' ; Ua(UserVar) ;
@@ -54,6 +65,7 @@ Ua
 cd ..
 
 cd Calving\
+
 
 % A few examples: 
 
