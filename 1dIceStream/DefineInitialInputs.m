@@ -84,7 +84,7 @@ CtrlVar.PlotLabels=0 ; CtrlVar.PlotMesh=1; CtrlVar.PlotBCs=1;
 CtrlVar.PlotXYscale=1000;     % used to scale x and y axis of some of the figures, only used for plotting purposes
 
 %% Testing
-CtrlVar.uvGroupAssembly=true;
-CtrlVar.uvhGroupAssembly=true;
+% CtrlVar.uvGroupAssembly=true;
+% CtrlVar.uvhGroupAssembly=true;
 
 end
