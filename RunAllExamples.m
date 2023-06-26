@@ -7,13 +7,10 @@ cd ..
 close all
 
 
-%%
 cd 1dIceStream
 Ua
 cd ..
 close all
-%%
-
 
 cd Crack
 Ua
