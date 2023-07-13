@@ -1,11 +1,11 @@
 
-%%  Beta 09/03/2023
-
+%% Beta 26 June 2023
 
 cd 1dIceShelf
 Ua
 cd ..
 close all
+
 
 cd 1dIceStream
 Ua
@@ -57,10 +57,6 @@ close all
 
 
 
-UserVar.RunType='TestingMeshOptions' ; Ua(UserVar) ;
-cd ..
-close all
-
 cd MassBalanceFeedback\
 Ua
 cd ..
@@ -74,8 +70,8 @@ cd Calving\
 %    This does not involve the level-set method implementation in Ua
 UserVar.RunType="Test-1dAnalyticalIceShelf-CalvingThroughMassBalanceFeedback-";               Ua(UserVar) ;
 
-% 2) Level-set is prescribed direclty (in DefineCalving.m). This example shows how the user can 
-%   define direclty/manually the position of the calving front over time. 
+% 2) Level-set is prescribed directly (in DefineCalving.m). This example shows how the user can 
+%   define directly/manually the position of the calving front over time. 
 %   No calving law is used and the calving rate is not specified.
 UserVar.RunType="Test-1dAnalyticalIceShelf-CalvingThroughPrescribedLevelSet-" ;               Ua(UserVar) ;
 
