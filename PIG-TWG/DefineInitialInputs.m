@@ -109,7 +109,7 @@ switch UserVar.RunType
         
         CtrlVar.InverseRun=0;
         CtrlVar.TimeDependentRun=1;
-        CtrlVar.Restart=0;
+        CtrlVar.Restart=1;
         CtrlVar.InfoLevelNonLinIt=1;
         UserVar.Slipperiness.ReadFromFile=1;
         UserVar.AGlen.ReadFromFile=1;
@@ -133,8 +133,7 @@ switch UserVar.RunType
         CtrlVar.InverseRun=0;
         CtrlVar.Restart=0;
         CtrlVar.ReadInitialMesh=0;
-        CtrlVar.AdaptMesh=1;
-        UserVar.Slipperiness.ReadFromFile=1;
+        CtrlVar.AdaptMesh=1;        UserVar.Slipperiness.ReadFromFile=1;
         UserVar.Slipperiness.ReadFromFile=1;
         UserVar.AGlen.ReadFromFile=1;
         CtrlVar.AdaptMesh=1;
@@ -146,13 +145,13 @@ switch UserVar.RunType
 end
 
 
-CtrlVar.dt=1e-5; 
+CtrlVar.dt=1e-5; CtrlVar.dtmin=1e-7;  
 CtrlVar.time=0;
-CtrlVar.TotalNumberOfForwardRunSteps=10; 
-CtrlVar.TotalTime=10;
+CtrlVar.TotalNumberOfForwardRunSteps=inf; 
+CtrlVar.TotalTime=500;
 
 % time interval between calls to DefineOutputs.m
-CtrlVar.DefineOutputsDt=1; 
+CtrlVar.DefineOutputsDt=50; 
 % Element type
 CtrlVar.TriNodes=3 ;
 
