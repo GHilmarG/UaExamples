@@ -109,7 +109,7 @@ switch UserVar.RunType
         
         CtrlVar.InverseRun=0;
         CtrlVar.TimeDependentRun=1;
-        CtrlVar.Restart=1;
+        CtrlVar.Restart=0;
         CtrlVar.InfoLevelNonLinIt=1;
         UserVar.Slipperiness.ReadFromFile=1;
         UserVar.AGlen.ReadFromFile=1;
