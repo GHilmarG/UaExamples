@@ -1,5 +1,5 @@
 
-%% Alpha 26 June 2023
+%% Alpha 28 August 2023
 
 cd 1dIceShelf
 Ua
