@@ -174,11 +174,7 @@ end
         bProfile=F.b(Iy);
         BProfile=F.B(Iy);
         uProfile=F.ub(Iy) ;
-<<<<<<< HEAD
-        if isfield(F,'c') && ~isempty(F.c) && ~isnan(F.c)
-=======
-        if isfield(F,'c') &&  ~isnan(F.c)  &&  ~isempty(F.c)
->>>>>>> master
+        if isfield(F,'c') &&  ~isempty(F.c) &&  ~isnan(F.c)  
             cProfile=F.c(Iy);
             cProfile=cProfile(Ix);
         else
