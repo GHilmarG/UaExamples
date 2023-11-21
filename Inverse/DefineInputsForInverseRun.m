@@ -1,3 +1,9 @@
+
+
+
+
+
+
 function [UserVar,InvStartValues,Priors,Meas,BCsAdjoint,RunInfo]=DefineInputsForInverseRun(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,Priors,Meas,BCsAdjoint,RunInfo)
 
 
@@ -23,7 +29,8 @@ Priors.C=zeros(MUA.Nnodes,1)+1/20^m;
 Priors.m=m ;
 Priors.AGlen=AGlenVersusTemp(-10)+zeros(MUA.Nnodes,1);
 Priors.n=3 ; 
-
+Priors.q=1 ;
+Priors.muk=0.5 ;
 %% Start values
 % 
 wavelength=(max(x)-min(x))/4 ; 
@@ -32,6 +39,8 @@ InvStartValues.C=Priors.C.*(1+Ampl.*sin(2*pi*x/wavelength)) ;
 InvStartValues.m=Priors.m;
 InvStartValues.AGlen=Priors.AGlen.*(1+Ampl.*sin(2*pi*x/wavelength)) ;
 InvStartValues.n=Priors.n;
+InvStartValues.q=Priors.q ; 
+InvStartValues.muk=Priors.muk ;
 
 
 %% Define measurements and measurement errors
@@ -39,8 +48,10 @@ InvStartValues.n=Priors.n;
 fprintf(' Creating synthetic data \n')
 
 CtrlVar.doDiagnostic=1;
-[UserVar,F.C,F.m]=DefineSlipperyDistribution(UserVar,CtrlVar,MUA,CtrlVar.time,F.s,F.b,F.s-F.b,F.S,F.B,F.rho,F.rhow,GF);
+[UserVar,F.C,F.m,F.q,F.muk,F.V0]=DefineSlipperyDistribution(UserVar,CtrlVar,MUA,CtrlVar.time,F.s,F.b,F.s-F.b,F.S,F.B,F.rho,F.rhow,GF);
 [UserVar,F.AGlen,F.n]=DefineAGlenDistribution(UserVar,CtrlVar,MUA,CtrlVar.time,F.s,F.b,F.s-F.b,F.S,F.B,F.rho,F.rhow,GF);
+
+[F.C,F.m,F.q,F.muk,F.V0]=TestSlipperinessInputValues(CtrlVar,MUA,F.C,F.m,F.q,F.muk,F.V0);
 
 [UserVar,RunInfo,F,l,Kuv,Ruv,Lubvb]= uv(UserVar,RunInfo,CtrlVar,MUA,BCs,F,l);
 
