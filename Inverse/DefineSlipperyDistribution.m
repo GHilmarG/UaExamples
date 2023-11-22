@@ -5,7 +5,7 @@ function [UserVar,C,m,q,muk,V0]=DefineSlipperyDistribution(UserVar,CtrlVar,MUA,t
 m=3 ;
 q=1;
 muk=0.5 ; 
-V0=0;    % setting this to zero gives Weertman 
+V0=1e5;    % setting this to zero gives Weertman 
 
 C=zeros(MUA.Nnodes,1)+1/20^m;
 

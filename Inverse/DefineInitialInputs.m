@@ -60,7 +60,7 @@ CtrlVar.Inverse.InfoLevel=1;  % Set to 1 to get some basic information, >=2 for 
 % >=100 for further info and plots
 
 CtrlVar.InfoLevelNonLinIt=0; CtrlVar.InfoLevel=0;
-% CtrlVar.InfoLevelNonLinIt=1; CtrlVar.InfoLevel=1;
+CtrlVar.InfoLevelNonLinIt=1; CtrlVar.InfoLevel=1;
 
 CtrlVar.Inverse.DataMisfit.Multiplier=1;
 CtrlVar.Inverse.Regularize.Multiplier=1;
