@@ -24,13 +24,14 @@ x=MUA.coordinates(:,1) ; y=MUA.coordinates(:,2);
 %%  Priors
 
 
-m=3; 
-Priors.C=zeros(MUA.Nnodes,1)+1/20^m;
-Priors.m=m ;
+
+Priors.C=zeros(MUA.Nnodes,1)+UserVar.C0; 
+Priors.m=UserVar.m ;
 Priors.AGlen=AGlenVersusTemp(-10)+zeros(MUA.Nnodes,1);
-Priors.n=3 ; 
+Priors.n=UserVar.n  ;
 Priors.q=1 ;
 Priors.muk=0.5 ;
+Priors.V0=UserVar.V0 ;
 %% Start values
 % 
 wavelength=(max(x)-min(x))/4 ; 
@@ -41,6 +42,7 @@ InvStartValues.AGlen=Priors.AGlen.*(1+Ampl.*sin(2*pi*x/wavelength)) ;
 InvStartValues.n=Priors.n;
 InvStartValues.q=Priors.q ; 
 InvStartValues.muk=Priors.muk ;
+InvStartValues.V0=Priors.V0 ;
 
 
 %% Define measurements and measurement errors

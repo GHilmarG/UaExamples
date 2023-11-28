@@ -2,12 +2,16 @@ function [UserVar,C,m,q,muk,V0]=DefineSlipperyDistribution(UserVar,CtrlVar,MUA,t
 
 
 %m=3 ;  C=1/20^m+zeros(Nnodes,1); % m=3 , 1 m/a and basal shear stress of 20 kPa
-m=3 ;
+m=UserVar.m ;
 q=1;
 muk=0.5 ; 
-V0=1e5;    % setting this to zero gives Weertman 
+V0=UserVar.V0; 
 
-C=zeros(MUA.Nnodes,1)+1/20^m;
+
+C=zeros(MUA.Nnodes,1)+UserVar.C0 ;
+
+
+
 
 %C=C.*(1+10*Hi(y,x,0,0,1e4,1e4,1));
 
@@ -25,6 +29,7 @@ if CtrlVar.doDiagnostic
             
             sx=10e3 ; sy=10e3;
             C=C.*(1+100*exp(-(x.*x/sx^2+y.*y./sy^2)));
+            C=C.*(1+0.1*exp(-(x.*x/sx^2+y.*y./sy^2)));
             
         case 'iceshelf'
             

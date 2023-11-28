@@ -7,6 +7,12 @@ if ~isfield(UserVar,'RunType')
     UserVar.RunType="IceStream";  %  C pertubation only
 end
 
+
+UserVar.n=3;
+UserVar.m=3;
+UserVar.C0=1/20^UserVar.m ; % C without pertubation applied, not a possible modification to this value below.
+UserVar.V0=1000;
+
 UserVar.AddDataErrors=0;
 
 %%
@@ -42,13 +48,28 @@ CtrlVar.SlidingLaw="Umbi" ;
 CtrlVar.SlidingLaw="Cornford" ;
 CtrlVar.SlidingLaw="Joughin" ;
 
+pattern=["Joughin","rCW-V0"];
+if contains(CtrlVar.SlidingLaw,pattern)
+    UserVar.C0=UserVar.C0/UserVar.V0;
+end
+
+
+
 %% Inverse   -inverse
 %CtrlVar.Inverse.MinimisationMethod='MatlabOptimization'; % {'MatlabOptimization','UaOptimization'}
 % CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased"; % 
 % CtrlVar.Inverse.AdjointGradientPreMultiplier="M" ; 
 
 % CtrlVar.Inverse.MinimisationMethod='UaOptimization-Hessian'; % {'MatlabOptimization','UaOptimization'}
-CtrlVar.Inverse.InfoLevelBackTrack=1000;  % info on backtracking within inverse step
+
+
+CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased";      % Hessian-based, Matlab toolbox, only use for CtrlVar.TriNodes=3;
+CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";     % gradient-based, Matlab toolbox
+CtrlVar.Inverse.MinimisationMethod="UaOptimization-GradientBased";         % gradient-based, Ua optimisation toolbox
+CtrlVar.Inverse.MinimisationMethod="UaOptimization-HessianBased";          % Hessian-based, Ua optimisation toolbox, , seems to work fin for CtrlVar.TriNodes>3;
+
+
+
 
 
 CtrlVar.Inverse.InvertFor='-logC-';
@@ -60,7 +81,7 @@ CtrlVar.Inverse.InfoLevel=1;  % Set to 1 to get some basic information, >=2 for 
 % >=100 for further info and plots
 
 CtrlVar.InfoLevelNonLinIt=0; CtrlVar.InfoLevel=0;
-CtrlVar.InfoLevelNonLinIt=1; CtrlVar.InfoLevel=1;
+% CtrlVar.InfoLevelNonLinIt=1; CtrlVar.InfoLevel=1;
 
 CtrlVar.Inverse.DataMisfit.Multiplier=1;
 CtrlVar.Inverse.Regularize.Multiplier=1;
