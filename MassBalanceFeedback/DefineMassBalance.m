@@ -1,6 +1,10 @@
 
 function [UserVar,as,ab,dasdh,dabdh]=DefineMassBalance(UserVar,CtrlVar,MUA,time,s,b,h,S,B,rho,rhow,GF)
 
+%
+%   dasdh = da_s/dh
+%
+
 
 as=h;
 dasdh=zeros(MUA.Nnodes,1)+1;

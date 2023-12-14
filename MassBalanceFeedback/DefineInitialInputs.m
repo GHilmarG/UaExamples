@@ -17,6 +17,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
 
 
 CtrlVar.FlowApproximation='SSHEET' ;  % any off ['SSTREAM'|'SSHEET'|'Hybrid']  
+
 CtrlVar.InfoLevelNonLinIt=10 ;
 CtrlVar.Experiment='MB';
 CtrlVar.TimeDependentRun=1 ;  % any of [0|1].  
@@ -51,7 +52,7 @@ CtrlVar.UaOutputs='-saveAcc-';
 
 %%
 CtrlVar.MassBalanceGeometryFeedback=3; 
-%CtrlVar.MassBalanceGeometryFeedback=0; 
+% CtrlVar.MassBalanceGeometryFeedback=0; 
 CtrlVar.MassBalanceGeometryFeedbackDamping=0;
 
 end

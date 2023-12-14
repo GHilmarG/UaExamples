@@ -65,8 +65,8 @@ end
 
 CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased";      % Hessian-based, Matlab toolbox, only use for CtrlVar.TriNodes=3;
 CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";     % gradient-based, Matlab toolbox
-CtrlVar.Inverse.MinimisationMethod="UaOptimization-GradientBased";         % gradient-based, Ua optimisation toolbox
-CtrlVar.Inverse.MinimisationMethod="UaOptimization-HessianBased";          % Hessian-based, Ua optimisation toolbox, , seems to work fin for CtrlVar.TriNodes>3;
+% CtrlVar.Inverse.MinimisationMethod="UaOptimization-GradientBased";         % gradient-based, Ua optimisation toolbox
+% CtrlVar.Inverse.MinimisationMethod="UaOptimization-HessianBased";          % Hessian-based, Ua optimisation toolbox, seems to work fin for CtrlVar.TriNodes>3;
 
 
 
@@ -77,7 +77,7 @@ CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor;
 CtrlVar.Inverse.Iterations=10;
 
 
-CtrlVar.Inverse.InfoLevel=1;  % Set to 1 to get some basic information, >=2 for additional info on backtrackgin,
+CtrlVar.Inverse.InfoLevel=1;  % Set to 1 to get some basic information, >=2 for additional info on backtracking,
 % >=100 for further info and plots
 
 CtrlVar.InfoLevelNonLinIt=0; CtrlVar.InfoLevel=0;
