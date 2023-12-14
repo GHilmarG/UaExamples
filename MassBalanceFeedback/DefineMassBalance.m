@@ -1,15 +1,26 @@
 
-function [UserVar,as,ab,dasdh,dabdh]=DefineMassBalance(UserVar,CtrlVar,MUA,time,s,b,h,S,B,rho,rhow,GF)
+
+
+
+function [UserVar,as,ab,dasdh,dabdh]=DefineMassBalance(UserVar,CtrlVar,MUA,F)
+
+
+% Alternative input format:
+%
+%   function [UserVar,as,ab,dasdh,dabdh]=DefineMassBalance(UserVar,CtrlVar,MUA,time,s,b,h,S,B,rho,rhow,GF)
+%
+%
+
 
 %
 %   dasdh = da_s/dh
 %
 
 
-as=h;
+as=F.h;
 dasdh=zeros(MUA.Nnodes,1)+1;
 
-ab=s*0;
+ab=F.s*0;
 dabdh=zeros(MUA.Nnodes,1);
 
 %  as = as_0 + das/dh  dh
