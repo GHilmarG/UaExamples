@@ -51,8 +51,8 @@ CtrlVar.PlotLabels=0 ; CtrlVar.PlotMesh=1; CtrlVar.PlotBCs=1;
 CtrlVar.UaOutputs='-saveAcc-';
 
 %%
-CtrlVar.MassBalanceGeometryFeedback=3; 
-%CtrlVar.MassBalanceGeometryFeedback=0; 
+ CtrlVar.MassBalanceGeometryFeedback=3; 
+% CtrlVar.MassBalanceGeometryFeedback=0; 
 CtrlVar.MassBalanceGeometryFeedbackDamping=0;
 
 end

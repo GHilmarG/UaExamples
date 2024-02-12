@@ -1,5 +1,5 @@
 
-%% Alpha 2 Oct 2023
+%% Example Alpha 7 Feb 2024 : all working with Ua Alpha
 
 cd 1dIceShelf
 Ua

@@ -17,7 +17,7 @@ function [UserVar,as,ab,dasdh,dabdh]=DefineMassBalance(UserVar,CtrlVar,MUA,F)
 %
 
 
-as=F.h;
+as=F.h;                              % surface mass balance set equal to the ice thickness
 dasdh=zeros(MUA.Nnodes,1)+1;
 
 ab=F.s*0;
