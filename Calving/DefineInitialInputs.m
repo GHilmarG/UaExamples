@@ -44,7 +44,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
        % UserVar.RunType="Test-CalvingThroughMassBalanceFeedback-"; % MismipPlus: Calving using additional user defined mass-balance term (done in DefineMassBalance.m)
        % UserVar.RunType="Test-CalvingThroughPrescribedLevelSet-" ; % MismipPlus: Calving using prescribed ice/ocean mask (done in DefineCalving.m)
        UserVar.RunType="Test-ManuallyDeactivateElements-"       ; % MismipPlus: Calving using element deactivation (done in DefineElementsToDeactivate.m)
-        
+       UserVar.RunType="-1dAnalyticalIceShelf-"       ; % MismipPlus: Calving using element deactivation (done in DefineElementsToDeactivate.m) 
     end
     
     
@@ -142,9 +142,9 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
     CtrlVar.LevelSetMethodMassBalanceFeedbackCoeffLin=-1;  % This is the constant a1, it has units 1/time.  
                                                            % Default value is -1
     
-    CtrlVar.LevelSetMinIceThickness=CtrlVar.ThickMin+1;    % this is the hmin constant, i.e. the accepted min ice thickness 
+    CtrlVar.LevelSetMinIceThickness=CtrlVar.ThickMin;    % this is the hmin constant, i.e. the accepted min ice thickness 
                                                            % over the 'ice-free' areas. 
-                                                           % Default value is CtrlVar.ThickMin+1
+                                                           % Default value is CtrlVar.ThickMin
     
                                                            
                                                            

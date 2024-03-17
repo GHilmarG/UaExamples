@@ -18,19 +18,11 @@ CtrlVar.ThicknessConstraints=0;
 CtrlVar.FlowApproximation='SSTREAM' ;  % 'SSTREAM'|'SSHEET'|'Hybrid'
 
 
-%CtrlVar.Implicituvh=0;      CtrlVar.TG3=0;
-%CtrlVar.uvhTimeSteppingMethod='theta';  % theta | tg3 | supg
-%CtrlVar.uvhTimeSteppingMethod='supg';  % theta | tg3 | supg
-%CtrlVar.SUPG.beta0=0.5 ; CtrlVar.SUPG.beta1=0.0 ;
-%CtrlVar.theta=0.5;
-
-%CtrlVar.uvhTimeSteppingMethod='tg3';  CtrlVar.TG3=1 ; % theta | tg3 | supg
-%CtrlVar.uvhTimeSteppingMethod='shocks';
 
 
 %CtrlVar.SpeedZero=1e-10;
 %% Solver
-CtrlVar.NLtol=1e-15; % this is the square of the error, i.e. not root-mean-square error
+
 CtrlVar.InfoLevelNonLinIt=1;
 CtrlVar.InfoLevel=10;
 CtrlVar.LineSeachAllowedToUseExtrapolation=1;
@@ -91,6 +83,8 @@ CtrlVar.MeshAdapt.GLrange=[5000 1000 ; 1000 250 ];
 CtrlVar.PlotLabels=0 ; CtrlVar.PlotMesh=1; CtrlVar.PlotBCs=1;
 CtrlVar.PlotXYscale=1000;     % used to scale x and y axis of some of the figures, only used for plotting purposes
 
-
+%% Testing
+% CtrlVar.uvGroupAssembly=true;
+% CtrlVar.uvhGroupAssembly=true;
 
 end

@@ -126,4 +126,9 @@ CtrlVar.ThicknessConstraintsItMax=2500  ;
 CtrlVar.DefineOutputsDt=20;
 
 
+
+%% Testing
+CtrlVar.uvGroupAssembly=true;
+CtrlVar.uvhGroupAssembly=true;
+
 end

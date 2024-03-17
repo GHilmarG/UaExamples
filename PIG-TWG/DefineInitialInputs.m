@@ -133,8 +133,7 @@ switch UserVar.RunType
         CtrlVar.InverseRun=0;
         CtrlVar.Restart=0;
         CtrlVar.ReadInitialMesh=0;
-        CtrlVar.AdaptMesh=1;
-        UserVar.Slipperiness.ReadFromFile=1;
+        CtrlVar.AdaptMesh=1;        UserVar.Slipperiness.ReadFromFile=1;
         UserVar.Slipperiness.ReadFromFile=1;
         UserVar.AGlen.ReadFromFile=1;
         CtrlVar.AdaptMesh=1;
@@ -146,13 +145,13 @@ switch UserVar.RunType
 end
 
 
-CtrlVar.dt=1e-5; 
+CtrlVar.dt=1e-5; CtrlVar.dtmin=1e-7;  
 CtrlVar.time=0;
-CtrlVar.TotalNumberOfForwardRunSteps=10; 
-CtrlVar.TotalTime=10;
+CtrlVar.TotalNumberOfForwardRunSteps=inf; 
+CtrlVar.TotalTime=500;
 
 % time interval between calls to DefineOutputs.m
-CtrlVar.DefineOutputsDt=1; 
+CtrlVar.DefineOutputsDt=50; 
 % Element type
 CtrlVar.TriNodes=3 ;
 
@@ -257,9 +256,8 @@ CtrlVar.Inverse.TestAdjoint.iRange=[100,121] ;  % range of nodes/elements over w
 % end, testing adjoint parameters. 
 
 
-if contains(UserVar.RunType,'MatOpt')
-    CtrlVar.Inverse.MinimisationMethod='MatlabOptimization';
-else
+if contains(UserVar.RunType,'UatOpt')
+    
     CtrlVar.Inverse.MinimisationMethod='UaOptimization';
     if contains(UserVar.RunType,'ConjGrad')
         CtrlVar.Inverse.GradientUpgradeMethod='ConjGrad' ; %{'SteepestDecent','ConjGrad'}
@@ -274,10 +272,10 @@ end
 CtrlVar.Inverse.Regularize.C.gs=1;
 CtrlVar.Inverse.Regularize.C.ga=1;
 CtrlVar.Inverse.Regularize.logC.ga=1;
-CtrlVar.Inverse.Regularize.logC.gs=1e3 ;
+CtrlVar.Inverse.Regularize.logC.gs=1e5 ;
 
-CtrlVar.Inverse.Regularize.logC.ga=0;  % testing for Budd
-CtrlVar.Inverse.Regularize.logC.gs=1e3 ; % testing for Budd
+CtrlVar.Inverse.Regularize.logC.ga=1; 
+CtrlVar.Inverse.Regularize.logC.gs=1e5 ; 
 
 CtrlVar.Inverse.Regularize.AGlen.gs=1;
 CtrlVar.Inverse.Regularize.AGlen.ga=1;
@@ -288,7 +286,7 @@ CtrlVar.Inverse.Regularize.logAGlen.gs=1e3 ;
 %%
 CtrlVar.ThicknessConstraints=0;
 CtrlVar.ResetThicknessToMinThickness=1;  % change this later on
-CtrlVar.ThickMin=50;
+CtrlVar.ThickMin=1;
 
 %% Filenames
 

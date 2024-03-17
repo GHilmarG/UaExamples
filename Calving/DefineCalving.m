@@ -1,5 +1,4 @@
-function [UserVar,LSF,c]=DefineCalving(UserVar,CtrlVar,MUA,F,BCs)
-
+function [UserVar,LSF,c]=DefineCalving(UserVar,CtrlVar,MUA,LSF,c,F,BCs) 
 
 %%
 %
@@ -49,9 +48,11 @@ function [UserVar,LSF,c]=DefineCalving(UserVar,CtrlVar,MUA,F,BCs)
 %%
 
 
-% LSF=F.LSF  ; %
-
-c=[] ;
+c=nan ;  % Set c to nan to indicate that the level-set is NOT to be evolved by solving the level-set equation, 
+%        % but is here being prescribed directly.
+         % Note: Setting c=nan is not really required because if 
+         %      CtrlVar.LevelSetEvolution=="-prescribed-"
+         % this will be done automatically anyhow. 
 
 if F.time > 2
     

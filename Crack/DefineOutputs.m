@@ -116,7 +116,7 @@ end
 
 
 if contains(plots,'-e-')
-    % plotting effectiv strain rates
+    % plotting effective strain rates
     
     % first get effective strain rates, e :
     [etaInt,xint,yint,exx,eyy,exy,Eint,e,txx,tyy,txy]=calcStrainRatesEtaInt(CtrlVar,MUA,ub,vb,AGlen,n);
@@ -136,17 +136,23 @@ end
 e=[];
 
 if contains(plots,'-stresses-')
-    
+
     figure
 
     % [txzb,tyzb,txx,tyy,txy,exx,eyy,exy,e]=CalcNodalStrainRatesAndStresses(CtrlVar,MUA,AGlen,n,C,m,GF,s,b,ub,vb,ud,vd);
     [txzb,tyzb,txx,tyy,txy,exx,eyy,exy,e]=CalcNodalStrainRatesAndStresses(CtrlVar,UserVar,MUA,F);
     N=30;
-    
+
     [X,Y]=ndgrid(linspace(min(x),max(x),N),linspace(min(y),max(y),N));
+
+    if isempty(MUA.TR)
+        [MUA.Boundary,MUA.TR]=FindBoundary(MUA.connectivity,MUA.coordinates);
+    end
+
+
     I=nearestNeighbor(MUA.TR,[X(:) Y(:)]);  % find nodes within computational grid closest to the regularly spaced X and Y grid points.
 
-    
+
     scale=1e-3;
     PlotTensor(x(I)/CtrlVar.PlotXYscale,y(I)/CtrlVar.PlotXYscale,txx(I),txy(I),tyy(I),scale);
     hold on
