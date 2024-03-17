@@ -1,7 +1,6 @@
 
 
-
-%% Beta 17 March 2024
+%% Example Beta 17 March 2024 :
 
 
 cd 1dIceShelf
@@ -35,6 +34,10 @@ cd ..
 close all
 
 cd MismipPlus
+Ua
+cd ..
+
+cd IceBerg\
 Ua
 cd ..
 

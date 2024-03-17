@@ -109,6 +109,9 @@ if contains(plots,'-stresses-')
 
     N=30;
     [X,Y]=ndgrid(linspace(min(x),max(x),N),linspace(min(y),max(y),N));
+    if isempty(MUA.TR)
+          [MUA.Boundary,MUA.TR]=FindBoundary(MUA.connectivity,MUA.coordinates);
+    end
     I=nearestNeighbor(MUA.TR,[X(:) Y(:)]);  % find nodes within computational grid closest to the regularly spaced X and Y grid points.
     
 

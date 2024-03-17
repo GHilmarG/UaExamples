@@ -1,6 +1,7 @@
 
 function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,CtrlVar)
 
+%%
 %
 %   Testing mass-balance feedback
 %   Here the mass balance is a function of elevation/thickness with as=h and h(t0)=10 ; 
@@ -9,15 +10,15 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
 %   Therefore dh/dt=a=h and the solution is h=h0 exp(t)
 %   Integrating from t=0 to t=1 will give a final thickness of h=10 exp(1) = 27.3
 %
-% Plot results using:
-
-%%
-
 %%
 
 
-CtrlVar.FlowApproximation='SSHEET' ;  % any off ['SSTREAM'|'SSHEET'|'Hybrid']  
-CtrlVar.InfoLevelNonLinIt=10 ;
+
+
+CtrlVar.FlowApproximation='SSHEET' ;   % Implicit mass-balance feedback not included in the SSHET/SIA solver 
+CtrlVar.FlowApproximation='SSTREAM' ;  %
+
+CtrlVar.InfoLevelNonLinIt=1 ;
 CtrlVar.Experiment='MB';
 CtrlVar.TimeDependentRun=1 ;  % any of [0|1].  
 CtrlVar.time=0 ; 
@@ -50,8 +51,8 @@ CtrlVar.PlotLabels=0 ; CtrlVar.PlotMesh=1; CtrlVar.PlotBCs=1;
 CtrlVar.UaOutputs='-saveAcc-';
 
 %%
-CtrlVar.MassBalanceGeometryFeedback=3; 
-%CtrlVar.MassBalanceGeometryFeedback=0; 
+ CtrlVar.MassBalanceGeometryFeedback=3; 
+% CtrlVar.MassBalanceGeometryFeedback=0; 
 CtrlVar.MassBalanceGeometryFeedbackDamping=0;
 
 end
