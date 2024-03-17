@@ -1,7 +1,7 @@
 
 
 
-%% Beta 2 October 2023
+%% Beta 17 March 2024
 
 
 cd 1dIceShelf
