@@ -9,10 +9,10 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
     %
     % For example elements can be deactivated and then reactivated to simulate a calving event.
     %
-    % Also, calving can be prescribed using a melt pertubation with a thickness feedback.
+    % Also, calving can be prescribed using a melt perturbation with a thickness feedback.
     %
     % Currently the best approach seems to be to use the level set method with the level set being prescribed by the user at each
-    % time step using 'DefineCalving.m'.  (Dynamically updating the level set based on a calving law is in preparaton but not
+    % time step using 'DefineCalving.m'.  (Dynamically updating the level set based on a calving law is in preparation but not
     % ready for general use)
     %
     %
@@ -227,7 +227,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
     CtrlVar.ThickMin=1; % minimum allowed thickness without (potentially) doing something about it
     CtrlVar.ResetThicknessToMinThickness=0;  % if true, thickness values less than ThickMin will be set to ThickMin
     CtrlVar.ThicknessConstraints=1  ;        % if true, min thickness is enforced using active set method
-    CtrlVar.ThicknessConstraintsItMax=5  ;
+    CtrlVar.ThicknessConstraintsItMax=0  ;
     
     %% MeshBoundaryCoordinates
     
