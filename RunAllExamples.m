@@ -1,5 +1,6 @@
 
 %% Example Alpha 17 March 2024 : all working with Ua Alpha
+%% Example Alpha 01 August2024 : all working with Ua Alpha
 
 cd 1dIceShelf
 Ua
