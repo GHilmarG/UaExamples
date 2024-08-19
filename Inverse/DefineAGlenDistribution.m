@@ -1,4 +1,4 @@
-function  [UserVar,AGlen,n]=DefineAGlenDistribution(UserVar,CtrlVar,MUA,time,s,b,h,S,B,rho,rhow,GF)
+function  [UserVar,AGlen,n]=DefineAGlenDistribution(UserVar,CtrlVar,MUA,F)
 
 n=3 ;
 
@@ -16,13 +16,10 @@ if CtrlVar.doDiagnostic
         
         case 'iceshelf'
             
-            
-            x=MUA.coordinates(:,1) ;
-            y=MUA.coordinates(:,2);
-            
+       
             
             sx=10e3 ; sy=10e3;
-            AGlen=AGlen.*(1+100*exp(-(x.*x/sx^2+y.*y./sy^2)));
+            AGlen=AGlen.*(1+100*exp(-(F.x.*F.x/sx^2+F.y.*F.y./sy^2)));
             
         case 'icestream'
             
