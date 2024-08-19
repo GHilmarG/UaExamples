@@ -8,8 +8,6 @@ function [UserVar,InvStartValues,Priors,Meas,BCsAdjoint,RunInfo]=DefineInputsFor
 
 
 
-
-
 %
 
 %% Define boundary conditions of adjoint problem
