@@ -5,13 +5,14 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
     CtrlVar.Experiment='TestGaussPeak';
      %%
     
-    CtrlVar.TimeDependentRun=0 ;
+    CtrlVar.TimeDependentRun=false ;
    
     CtrlVar.Restart=0;  
     
  
     
-    CtrlVar.time=0 ; 
+    CtrlVar.StartTime=0 ; 
+    CtrlVar.EndTime=0 ;   % only needed for a time-dependent run
     CtrlVar.dt=1;
     CtrlVar.TotalNumberOfForwardRunSteps=1;
     
