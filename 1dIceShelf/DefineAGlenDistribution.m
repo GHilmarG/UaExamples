@@ -1,12 +1,27 @@
-function [UserVar,AGlen,n]=DefineAGlenDistribution(UserVar,CtrlVar,MUA,time,s,b,h,S,B,rho,rhow,GF)
-      
-    
-	n=3;	
-    x=MUA.coordinates(:,1);
-    AGlen=1.0e-9+x*0 ; 
-    
-    sx=10e3 ;  AGlen=AGlen.*(1+9*exp(-(x.*x/sx^2)));
-   
-    
+
+function  [UserVar,AGlen,n]=DefineAGlenDistribution(UserVar,CtrlVar,MUA,F)
+
+
+%%
+%
+% User input m-file to define A and n in the Glenn-Steinemann flow law
+%
+%   [UserVar,AGlen,n]=DefineAGlenDistribution(UserVar,CtrlVar,MUA,F)
+% 
+%   [UserVar,AGlen,n]=DefineAGlenDistribution(UserVar,CtrlVar,MUA,time,s,b,h,S,B,rho,rhow,GF)
+%
+% Note: Use
+%
+%   [AGlen,B]=AGlenVersusTemp(T)
+%
+% to get A in the units kPa^{-3} yr^{-1} for some temperature T (degrees Celsius) 
+%
+%% 
+
+n=3 ;
+A=6.338e-25;                                           % A in SI units for temperate ice ; 
+AGlen=A*1e9*365.2422*24*60*60+zeros(MUA.Nnodes,1);     % A in the units kPa^{-3} yr^{-1}
+
+
 end
 

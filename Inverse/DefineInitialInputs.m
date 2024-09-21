@@ -64,9 +64,9 @@ end
 
 
 CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased";      % Hessian-based, Matlab toolbox, only use for CtrlVar.TriNodes=3;
-CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";     % gradient-based, Matlab toolbox
-% CtrlVar.Inverse.MinimisationMethod="UaOptimization-GradientBased";         % gradient-based, Ua optimisation toolbox
-% CtrlVar.Inverse.MinimisationMethod="UaOptimization-HessianBased";          % Hessian-based, Ua optimisation toolbox, seems to work fin for CtrlVar.TriNodes>3;
+CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";     % gradient-based, Matlab toolbox (not working with R2023a, fine with R2023b and later versions)
+% CtrlVar.Inverse.MinimisationMethod="UaOptimization-GradientBased";       % gradient-based, Ua optimisation toolbox
+% CtrlVar.Inverse.MinimisationMethod="UaOptimization-HessianBased";        % Hessian-based, Ua optimisation toolbox, seems to work fine for CtrlVar.TriNodes>3;
 
 
 

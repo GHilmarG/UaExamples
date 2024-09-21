@@ -22,7 +22,7 @@ Ua
 cd ..
 close all
 
-cd IceShelf\
+cd IceShelf
 Ua
 cd ..
 close all
@@ -36,12 +36,12 @@ cd MismipPlus
 Ua
 cd ..
 
-cd IceBerg\
+cd IceBerg
 Ua
 cd ..
 
 
-cd PIG-TWG\
+cd PIG-TWG
 
 
 UserVar.RunType='Inverse-MatOpt'; Ua(UserVar) ;                                                                                         % working 06/03/2023
@@ -62,11 +62,11 @@ close all
 
 
 
-cd MassBalanceFeedback\
+cd MassBalanceFeedback
 Ua
 cd ..
 
-cd Calving\
+cd Calving
 
 
 % A few examples: 
