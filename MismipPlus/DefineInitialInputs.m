@@ -10,9 +10,10 @@ CtrlVar.SlidingLaw="W" ;  % options:  "W","W-N0","minCW-N0","C","rpCW-N0", and "
 CtrlVar.Experiment=['MismipPlus-',UserVar.MisExperiment];   
 %% Types of run
 %
-CtrlVar.TimeDependentRun=0; 
-CtrlVar.TotalNumberOfForwardRunSteps=10;
-CtrlVar.TotalTime=100;
+CtrlVar.TimeDependentRun=1; 
+CtrlVar.TotalNumberOfForwardRunSteps=100;
+CtrlVar.StartTime=99;
+CtrlVar.EndTime=100;
 CtrlVar.Restart=0;  
 CtrlVar.InfoLevelNonLinIt=1;  % try setting to 100 for more info and plots on non-linear convergence  
 CtrlVar.NRitmax=500;            % maximum number of NR iteration
