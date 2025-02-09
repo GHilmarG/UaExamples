@@ -59,21 +59,30 @@ end
 if contains(plots,'-dhdt(x)-')
     figure
     plot(x(I)/CtrlVar.PlotXYscale,dhdt(I)) ;
-    title(sprintf('dhdt(x) at t=%-g ',time)) ; xlabel('x') ; ylabel('dh/dt')
+    title(sprintf("$dh/dt$ at $t$=%-g ",time),Interpreter="latex") ; xlabel("$x$ (km)",Interpreter='latex') ; ylabel("$dh/dt$ (m/yr)",Interpreter='latex')
     drawnow
 end
 
 
 if contains(plots,'-h(x)-')
-    figure;
-    plotyy(x(I)/CtrlVar.PlotXYscale,h(I),x(I)/CtrlVar.PlotXYscale,GF.node(I)) ;
+    fig=figure;
+    yyaxis left
+
+    plot(x(I)/CtrlVar.PlotXYscale,h(I),DisplayName="$h$")
+    ylabel("ice thickness, $h$ (m)",Interpreter="latex")
+
+    yyaxis right 
+    plot(x(I)/CtrlVar.PlotXYscale,GF.node(I),DisplayName="$\mathcal{G}$") ;
+    ylabel("flotation mask, $\mathcal{G}$",Interpreter="latex")
     
     if CtrlVar.Implicituvh
-        title(sprintf('fully-implicit h(x) at t=%-g (%s)',time,CtrlVar.uvhImplicitTimeSteppingMethod)) ;
+        title(sprintf("fully-implicit: $h(x)$ at $t$=%-g, %s, $\\theta$=%g",time,CtrlVar.uvhImplicitTimeSteppingMethod,CtrlVar.theta),interpreter="latex") ;
     else
-        title(sprintf('semi-implicit h(x) at t=%-g (TG3=%i)',time,CtrlVar.TG3)) ;
+          title(sprintf("semi-implicit: $h(x)$ at $t$=%-g, %s, $\\theta$=%g",time,CtrlVar.uvhImplicitTimeSteppingMethod,CtrlVar.theta),interpreter="latex") ;
     end
-    xlabel('x') ; ylabel('h')
+    xlabel('$x$ (km)',Interpreter='latex') ; 
+    legend(Interpreter="latex")
+    fig.Position=[50 800 800 450];
     drawnow
 end
 
@@ -160,7 +169,7 @@ if contains(plots,'-e-')
     
 end
 
-if ~isempty(strfind(plots,'-ub-'))
+if contains(plots,'-ub-')
     
     figure
     [FigHandle,ColorbarHandel,tri]=PlotNodalBasedQuantities(MUA.connectivity,MUA.coordinates,ub,CtrlVar)    ;

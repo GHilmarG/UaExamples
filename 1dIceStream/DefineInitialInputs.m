@@ -15,14 +15,16 @@ MeshBoundaryCoordinates=flipud([xu yr ; xd yr ; xd yl ; xu yl]);
 %% Types of runs
 CtrlVar.TimeDependentRun=true;
 CtrlVar.StartTime=0;
-CtrlVar.EndTime=10;
+CtrlVar.EndTime=0.1;
 CtrlVar.dt=0.01;
-CtrlVar.TotalNumberOfForwardRunSteps=5;
+CtrlVar.TotalNumberOfForwardRunSteps=inf;
 CtrlVar.AdaptiveTimeStepping=1 ;
 CtrlVar.ThicknessConstraints=0;
 CtrlVar.FlowApproximation='SSTREAM' ;  % 'SSTREAM'|'SSHEET'|'Hybrid'
 
-
+CtrlVar.theta=1; % backward Euler
+CtrlVar.theta=1; % Lax-Wendroff
+CtrlVar.theta=0; % forward Euler
 
 
 %CtrlVar.SpeedZero=1e-10;
