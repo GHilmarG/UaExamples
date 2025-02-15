@@ -15,23 +15,26 @@ MeshBoundaryCoordinates=flipud([xu yr ; xd yr ; xd yl ; xu yl]);
 %% Types of runs
 CtrlVar.TimeDependentRun=true;
 CtrlVar.StartTime=0;
-CtrlVar.EndTime=0.1;
-CtrlVar.dt=0.01;
+CtrlVar.EndTime=1;
+CtrlVar.dt=0.001;
 CtrlVar.TotalNumberOfForwardRunSteps=inf;
 CtrlVar.AdaptiveTimeStepping=1 ;
 CtrlVar.ThicknessConstraints=0;
 CtrlVar.FlowApproximation='SSTREAM' ;  % 'SSTREAM'|'SSHEET'|'Hybrid'
 
-CtrlVar.theta=1; % backward Euler
-CtrlVar.theta=1; % Lax-Wendroff
-CtrlVar.theta=0; % forward Euler
+% CtrlVar.theta=1; % backward Euler
+ CtrlVar.theta=0.5; % Lax-Wendroff
+% CtrlVar.theta=0; % forward Euler
+
+CtrlVar.SUPG.beta0=1.0 ; CtrlVar.SUPG.beta1=0 ; % parameters related to the SUPG method.
+
 
 
 %CtrlVar.SpeedZero=1e-10;
 %% Solver
 
 CtrlVar.InfoLevelNonLinIt=1;
-CtrlVar.InfoLevel=10;
+CtrlVar.InfoLevel=1;
 CtrlVar.LineSeachAllowedToUseExtrapolation=1;
 
 %% Restart
@@ -61,6 +64,7 @@ CtrlVar.AdaptMeshMaxIterations=4;  % Number of adapt mesh iterations within each
 CtrlVar.AdaptMeshUntilChangeInNumberOfElementsLessThan=0;
 
 CtrlVar.InfoLevelAdaptiveMeshing=10;
+%CtrlVar.InfoLevelAdaptiveMeshing=0;
 CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';
 
 I=1;
@@ -82,7 +86,17 @@ CtrlVar.ExplicitMeshRefinementCriteria(I).p=[];
 CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
 CtrlVar.ExplicitMeshRefinementCriteria(I).Use=false;
 
-CtrlVar.MeshAdapt.GLrange=[5000 1000 ; 1000 250 ];
+I=I+1;
+CtrlVar.ExplicitMeshRefinementCriteria(I).Name='thickness gradient';
+CtrlVar.ExplicitMeshRefinementCriteria(I).Scale=0.001;
+CtrlVar.ExplicitMeshRefinementCriteria(I).EleMin=[];
+CtrlVar.ExplicitMeshRefinementCriteria(I).EleMax=[];
+CtrlVar.ExplicitMeshRefinementCriteria(I).p=[];
+CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
+CtrlVar.ExplicitMeshRefinementCriteria(I).Use=false;
+
+ CtrlVar.MeshAdapt.GLrange=[10000 2000 ; 5000 500 ; 2000 100 ];
+% CtrlVar.MeshAdapt.GLrange=[5000 1000 ; 1000 250 ];
 
 %CtrlVar.MeshAdapt.GLrange=[10000 2000 ; 2000 500];                                                    
 %% plotting

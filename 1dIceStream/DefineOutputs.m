@@ -51,9 +51,15 @@ end
 if contains(plots,'-ub(x)-')
     figure
     plot(x(I)/CtrlVar.PlotXYscale,ub(I)) ;
-    title(sprintf('u_b(x) at t=%-g ',time)) ; xlabel('x') ; ylabel('u_b')
+    title(sprintf('Velocity at t=%-g ',time)) ; 
+    xlabel("$x$ (km) ",Interpreter="latex") ; 
+    ylabel("Velocity, $u$, (m/yr)",Interpreter="latex")
     drawnow
 end
+
+
+Fh=scatteredInterpolant(F.x,F.y,F.h); 
+FG=scatteredInterpolant(F.x,F.y,F.GF.node); 
 
 
 if contains(plots,'-dhdt(x)-')
@@ -68,15 +74,28 @@ if contains(plots,'-h(x)-')
     fig=figure;
     yyaxis left
 
-    plot(x(I)/CtrlVar.PlotXYscale,h(I),DisplayName="$h$")
+    xProfile=linspace(-100e3,100e3,1000);
+    yProfile=xProfile*0;
+    hProfile=Fh(xProfile,yProfile); 
+  %  plot(x(I)/CtrlVar.PlotXYscale,h(I),DisplayName="$h$",Color="b")
+    hold on
+    plot(xProfile/CtrlVar.PlotXYscale,hProfile,DisplayName="$h$ profile",Color="b",LineWidth=1.5)
+
     ylabel("ice thickness, $h$ (m)",Interpreter="latex")
+    ylim([820 1020])
 
     yyaxis right 
-    plot(x(I)/CtrlVar.PlotXYscale,GF.node(I),DisplayName="$\mathcal{G}$") ;
+    G=FG(xProfile,yProfile);
+    %plot(x(I)/CtrlVar.PlotXYscale,GF.node(I),DisplayName="$\mathcal{G}$") ;
+    plot(xProfile/CtrlVar.PlotXYscale,G,DisplayName="$\mathcal{G}$") ;
     ylabel("flotation mask, $\mathcal{G}$",Interpreter="latex")
+    ylim([-0.1 1.1])
     
     if CtrlVar.Implicituvh
-        title(sprintf("fully-implicit: $h(x)$ at $t$=%-g, %s, $\\theta$=%g",time,CtrlVar.uvhImplicitTimeSteppingMethod,CtrlVar.theta),interpreter="latex") ;
+        
+        title(sprintf("fully-implicit: $h(x)$ at $t$=%-g",F.time),interpreter="latex") ;
+        subtitle(sprintf("%s with $\\beta_0$=%g, $\\theta$=%g",CtrlVar.uvhImplicitTimeSteppingMethod,CtrlVar.SUPG.beta0,CtrlVar.theta),interpreter="latex") ;
+
     else
           title(sprintf("semi-implicit: $h(x)$ at $t$=%-g, %s, $\\theta$=%g",time,CtrlVar.uvhImplicitTimeSteppingMethod,CtrlVar.theta),interpreter="latex") ;
     end
