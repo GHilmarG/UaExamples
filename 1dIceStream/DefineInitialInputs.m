@@ -22,13 +22,23 @@ CtrlVar.AdaptiveTimeStepping=1 ;
 CtrlVar.ThicknessConstraints=0;
 CtrlVar.FlowApproximation='SSTREAM' ;  % 'SSTREAM'|'SSHEET'|'Hybrid'
 
-% CtrlVar.theta=1; % backward Euler
- CtrlVar.theta=0.5; % Lax-Wendroff
-% CtrlVar.theta=0; % forward Euler
+CtrlVar.ForwardTimeIntegration="-uvh-" ; % "-uv-h-" ; % "-uvh-" , "-uv-h-" , "-uv-" , "-h-" ; 
+
+%CtrlVar.theta=1; % backward Euler
+CtrlVar.theta=0.5; % Lax-Wendroff
+%CtrlVar.theta=0; % forward Euler
 
 CtrlVar.SUPG.beta0=1.0 ; CtrlVar.SUPG.beta1=0 ; % parameters related to the SUPG method.
+%CtrlVar.SUPG.beta0=0.0 ; CtrlVar.SUPG.beta1=0 ; % parameters related to the SUPG method.
 
+CtrlVar.DefineOutputsDt=0.01; % model time interval between calling DefineOutputs.m, output interval
 
+CtrlVar.uvh.SUPG.tau="taus" ; % {'tau1','tau2','taus','taut'}  
+CtrlVar.h.SUPG.tau="taus";  CtrlVar.h.SUPG.Use=1;
+% CtrlVar.h.SUPG.tau="tau1";  CtrlVar.h.SUPG.Use=1;
+
+CtrlVar.uvh.SUPG.tauMultiplier=1 ; 
+CtrlVar.h.SUPG.tauMultiplier=1 ; 
 
 %CtrlVar.SpeedZero=1e-10;
 %% Solver
@@ -48,7 +58,7 @@ CtrlVar.ReadInitialMesh=0;    % if true then read FE mesh (coordinates, connecti
 CtrlVar.ReadInitialMeshFileName='NewMeshFile.mat';
 
 CtrlVar.TriNodes=3 ;
-CtrlVar.MeshSize=2.5e3;
+CtrlVar.MeshSize=2e3;
 CtrlVar.MeshSizeMin=0.05*CtrlVar.MeshSize;
 CtrlVar.MeshSizeMax=CtrlVar.MeshSize;
 CtrlVar.MaxNumberOfElements=25000;
@@ -56,12 +66,12 @@ CtrlVar.MaxNumberOfElements=25000;
 %% for adaptive meshing
 CtrlVar.AdaptMesh=1;
 CtrlVar.MeshGenerator='mesh2d';  % possible values: {mesh2d|gmsh}
-CtrlVar.GmshMeshingAlgorithm=8;     % see gmsh manual
 
-CtrlVar.AdaptMeshInitial=1  ; % remesh in first run-step irrespecitivy of the value of AdaptMeshInterval
-CtrlVar.AdaptMeshRunStepInterval=1 ; % Number of run-steps between mesh adaptation
-CtrlVar.AdaptMeshMaxIterations=4;  % Number of adapt mesh iterations within each run-step.
-CtrlVar.AdaptMeshUntilChangeInNumberOfElementsLessThan=0;
+
+CtrlVar.AdaptMeshInitial=1  ;            % remesh in first run-step irrespecitivy of the value of AdaptMeshInterval
+CtrlVar.AdaptMeshRunStepInterval=inf ;   % Number of run-steps between mesh adaptation
+CtrlVar.AdaptMeshMaxIterations=10;       % Number of adapt mesh iterations within each run-step.
+CtrlVar.AdaptMeshUntilChangeInNumberOfElementsLessThan=10;
 
 CtrlVar.InfoLevelAdaptiveMeshing=10;
 %CtrlVar.InfoLevelAdaptiveMeshing=0;
@@ -104,8 +114,6 @@ CtrlVar.ExplicitMeshRefinementCriteria(I).Use=false;
 CtrlVar.PlotLabels=0 ; CtrlVar.PlotMesh=1; CtrlVar.PlotBCs=1;
 CtrlVar.PlotXYscale=1000;     % used to scale x and y axis of some of the figures, only used for plotting purposes
 
-%% Testing
-% CtrlVar.uvGroupAssembly=true;
-% CtrlVar.uvhGroupAssembly=true;
+
 
 end
