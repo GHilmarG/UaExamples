@@ -100,12 +100,31 @@ if strcmp(CtrlVar.DefineOutputsInfostring,'Last call')
     
     %load AccSurf ;
     fig=FindOrCreateFigure("-Analytical/Numerical-")  ; clf(fig) ; 
-    plot(Time,Surf,'or') ; xlabel('time (yr)') ; ylabel('Surface elevation (m)')
-    hold on ; plot(Time,10*exp(Time),'g'); legend('Numerical','Analytical')
-    
+      
     Analytical=10*exp(Time);
     Numerical=Surf;
     Error=Numerical-Analytical;
+
+
+    yyaxis left
+    plot(Time,Numerical,'ob') ; 
+    
+    
+    xlabel("time (yr)",interpreter="latex")
+    ylabel("Surface elevation (m)",interpreter="latex")
+    hold on ; 
+    plot(Time,Analytical,'b'); 
+    
+    yyaxis right
+    Err=Surf-Analytical;
+    plot(Time,Err,"-r")
+    ylabel("Numerical-Analytical (m)",interpreter="latex")
+
+    legend("Numerical","Analytical","Error",Location="best",interpreter="latex")
+    
+  title("Surface elevation over time, $a_s=s$ and $s(t=0)=10$",interpreter="latex",FontSize=14)
+
+
     T=table(Time,Numerical,Analytical,Error);
     disp(T)
     

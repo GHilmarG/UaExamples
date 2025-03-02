@@ -91,9 +91,9 @@ CtrlVar.SaveAdaptMeshFileName='AdaptMesh.mat';
 
 
 
-CtrlVar.AdaptMeshInitial=1 ;       % if true, then a remeshing will always be performed at the inital step
+CtrlVar.AdaptMeshInitial=1 ;       % if true, then a re-meshing will always be performed at the inital step
 CtrlVar.AdaptMeshAndThenStop=0;    % if true, then mesh will be adapted but no further calculations performed
-                                   % usefull, for example, when trying out different remeshing options (then use CtrlVar.doRemeshPlots=1 to get plots)
+                                   % useful, for example, when trying out different re-meshing options (then use CtrlVar.doRemeshPlots=1 to get plots)
 
 
 CtrlVar.AdaptMeshRunStepInterval=1;  % number of run-steps between mesh adaptation

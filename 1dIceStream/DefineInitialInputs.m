@@ -22,7 +22,7 @@ CtrlVar.AdaptiveTimeStepping=1 ;
 CtrlVar.ThicknessConstraints=0;
 CtrlVar.FlowApproximation='SSTREAM' ;  % 'SSTREAM'|'SSHEET'|'Hybrid'
 
-CtrlVar.ForwardTimeIntegration="-uvh-" ; % "-uv-h-" ; % "-uvh-" , "-uv-h-" , "-uv-" , "-h-" ; 
+CtrlVar.ForwardTimeIntegration="-uvh-" ; % "-uvh-" , "-uv-h-" , "-uv-" , "-h-" ; 
 
 %CtrlVar.theta=1; % backward Euler
 CtrlVar.theta=0.5; % Lax-Wendroff

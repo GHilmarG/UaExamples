@@ -218,7 +218,8 @@ if contains(plots,'-profile-')
     legend('Modelled','Theory','location','northwest')
     title('v_y velocity profile away from crack tip')
     I=r<(5*UserVar.Crack.a) & r> 0;
-    Fit=fit(log(r(I))',log(vProfile(I))','poly1')
+
+    % Fit=fit(log(r(I))',log(vProfile(I))','poly1')
 
 
 
