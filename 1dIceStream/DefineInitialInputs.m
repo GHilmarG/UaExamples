@@ -6,7 +6,14 @@
 
 function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,CtrlVar)
 
+
+UserVar.AdaptMesh=" int/nodal ";
+
+
 CtrlVar.Experiment='Test1dIceStream';
+
+
+
 CtrlVar.doplots=1; CtrlVar.doRemeshPlots=1;
 
 xd=100e3; xu=-100e3 ; yl=10e3 ; yr=-10e3;
@@ -64,16 +71,30 @@ CtrlVar.MeshSizeMax=CtrlVar.MeshSize;
 CtrlVar.MaxNumberOfElements=25000;
 
 %% for adaptive meshing
+
+
+if UserVar.AdaptMesh ==" int/nodal "
+
+    CtrlVar.AdaptMesh=1;
+    CtrlVar.AdaptMeshRunStepInterval=1 ;   % Number of run-steps between mesh adaptation
+    CtrlVar.InfoLevelAdaptiveMeshing=100;
+    CtrlVar.AdaptMeshUntilChangeInNumberOfElementsLessThan=1;
+
+else
+
+    CtrlVar.MeshAdapt.GLrange=[10000 2000 ; 5000 500 ; 2000 100 ];
+    CtrlVar.AdaptMeshRunStepInterval=inf ;   % Number of run-steps between mesh adaptation
+    CtrlVar.AdaptMeshUntilChangeInNumberOfElementsLessThan=10;
+end
+
 CtrlVar.AdaptMesh=1;
 CtrlVar.MeshGenerator='mesh2d';  % possible values: {mesh2d|gmsh}
 
-
 CtrlVar.AdaptMeshInitial=1  ;            % remesh in first run-step irrespecitivy of the value of AdaptMeshInterval
-CtrlVar.AdaptMeshRunStepInterval=inf ;   % Number of run-steps between mesh adaptation
 CtrlVar.AdaptMeshMaxIterations=10;       % Number of adapt mesh iterations within each run-step.
-CtrlVar.AdaptMeshUntilChangeInNumberOfElementsLessThan=10;
 
-CtrlVar.InfoLevelAdaptiveMeshing=10;
+
+
 %CtrlVar.InfoLevelAdaptiveMeshing=0;
 CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';
 
@@ -81,6 +102,8 @@ I=1;
 CtrlVar.ExplicitMeshRefinementCriteria(I).Name='effective strain rates';
 CtrlVar.ExplicitMeshRefinementCriteria(I).Scale=0.01;
 CtrlVar.ExplicitMeshRefinementCriteria(I).EleMin=[];
+
+
 CtrlVar.ExplicitMeshRefinementCriteria(I).EleMax=[];
 CtrlVar.ExplicitMeshRefinementCriteria(I).p=[];
 CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
@@ -105,10 +128,8 @@ CtrlVar.ExplicitMeshRefinementCriteria(I).p=[];
 CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
 CtrlVar.ExplicitMeshRefinementCriteria(I).Use=false;
 
- CtrlVar.MeshAdapt.GLrange=[10000 2000 ; 5000 500 ; 2000 100 ];
-% CtrlVar.MeshAdapt.GLrange=[5000 1000 ; 1000 250 ];
 
-%CtrlVar.MeshAdapt.GLrange=[10000 2000 ; 2000 500];                                                    
+
 %% plotting
 
 CtrlVar.PlotLabels=0 ; CtrlVar.PlotMesh=1; CtrlVar.PlotBCs=1;

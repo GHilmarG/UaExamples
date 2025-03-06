@@ -1,6 +1,13 @@
+
+
+
+
+
+
+
+
 function [UserVar,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened]=...
-            DefineDesiredEleSize(UserVar,CtrlVar,MUA,x,y,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened,s,b,S,B,rho,rhow,ub,vb,ud,vd,GF,NodalErrorIndicators)
-        
+    DefineDesiredEleSize(UserVar,CtrlVar,MUA,F,x,y,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened,NodalErrorIndicators)
 
 %%
 % Define desired sizes of elements or specify which elements to refine or
@@ -101,6 +108,19 @@ function [UserVar,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened]=...
 % 
 %%
  
+
  
-    
+ R=ElementErrorEstimator(CtrlVar,MUA,F);
+ 
+
+UaPlots(CtrlVar,MUA,F,R); % set(gca,'ColorScale','log') 
+title(sprintf("max(R)=%g",max(R)))
+
+Rcrit=10;
+ElementsToBeRefined=R>Rcrit;
+ElementsToBeCoarsened=false(MUA.Nele,1);
+
+fprintf("DefineDesiredEleSizes: Refine %i \t Coarsen %i \n",numel(find((ElementsToBeRefined))),numel(find((ElementsToBeCoarsened))))
+
+
 end

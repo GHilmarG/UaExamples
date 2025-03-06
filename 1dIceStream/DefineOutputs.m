@@ -61,15 +61,15 @@ xy0=F.x(Iy0Nodes);
 
 
 
-Fh=scatteredInterpolant(F.x,F.y,F.h);
+% Fh=scatteredInterpolant(F.x,F.y,F.h);
 Fu=scatteredInterpolant(F.x,F.y,F.ub);
 FG=scatteredInterpolant(F.x,F.y,F.GF.node);
-Fdhdt=scatteredInterpolant(F.x,F.y,F.dhdt);
+% Fdhdt=scatteredInterpolant(F.x,F.y,F.dhdt);
 xProfile=linspace(-100e3,100e3,1000);
 yProfile=xProfile*0;
-hProfile=Fh(xProfile,yProfile);
+% hProfile=Fh(xProfile,yProfile);
 uProfile=Fu(xProfile,yProfile);
-dhdtProfile=Fdhdt(xProfile,yProfile);
+% dhdtProfile=Fdhdt(xProfile,yProfile);
 
 if contains(plots,'-ub(x)-')
 
@@ -87,10 +87,10 @@ end
 
 if contains(plots,'-dhdt(x)-')
     figdhdt=FindOrCreateFigure("dh/dt") ;
-    plot(xProfile/CtrlVar.PlotXYscale,dhdtProfile,DisplayName="$dt/dt$ at $y=0$ (interpolated") ;
-    hold on
-    plot(xSorted/CtrlVar.PlotXYscale,dhdt0(ISorted),DisplayName="$dh/dt$ at $y=0$ (nodal values)",Color="g",LineStyle="none",Marker="o",MarkerFaceColor="b")
-   
+    % plot(xProfile/CtrlVar.PlotXYscale,dhdtProfile,DisplayName="$dt/dt$ at $y=0$ (interpolated") ;
+    % hold on
+    plot(xSorted/CtrlVar.PlotXYscale,dhdt0(ISorted),DisplayName="$dh/dt$ at $y=0$ (nodal values)",Color="r",LineStyle="-",Marker="o",MarkerFaceColor="r")
+    hold on 
     title(sprintf("$dh/dt$ at $t$=%-g ",F.time),Interpreter="latex") ; xlabel("$x$ (km)",Interpreter='latex') ; ylabel("$dh/dt$ (m/yr)",Interpreter='latex')
     legend(Interpreter="latex")
 end
@@ -105,10 +105,10 @@ if contains(plots,'-h(x)-')
  
   %  plot(x(I)/CtrlVar.PlotXYscale,h(I),DisplayName="$h$",Color="b")
     
-    plot(xProfile/CtrlVar.PlotXYscale,hProfile,DisplayName="$h$ profile at $y=0$ (interpolated)",Color="b",LineWidth=1.5)
+    % plot(xProfile/CtrlVar.PlotXYscale,hProfile,DisplayName="$h$ profile at $y=0$ (interpolated)",Color="b",LineWidth=1.5)
+    % hold on
+    plot(xSorted/CtrlVar.PlotXYscale,hy0(ISorted),DisplayName="$h$ at $y=0$ (nodal values)",Color="b",LineStyle="-",Marker="o",MarkerFaceColor="b")
     hold on
-    plot(xSorted/CtrlVar.PlotXYscale,hy0(ISorted),DisplayName="$h$ at $y=0$ (nodal values)",Color="g",LineStyle="none",Marker="o",MarkerFaceColor="b")
-
     ylabel("ice thickness, $h$ (m)",Interpreter="latex")
     ylim([820 1020])
 
