@@ -1,6 +1,4 @@
 
-
-
 %% Example Beta 17 March 2024 :
 %% Example Beta 01 August 2024 :
 %% Example Beta 5  May 2025 :
@@ -26,7 +24,7 @@ Ua
 cd ..
 close all
 
-cd IceShelf\
+cd IceShelf
 Ua
 cd ..
 close all
@@ -40,37 +38,38 @@ cd MismipPlus
 Ua
 cd ..
 
-cd IceBerg\
+cd IceBerg
 Ua
 cd ..
 
 
-cd PIG-TWG\
+cd PIG-TWG
 
 
-UserVar.RunType='Inverse-MatOpt'; Ua(UserVar) ;                                                                                         % working 06/03/2023
-UserVar.RunType='Inverse-UaOpt' ; Ua(UserVar) ;                                                                                         % working 06/03/2023
-UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased"; Ua(UserVar,CtrlVar) ;       % working 06/03/2023
+UserVar.RunType='Inverse-MatOpt'; Ua(UserVar) ;                                                                                         %  01/03/2025
+UserVar.RunType='Inverse-UaOpt' ; Ua(UserVar) ;                                                                                         %  01/03/2025
+UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased"; Ua(UserVar,CtrlVar) ;       %  01/03/2025
 
-% UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased"; Ua(UserVar,CtrlVar) ;    % no-longer working as of Matlab 2021b...?
-                                                                                                                                        % The reasons are unclear, but for the time being gradient-based optimisation 
-                                                                                                                                        % with the Matlab toolbox can not be done with MATLAB2022a.
-                                                                                                                                        % This is not too much of an issue as the default option is the HessianBased approach anyhonw, 
+Klear
+UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased"; Ua(UserVar,CtrlVar) ;    % no-longer working as of Matlab 2021b...?
+                                                                                                                                        % The reasons are unclear, but for the time being gradient-based optimization 
+                                                                                                                                        % with the Matlab toolbox can not be done with MATLAB R2022a.
+                                                                                                                                        % This is not too much of an issue as the default option is the Hessian-based approach anyhow, 
                                                                                                                                         % which is also the better option.
-                                                                                                                                        
+                                                                                                                                        % But as of R2024b, and possibly earlier, this is again working... 01/03/202                                                                                                                                 
                                                                                                                                        
-UserVar.RunType='TestingMeshOptions' ; Ua(UserVar) ;                                                                                    % working 06/03/2023
+UserVar.RunType='TestingMeshOptions' ; Ua(UserVar) ;                                                                                    %  01/03/2025
 
 cd ..                   
 close all
 
 
 
-cd MassBalanceFeedback\
+cd MassBalanceFeedback
 Ua
 cd ..
 
-cd Calving\
+cd Calving
 
 
 % A few examples: 
@@ -93,7 +92,7 @@ UserVar.RunType="Test-CalvingThroughPrescribedLevelSet-"  ;                     
 
 
 % 5) Calving through element deactivation:  Here calving is simulated by deactivating elements (done in
-% DefineElementsToDeactivate.m). No level-set calculations/initialisatons are required.
+% DefineElementsToDeactivate.m). No level-set calculations/initialization are required.
 %
 UserVar.RunType="Test-ManuallyDeactivateElements-" ;                                          Ua(UserVar) ;
 

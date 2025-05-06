@@ -1,20 +1,37 @@
-function [UserVar,C,m]=DefineSlipperyDistribution(UserVar,CtrlVar,MUA,time,s,b,h,S,B,rho,rhow,GF)
+
+function  [UserVar,C,m,q,muk]=DefineSlipperyDistribution(UserVar,CtrlVar,MUA,F)
+    
 
 %%
-%  User input m-file to define C and m in the Weertman sliding law
-% [UserVar,C,m]=DefineSlipperyDistribution(UserVar,CtrlVar,MUA,time,s,b,h,S,B,rho,rhow,GF)
 %
-% Usually C is defined on the nodes, but sometimes in an inverse run C might be
-% defined as an element variable. The user makes this decision by setting
-% CtrlVar.CisElementBased to true or false in Ua2D_InitialUserInput
+% [UserVar,C,m,q,muk]=DefineSlipperyDistribution(UserVar,CtrlVar,MUA,F)
+%
+% [UserVar,C,m,q,muk]=DefineSlipperyDistribution(UserVar,CtrlVar,MUA,time,s,b,h,S,B,rho,rhow,GF)
+%
+%
+% Defines sliding-law parameters.
+%
+% The sliding law used is determined by the value of
+%
+%   CtrlVar.SlidingLaw
+%
+% which is defined in
+%
+%   DefineInitialInputs.m
+%
+% See description in Ua2D_DefaultParameters.m for further details and the
+% UaCompendium.pdf.
+%
+%%
+
+m=3 ; C=0.01 ;
 
 
-m=3 ; C=0.01 ; 
+C=C+zeros(MUA.Nnodes,1);
 
-if CtrlVar.CisElementBased
-    C=C+zeros(MUA.Nele,1);
-else
-    C=C+zeros(MUA.Nnodes,1);
-end
+
+q=1 ;      % only needed for Budd sliding law
+muk=0.5 ;  % required for Coulomb friction type sliding law as well as Budd, minCW (Tsai), rCW  (Umbi) and rpCW (Cornford).
+
 
 end

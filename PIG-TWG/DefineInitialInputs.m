@@ -146,9 +146,10 @@ end
 
 
 CtrlVar.dt=1e-5; CtrlVar.dtmin=1e-7;  
-CtrlVar.time=0;
+CtrlVar.StartTime=0;
+CtrlVar.EndTime=500;
 CtrlVar.TotalNumberOfForwardRunSteps=inf; 
-CtrlVar.TotalTime=500;
+
 
 % time interval between calls to DefineOutputs.m
 CtrlVar.DefineOutputsDt=50; 

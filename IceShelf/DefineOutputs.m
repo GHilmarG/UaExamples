@@ -58,6 +58,7 @@ if contains(plots,'-plot-')
     PlotBoundaryConditions(CtrlVar,MUA,BCs,'k');
     axis tight 
     
+    figure(fig) ; % make the figure active again as BCs might have created an additional figure
     subplot(3,2,6);
     hold off
     [exx,eyy,exy,e]=CalcHorizontalNodalStrainRates(CtrlVar,MUA,F.ub,F.vb);
@@ -163,12 +164,12 @@ if contains(plots,'-udvd-')
 end
 
 if contains(plots,'-e-')
-    % plotting effectiv strain rates
+    % plotting effective strain rates
     
     % first get effective strain rates, e :
     [etaInt,xint,yint,exx,eyy,exy,Eint,e,txx,tyy,txy]=calcStrainRatesEtaInt(CtrlVar,MUA,ub,vb,AGlen,n);
     % all these variables are are element variables defined on integration points
-    % therfore if plotting on nodes, must first project these onto nodes
+    % therefore if plotting on nodes, must first project these onto nodes
     eNod=ProjectFintOntoNodes(MUA,e);
     
     figure
