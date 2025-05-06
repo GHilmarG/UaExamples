@@ -4,9 +4,9 @@
 
 
 
-function [UserVar,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened]=DefineDesiredEleSize(UserVar,CtrlVar,MUA,F,x,y,EleSizeDesired,ElementsToBeRefined,NodalErrorIndicators)
+function [UserVar,RunInfo,F,l,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened]=...
+    DefineDesiredEleSize(UserVar,RunInfo,CtrlVar,MUA,BCs,F,l,x,y,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened,NodalErrorIndicators)
 
-        
 
 %%
 % Define desired sizes of elements or specify which elements to refine or coarsen.
@@ -16,7 +16,7 @@ function [UserVar,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened]=Defi
 %
 % Only used in combination with adaptive meshing.
 %
-% You need to set 
+% You need to set
 %
 %   CtrlVar.AdaptMesh=1;  
 %
@@ -50,7 +50,7 @@ function [UserVar,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened]=Defi
 % used. These options must be set accordingly in Ua2D_InitialUserInput.
 %
 % 
-% *Example:* To set desired ele sized to 1000 within a given boundary (this boundary
+% *Example:* To set desired element size to 1000 within a given boundary (this boundary
 % must of course be within the overall boundary of the computational
 % domain):
 %
@@ -106,7 +106,7 @@ function [UserVar,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened]=Defi
 % 
 %%
  
-
+ 
 
 I=x>-120e3 & x<120e3 & y<120e3 & y>-120e3 ;
 
@@ -114,4 +114,5 @@ EleSizeDesired(~I)=CtrlVar.MeshSizeMax;
 ElementsToBeRefined(~I)=false;
 ElementsToBeCoarsened(~I)=false;  % This may appear to be a bit risky way of creating an array, but MATLAB accepts this syntax.
 
+    
 end

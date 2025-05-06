@@ -1,13 +1,17 @@
-function [UserVar,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened]=...
-            DefineDesiredEleSize(UserVar,CtrlVar,MUA,x,y,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened,s,b,S,B,rho,rhow,ub,vb,ud,vd,GF,NodalErrorIndicators)
-        
+
+
+
+function [UserVar,RunInfo,F,l,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened]=...
+    DefineDesiredEleSize(UserVar,RunInfo,CtrlVar,MUA,BCs,F,l,x,y,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened,NodalErrorIndicators)
+
+
 
 %%
 % Define desired sizes of elements or specify which elements to refine or
 % coarsen.
 %
-%   [UserVar,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened]=...
-%            DefineDesiredEleSize(UserVar,CtrlVar,MUA,x,y,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened,s,b,S,B,rho,rhow,ub,vb,ud,vd,GF,NodalErrorIndicators)
+%   [UserVar,RunInfo,F,l,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened]=...
+%       DefineDesiredEleSize(UserVar,RunInfo,CtrlVar,MUA,BCs,F,l,x,y,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened,NodalErrorIndicators)
 %
 % Only used in combination with adaptive meshing.
 %
@@ -32,7 +36,7 @@ function [UserVar,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened]=...
 % Do not modify the size of the (nodal) vector `EleSizeDesired' or the logical (element)
 % vector 'ElementsToBeRefine', only the values.
 %
-% When using the gobal remeshing option x,y are the locations where new element sizes are specifed (these are the coordinates of the mesh)
+% When using the gobal remeshing option x,y are the locations where new element sizes are specified (these are the coordinates of the mesh)
 % 
 % *Note: When using the local remeshing option, x and y as given on input are not relevant. 
 %       In this case use MUA.xEle and MUA.yEle as the x, y locations where the elements are to be refined or coarsened.* 
@@ -57,7 +61,7 @@ function [UserVar,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened]=...
 %   I=inpoly([x y],Boundary) ;
 %   EleSizeDesired(I)=1000; 
 %
-% Here Boundary doese not have to be just a simple square, it can be a polygon of any shape.   
+% Here Boundary does not have to be just a simple square, it can be a polygon of any shape.   
 %
 % *Example:* To set all ele size of all floating elements (i.e. ice shelves)
 % to 1000:

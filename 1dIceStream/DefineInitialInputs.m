@@ -76,8 +76,8 @@ CtrlVar.MaxNumberOfElements=25000;
 if UserVar.AdaptMesh ==" int/nodal "
 
     CtrlVar.AdaptMesh=1;
-    CtrlVar.AdaptMeshRunStepInterval=1 ;   % Number of run-steps between mesh adaptation
-    CtrlVar.InfoLevelAdaptiveMeshing=100;
+    CtrlVar.AdaptMeshRunStepInterval=1 ;   % Number of run-steps between mesh adaptation. Note: in a transient run this number most likely could be increased
+    CtrlVar.InfoLevelAdaptiveMeshing=1;
     CtrlVar.AdaptMeshUntilChangeInNumberOfElementsLessThan=1;
 
 else
@@ -90,7 +90,7 @@ end
 CtrlVar.AdaptMesh=1;
 CtrlVar.MeshGenerator='mesh2d';  % possible values: {mesh2d|gmsh}
 
-CtrlVar.AdaptMeshInitial=1  ;            % remesh in first run-step irrespecitivy of the value of AdaptMeshInterval
+CtrlVar.AdaptMeshInitial=1  ;            % remesh in first run-step irrespective of the value of AdaptMeshInterval
 CtrlVar.AdaptMeshMaxIterations=10;       % Number of adapt mesh iterations within each run-step.
 
 

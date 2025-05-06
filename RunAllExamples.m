@@ -1,5 +1,5 @@
 
-%% Example Alpha 17 March 2024  : all  with Ua Alpha
+%% Example Alpha 17 March 2024  : all working with Ua Alpha
 %% Example Alpha 01 August 2024 : all working with Ua Alpha
 %% Example Alpha 29 Dec 2024    : all working with Ua Alpha
 %% Example Alpha 2 March 2025   : all working with Ua Alpha
@@ -50,13 +50,13 @@ UserVar.RunType='Inverse-MatOpt'; Ua(UserVar) ;                                 
 UserVar.RunType='Inverse-UaOpt' ; Ua(UserVar) ;                                                                                         %  01/03/2025
 UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased"; Ua(UserVar,CtrlVar) ;       %  01/03/2025
 
-% UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased"; Ua(UserVar,CtrlVar) ;    % no-longer working as of Matlab 2021b...?
+Klear
+UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased"; Ua(UserVar,CtrlVar) ;    % no-longer working as of Matlab 2021b...?
                                                                                                                                         % The reasons are unclear, but for the time being gradient-based optimization 
                                                                                                                                         % with the Matlab toolbox can not be done with MATLAB R2022a.
                                                                                                                                         % This is not too much of an issue as the default option is the Hessian-based approach anyhow, 
                                                                                                                                         % which is also the better option.
-                                                                                                                                        % But as of R2024b, and possibly earlier, this is  again... 01/03/2025
-                                                                                                                                        
+                                                                                                                                        % But as of R2024b, and possibly earlier, this is again working... 01/03/202                                                                                                                                 
                                                                                                                                        
 UserVar.RunType='TestingMeshOptions' ; Ua(UserVar) ;                                                                                    %  01/03/2025
 

@@ -12,11 +12,11 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
  
     
     CtrlVar.StartTime=0 ; 
-    CtrlVar.EndTime=0 ;   % only needed for a time-dependent run
+    CtrlVar.EndTime=inf ;   % only needed for a time-dependent run
     CtrlVar.dt=1;
     CtrlVar.TotalNumberOfForwardRunSteps=1;
     
-    CtrlVar.FlowApproximation='SSTREAM';   % 'hybrid'
+    CtrlVar.FlowApproximation='SSTREAM';  
     
     %%
     xd=200e3; xu=-200e3 ; yl=200e3 ; yr=-200e3;
