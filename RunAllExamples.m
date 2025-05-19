@@ -5,6 +5,11 @@
 %% Example Alpha 2 March 2025   : all working with Ua Alpha
 %% Example Alpha 5 May 2025     : all working with Ua Alpha
 
+cd RadialIceCap\
+Ua
+cd ..
+close all
+
 cd 1dIceShelf
 Ua
 cd ..
