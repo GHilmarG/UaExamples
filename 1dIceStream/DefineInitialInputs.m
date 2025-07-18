@@ -22,7 +22,7 @@ MeshBoundaryCoordinates=flipud([xu yr ; xd yr ; xd yl ; xu yl]);
 %% Types of runs
 CtrlVar.TimeDependentRun=true;
 CtrlVar.StartTime=0;
-CtrlVar.EndTime=1;
+CtrlVar.EndTime=0.1;
 CtrlVar.dt=0.001;
 CtrlVar.TotalNumberOfForwardRunSteps=inf;
 CtrlVar.AdaptiveTimeStepping=1 ;
@@ -98,35 +98,7 @@ CtrlVar.AdaptMeshMaxIterations=10;       % Number of adapt mesh iterations withi
 %CtrlVar.InfoLevelAdaptiveMeshing=0;
 CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';
 
-I=1;
-CtrlVar.ExplicitMeshRefinementCriteria(I).Name='effective strain rates';
-CtrlVar.ExplicitMeshRefinementCriteria(I).Scale=0.01;
-CtrlVar.ExplicitMeshRefinementCriteria(I).EleMin=[];
 
-
-CtrlVar.ExplicitMeshRefinementCriteria(I).EleMax=[];
-CtrlVar.ExplicitMeshRefinementCriteria(I).p=[];
-CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
-CtrlVar.ExplicitMeshRefinementCriteria(I).Use=false;
-
-
-I=I+1;
-CtrlVar.ExplicitMeshRefinementCriteria(I).Name='effective strain rates gradient';
-CtrlVar.ExplicitMeshRefinementCriteria(I).Scale=0.001/1000;
-CtrlVar.ExplicitMeshRefinementCriteria(I).EleMin=[];
-CtrlVar.ExplicitMeshRefinementCriteria(I).EleMax=[];
-CtrlVar.ExplicitMeshRefinementCriteria(I).p=[];
-CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
-CtrlVar.ExplicitMeshRefinementCriteria(I).Use=false;
-
-I=I+1;
-CtrlVar.ExplicitMeshRefinementCriteria(I).Name='thickness gradient';
-CtrlVar.ExplicitMeshRefinementCriteria(I).Scale=0.001;
-CtrlVar.ExplicitMeshRefinementCriteria(I).EleMin=[];
-CtrlVar.ExplicitMeshRefinementCriteria(I).EleMax=[];
-CtrlVar.ExplicitMeshRefinementCriteria(I).p=[];
-CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
-CtrlVar.ExplicitMeshRefinementCriteria(I).Use=false;
 
 
 
