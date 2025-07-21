@@ -1,9 +1,10 @@
 
-%% Example Alpha 17 March 2024  : all working with Ua Alpha
-%% Example Alpha 01 August 2024 : all working with Ua Alpha
-%% Example Alpha 29 Dec 2024    : all working with Ua Alpha
-%% Example Alpha 2 March 2025   : all working with Ua Alpha
-%% Example Alpha 5 May 2025     : all working with Ua Alpha
+%% Example Alpha 17 March 2024      : all working with Ua Alpha
+%% Example Alpha 01 August 2024     : all working with Ua Alpha
+%% Example Alpha 29 Dec 2024        : all working with Ua Alpha
+%% Example Alpha 2 March 2025       : all working with Ua Alpha
+%% Example Alpha 5 May 2025         : all working with Ua Alpha
+%% Example Alpha 19 July 2025       : all working with Ua Alpha with R2024b, but inverse example stalls with R2025a
 
 cd RadialIceCap\
 Ua
@@ -35,7 +36,7 @@ Ua
 cd ..
 close all
 
-cd Inverse
+cd Inverse   % this problem runs into numerical singular issues on some computers at the beginning of inversion iteration 
 Ua
 cd ..
 close all
@@ -52,19 +53,19 @@ cd ..
 cd PIG-TWG
 
 
-UserVar.RunType='Inverse-MatOpt'; Ua(UserVar) ;                                                                                         %  01/03/2025
-UserVar.RunType='Inverse-UaOpt' ; Ua(UserVar) ;                                                                                         %  01/03/2025
-UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased"; Ua(UserVar,CtrlVar) ;       %  01/03/2025
+UserVar.RunType='Inverse-MatOpt'; Ua(UserVar) ;                                                                                         %  01/03/2025, 19/07/2025
+UserVar.RunType='Inverse-UaOpt' ; Ua(UserVar) ;                                                                                         %  01/03/2025, 19/07/2025
+UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased"; Ua(UserVar,CtrlVar) ;       %  01/03/2025, 19/07/2025
 
 Klear
-UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased"; Ua(UserVar,CtrlVar) ;    % no-longer working as of Matlab 2021b...?
+UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased"; Ua(UserVar,CtrlVar) ;      % no-longer working as of Matlab 2021b...?
                                                                                                                                         % The reasons are unclear, but for the time being gradient-based optimization 
                                                                                                                                         % with the Matlab toolbox can not be done with MATLAB R2022a.
                                                                                                                                         % This is not too much of an issue as the default option is the Hessian-based approach anyhow, 
                                                                                                                                         % which is also the better option.
-                                                                                                                                        % But as of R2024b, and possibly earlier, this is again working... 01/03/202                                                                                                                                 
+                                                                                                                                        % But as of R2024b, and possibly earlier, this is again working... 01/03/2024                                                                                                                                 
                                                                                                                                        
-UserVar.RunType='TestingMeshOptions' ; Ua(UserVar) ;                                                                                    %  01/03/2025
+UserVar.RunType='TestingMeshOptions' ; Ua(UserVar) ;                                                                                    %  01/03/2025, 19/07/2025
 
 cd ..                   
 close all
@@ -75,7 +76,10 @@ cd MassBalanceFeedback
 Ua
 cd ..
 
+%%
+
 cd Calving
+
 
 
 % A few examples: 
@@ -104,3 +108,4 @@ UserVar.RunType="Test-ManuallyDeactivateElements-" ;                            
 
 cd ..
 
+%%
