@@ -105,18 +105,21 @@ function [UserVar,RunInfo,F,l,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoa
 %
 %
 %%
+if  UserVar.AdaptMesh ==" int/nodal "
 
-R=ElementErrorEstimator(CtrlVar,MUA,F);
+    % here using the "Recovery-based error estimator"
+    R=ElementErrorEstimator(CtrlVar,MUA,F);
 
 
-UaPlots(CtrlVar,MUA,F,R); % set(gca,'ColorScale','log')
-title(sprintf("max(R)=%g",max(R)))
+    UaPlots(CtrlVar,MUA,F,R); % set(gca,'ColorScale','log')
+    title(sprintf("max(R)=%g",max(R)))
 
-Rcrit=10;
-ElementsToBeRefined=R>Rcrit;
-ElementsToBeCoarsened=false(MUA.Nele,1);
+    Rcrit=10;
+    ElementsToBeRefined=R>Rcrit;
+    ElementsToBeCoarsened=false(MUA.Nele,1);
 
-fprintf("DefineDesiredEleSizes: Refine %i \t Coarsen %i \n",numel(find((ElementsToBeRefined))),numel(find((ElementsToBeCoarsened))))
+    fprintf("DefineDesiredEleSizes: Refine %i \t Coarsen %i \n",numel(find((ElementsToBeRefined))),numel(find((ElementsToBeCoarsened))))
 
+end
 
 end

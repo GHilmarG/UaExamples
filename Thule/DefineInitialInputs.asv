@@ -1,0 +1,196 @@
+
+function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,CtrlVar)
+
+%% Thule is a synthetic geometry 
+%
+% Note: By running Bedgeometry.m without any arguments, the Thule geometry will be created and plotted.
+% 
+% Thule geometry is defined as:
+%
+%   r=sqrt(x.*x+y.*y) ;
+%   theta=atan2(y,x);
+%   rc=0;
+%   l=R -  cos(2*theta).*R/2 ;            % theta-dependent wavelength
+%   a=Bc - (Bc-Bl)*(r-rc).^2./(R-rc).^2;  % quadratic term in r
+%   B=Ba*cos(3*pi*r./l)+a ;               %
+% 
+%% UserVar : This variable is never used by Ua, but is defined and used by the user alone.
+% 
+%
+% Here a RunType field is defined as part of UserVar. This is then used in
+% some of the other Define*.m fiels to select various options related to
+% the run.
+%
+% For example:
+% 
+%  "-Thule-" implies the use of the Thule geometry. This is used in  DefineGeometryAndDensities.m
+%  "-Cxy-" implies that the slipperines is a function of B. This is used in DefineSlipperiness.m
+%  "-SSmin-"  and "-SSmax-" set initial ice thickness at the beginning of a transient run to some small/large value. This is used in DefineGeometryAndDensities.m
+%  "-Tmax-" and "-Tmin-" are used in DefineGeometryAndDensities.m to specify initial gemetries based on steady-state
+%  geometries achieved by runnint the -SSmin-" and the "-SSmax-" gemetries to steady-state
+%
+%% The user always defines the UserVar. 
+
+% Here the user has decided to define a string variable which is then used later to control some of the run options
+%
+% Within the string UserVar.RunType: 
+%
+% -ES*km-  : indicates the overall mesh resolution
+% -SSmax-  implies that the run is started from a previous steady-state geometry which in turn was started using large initial thickness. 
+% 
+%  Note: The Thule geometry can produce different steady states for the same mass balance forcing, depending on
+% conditions at the beginning of the run. 
+%
+%  -Cxy- implies that the basal slipperiness is a function of x and y. Here this is used by the user in DefineSlipperines.m
+%
+
+UserVar.RunType="-Thule-C-Tmax-C-NV2.0-ES10km-" ; 
+UserVar.RunType="-Thule-C-Tmin-C-NV2.0-ES10km-" ; 
+
+UserVar.RunType="-Thule-P-SSmin-ES10km-Cxy-" ;  
+UserVar.RunType="-Thule-P-SSmax-ES10km-Cxy-" ;  
+
+UserVar.RunType="-Thule-P-SSmax-ES50km-Cxy-" ;  % This is a very coarse mesh resolution, but OK for testing
+
+
+UserVar.Region="-Thule-" ;
+R=750e3 ;
+theta=linspace(0,2*pi,400);
+Xc=R*cos(theta); Yc=R*sin(theta) ; Xc(end)=[] ; Yc(end)=[];
+UserVar.CalvingFront0.Xc=Xc(:);
+UserVar.CalvingFront0.Yc=Yc(:);
+
+%% Used in DefineOutputs.m
+UserVar.DefineOutputs="-ubvb-LSF-h-sbB-s-B-dhdt-save-log10speed-";
+UserVar.DefineOutputs="-ubvb-LSF-h-sbB-s-B-dhdt-log10speed-";
+
+
+
+%% Sliding law
+
+CtrlVar.SlidingLaw="Weertman" ; % "Umbi" ; % "Weertman" ; % "Tsai" ; % "Cornford" ;  "Umbi" ; "Cornford" ; % "Tsai" , "Budd"
+
+
+
+%% Runtype
+CtrlVar.InverseRun=0;
+CtrlVar.TimeDependentRun=1;
+CtrlVar.Restart=0;
+
+%% Runsteps, runtime, runtype
+
+CtrlVar.TotalNumberOfForwardRunSteps=inf; 
+
+CtrlVar.dt=1e-4;   CtrlVar.DefineOutputsDt=1;  CtrlVar.ATSdtMin=1e-4  ; 
+
+
+CtrlVar.StartTime=0; 
+CtrlVar.EndTime=10000; 
+
+
+
+%% Info levels
+CtrlVar.InfoLevelNonLinIt=1;  % info provided on solution procedure, 1 is basic information, 5 provides more info and various plots, see more in Ua2D_DefaultParameters.m
+CtrlVar.InfoLevelThickMin=0; % This provides information on whether the ice thickness drops below min ice thickness. Set to zero to suppress.
+
+
+
+
+
+%%
+CtrlVar.doplots=1;
+CtrlVar.PlotMesh=0;
+CtrlVar.PlotBCs=1 ;
+CtrlVar.PlotXYscale=1000;
+CtrlVar.doAdaptMeshPlots=5;
+
+%% Meshing
+
+CtrlVar.TriNodes=3 ;
+CtrlVar.AdaptMesh=0;
+CtrlVar.MeshSizeMax=NaN;
+CtrlVar.MeshSize=str2double(extractBetween(UserVar.RunType,"-ES","km-"))*1000; 
+CtrlVar.MeshSizeMin=CtrlVar.MeshSizeMax/20;
+
+
+CtrlVar.SaveInitialMeshFileName="MeshFile"+num2str(CtrlVar.MeshSize/1000)+"km.mat"; 
+CtrlVar.ReadInitialMeshFileName="MeshFile"+num2str(CtrlVar.MeshSize/1000)+"km.mat" ; 
+CtrlVar.MaxNumberOfElements=70e3;
+
+if isfile(CtrlVar.ReadInitialMeshFileName)
+    CtrlVar.ReadInitialMesh=1;  
+    CtrlVar.OnlyMeshDomainAndThenStop=0;
+else
+    CtrlVar.ReadInitialMesh=0;  
+    CtrlVar.OnlyMeshDomainAndThenStop=1;
+end
+
+
+R=1000e3 ;
+theta=linspace(0,2*pi,100);
+x=R*cos(theta); y=R*sin(theta) ; x(end)=[] ; y(end )=[];
+MeshBoundaryCoordinates=[x(:) y(:)];
+
+
+%% Min thickness:
+
+CtrlVar.ThickMin=1;   % This is the minimum thickness allowed. This should always be "small" thickness, i.e. small compared to any thicknesses of interest,
+
+
+% Enforcing min thickness:
+% There are different ways of enforcing the minimum thickness condition. The recommended approach is to use the active set
+% method, possibly in combination with a penalty mass-balance feedback.
+
+
+CtrlVar.ResetThicknessToMinThickness=0;    % (brutally) resets thickness to min ice-thickness, not recommended approach. Can cause convergence issues.
+CtrlVar.ThicknessConstraints=1;            % use thickness constraints. Here minimum thickness is enforced using Lagrange multipliers.
+                                           %  This is the recommended approach, but it does lead to additional solves and this will increase computational time.
+CtrlVar.ThicknessConstraintsItMax=1  ;
+
+
+CtrlVar.ThicknessPenalty=1;                                         % set to 1 for using thickness penalty term. This creates an
+                                                                    % additional mass-balance term, ab,  on the form:
+                                                                    %         ab =  a1*(h-hmin)+a3*(hint-hmin).^3) 
+                                                                    % that is added, and applied at integration points where  h<hmin.
+                                                                    % The "Thickness Penalty" option can be used in combination with the "Thickness Constraints" option, and this may possibly
+                                                                    % improve convergence and may reduce the number of active-set updates requried.
+
+CtrlVar.ThicknessPenaltyMassBalanceFeedbackCoeffLin=0;              % a1 in the equation for the additional mass balance term (should always be negative)
+CtrlVar.ThicknessPenaltyMassBalanceFeedbackCoeffQuad=-1e5;          % a1 in the equation for the additional mass balance term (should always be negative)
+CtrlVar.ThicknessPenaltyMassBalanceFeedbackCoeffCubic=-0;           % a3 in the equation for the additional mass balance term (should always be negative)
+                                                                    % The term is only applied at integration points where h < hmin. Therefore if a1<0 and a3<0, the resulting ab is greater than
+                                                                    % zero, and mass is added. 
+
+                                                                    %% Calving
+
+if contains(UserVar.RunType,"-P-")  % This indicates that calving fronts positions are prescribed and that the level-set methods is used. 
+
+    % Here the calving front positions are prescribed by the user. This is done in DefineCalving.m
+    % The level set method is used, but the level set equation is not solved since the calving front positions, and here the
+    % level-set function itself, is defined directly by the user (done in DefineCalving.m) 
+    %
+    % The level-set functionality of Ua is here only used to ensure that the ice downstream of calving fronts is set to some
+    % small value. 
+    %
+    CtrlVar.LevelSetMethod=1;
+    CtrlVar.LevelSetEvolution="-Prescribed-"  ; 
+    CtrlVar.LevelSetMinIceThickness=CtrlVar.ThickMin; 
+    CtrlVar.LevelSetMethodMassBalanceFeedbackCoeffLin;
+    CtrlVar.LevelSetMethodMassBalanceFeedbackCoeffCubic;
+    
+end
+
+                                               
+
+
+%%
+CtrlVar.Experiment=UserVar.RunType;
+
+
+CtrlVar.NameOfRestartFiletoRead="Restart"+UserVar.RunType; 
+CtrlVar.NameOfRestartFiletoRead=replace(CtrlVar.NameOfRestartFiletoRead,".","k")+".mat";
+CtrlVar.NameOfRestartFiletoWrite=CtrlVar.NameOfRestartFiletoRead;
+
+
+
+end
