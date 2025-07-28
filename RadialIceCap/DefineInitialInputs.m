@@ -20,7 +20,7 @@ CtrlVar.Experiment="RadialDome" ;
 CtrlVar.TimeDependentRun=1; 
 CtrlVar.Restart=0;  
 %%
-CtrlVar.FlowApproximation="SSHEET" ;  
+%CtrlVar.FlowApproximation="SSHEET" ;  
 %% Info levels 
 % higher numbers results in more information
 CtrlVar.InfoLevelNonLinIt=1;        % info on non-linear solution

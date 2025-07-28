@@ -66,7 +66,7 @@ CtrlVar.InfoLevelThickMin=10;
 CtrlVar.AdaptMesh=0;
 CtrlVar.TotalNumberOfForwardRunSteps=inf; 
 
-CtrlVar.dt=1e-3;   CtrlVar.DefineOutputsDt=1;  CtrlVar.ATSdtMin=1e-4  ; 
+CtrlVar.dt=1e-5;   CtrlVar.DefineOutputsDt=1;  CtrlVar.ATSdtMin=1e-4  ; 
 CtrlVar.TotalTime=1000;
 
 CtrlVar.time=0;
@@ -113,11 +113,11 @@ MeshBoundaryCoordinates=[x(:) y(:)];
 
 %% Min thickness approaches
 CtrlVar.ThickMin=1;
-CtrlVar.InfoLevelThickMin=1; % This provides informaton on whether the ice thickness drops below min ice thickness.
+CtrlVar.InfoLevelThickMin=1; % This provides information on whether the ice thickness drops below min ice thickness.
                              % 
 
-CtrlVar.ResetThicknessToMinThickness=1;    % reset thickness to min icethickness
-CtrlVar.ThicknessConstraints=0;            % use thickness constraints
+CtrlVar.ResetThicknessToMinThickness=0;    % reset thickness to min ice-thickness
+CtrlVar.ThicknessConstraints=1;            % use thickness constraints
 
 
 % thickness penalty, option 3
@@ -126,7 +126,7 @@ CtrlVar.ThicknessPenalty=1;                                         % set to 1 f
                                                                     %         ab =  a1*(h-hmin)+a3*(hint-hmin).^3) 
                                                                     % that is added, and applied at integration points where  h<hmin.
 CtrlVar.ThicknessPenaltyMassBalanceFeedbackCoeffLin=0;              % a1 in the equation for the additional mass balance term (should always be negative)
-CtrlVar.ThicknessPenaltyMassBalanceFeedbackCoeffQuad=-1e6;         % a1 in the equation for the additional mass balance term (should always be negative)
+CtrlVar.ThicknessPenaltyMassBalanceFeedbackCoeffQuad=-1e5;         % a1 in the equation for the additional mass balance term (should always be negative)
 CtrlVar.ThicknessPenaltyMassBalanceFeedbackCoeffCubic=-0;           % a3 in the equation for the additional mass balance term (should always be negative)
                                                                     % The term is only applied at integration points where h < hmin. Therefore if a1<0 and a3<0, the resulting ab is greater than
                                                                     % zero, and mass is added. 
