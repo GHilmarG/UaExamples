@@ -18,7 +18,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
 % 
 %
 % Here a RunType field is defined as part of UserVar. This is then used in
-% some of the other Define*.m fiels to select various options related to
+% some of the other Define*.m files to select various options related to
 % the run.
 %
 % For example:
