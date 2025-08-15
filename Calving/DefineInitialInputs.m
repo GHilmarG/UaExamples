@@ -44,7 +44,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
        % UserVar.RunType="Test-CalvingThroughMassBalanceFeedback-"; % MismipPlus: Calving using additional user defined mass-balance term (done in DefineMassBalance.m)
        % UserVar.RunType="Test-CalvingThroughPrescribedLevelSet-" ; % MismipPlus: Calving using prescribed ice/ocean mask (done in DefineCalving.m)
        UserVar.RunType="Test-ManuallyDeactivateElements-"       ; % MismipPlus: Calving using element deactivation (done in DefineElementsToDeactivate.m)
-       UserVar.RunType="-1dAnalyticalIceShelf-"       ; % MismipPlus: Calving using element deactivation (done in DefineElementsToDeactivate.m) 
+      % UserVar.RunType="-1dAnalyticalIceShelf-"       ; % MismipPlus: Calving using element deactivation (done in DefineElementsToDeactivate.m) 
     end
     
     
@@ -68,8 +68,8 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
             UserVar.InitialGeometry="-Constant-" ;
             CtrlVar.doplots=0;
             
-            CtrlVar.TotalNumberOfForwardRunSteps=100;
-            CtrlVar.TotalTime=100;
+            CtrlVar.TotalNumberOfForwardRunSteps=inf;
+            CtrlVar.TotalTime=inf;
             UserVar.Plots="-plot-flowline-";
             CtrlVar.DefineOutputsDt=1;
             CtrlVar.MassBalanceGeometryFeedback=3;
