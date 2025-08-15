@@ -56,7 +56,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
     CtrlVar.AdaptMesh=1;
     CtrlVar.dt=0.01;
     CtrlVar.TriNodes=3;
-    CtrlVar.TotalTime=5000;
+    CtrlVar.TotalTime=1000;
     CtrlVar.TotalNumberOfForwardRunSteps=inf;
     CtrlVar.AdaptMeshMaxIterations=1;  % Number of adapt mesh iterations within each run-step.
     
