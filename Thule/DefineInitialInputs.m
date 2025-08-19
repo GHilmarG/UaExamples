@@ -24,10 +24,10 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
 % For example:
 % 
 %  "-Thule-" implies the use of the Thule geometry. This is used in  DefineGeometryAndDensities.m
-%  "-Cxy-" implies that the slipperines is a function of B. This is used in DefineSlipperiness.m
+%  "-Cxy-" implies that the slipperiness is a function of B. This is used in DefineSlipperiness.m
 %  "-SSmin-"  and "-SSmax-" set initial ice thickness at the beginning of a transient run to some small/large value. This is used in DefineGeometryAndDensities.m
-%  "-Tmax-" and "-Tmin-" are used in DefineGeometryAndDensities.m to specify initial gemetries based on steady-state
-%  geometries achieved by runnint the -SSmin-" and the "-SSmax-" gemetries to steady-state
+%  "-Tmax-" and "-Tmin-" are used in DefineGeometryAndDensities.m to specify initial geometries based on steady-state
+%  geometries achieved by running the -SSmin-" and the "-SSmax-" geometries to steady-state
 %
 %% The user always defines the UserVar. 
 %
@@ -52,7 +52,7 @@ UserVar.RunType="-Thule-C-Tmin-C-NV2.0-ES10km-" ;
 UserVar.RunType="-Thule-P-SSmin-ES10km-Cxy-" ;  
 UserVar.RunType="-Thule-P-SSmax-ES10km-Cxy-" ;  
 
-UserVar.RunType="-Thule-P-SSmax-ES50km-Cxy-SUPGtaus-consistent-" ;  % This is a very coarse mesh resolution, but OK for testing
+UserVar.RunType="-Thule-P-SSmax-ES50km-Cxy-SUPGtaus-" ;  % This is a very coarse mesh resolution, but OK for testing
 
 
 UserVar.Region="-Thule-" ;
@@ -210,9 +210,7 @@ switch CtrlVar.uvh.SUPG.tau
     otherwise
         error("case not found")
 end
-if contains(UserVar.RunType,"-consistent")
-    CtrlVar.uvh.SUPG.consistent=true ;
-end
+
 %%
 CtrlVar.Experiment=UserVar.RunType;
 
