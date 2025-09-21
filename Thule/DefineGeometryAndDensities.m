@@ -25,8 +25,13 @@ s=[] ; b=[] ;
 if contains(FieldsToBeDefined,"-s-") || contains(FieldsToBeDefined,"-b-")
 
     if contains(UserVar.RunType,"-SSmin-")
+        % This sets the initial ice surface to 10 m. The idea is to grow
+        % Thule from a small (minimum) ice states.
         s=10; b=0;
     elseif contains(UserVar.RunType,"-SSmax-")
+        % Here the initial ice thickness is set to some very large values,
+        % e.g. 2000m. The idea here is to grow/shrink the ice sheets from a
+        % large (maximum) ice state.
         r=sqrt(F.x.*F.x+F.y.*F.y) ;
         B0=2000 ; % B(0,0) for Thule
         h0=2000;
