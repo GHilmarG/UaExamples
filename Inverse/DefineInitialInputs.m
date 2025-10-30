@@ -3,14 +3,14 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
 
 
 if ~isfield(UserVar,'RunType')
-    UserVar.RunType="IceShelf";   %  A pertubation only
-    UserVar.RunType="IceStream";  %  C pertubation only
+    UserVar.RunType="IceShelf";   %  A perturbation only
+    UserVar.RunType="IceStream";  %  C perturbation only
 end
 
 
 UserVar.n=3;
 UserVar.m=3;
-UserVar.C0=1/20^UserVar.m ; % C without pertubation applied, not a possible modification to this value below.
+UserVar.C0=1/20^UserVar.m ; % C without perturbation applied, not a possible modification to this value below.
 UserVar.V0=1000;
 
 UserVar.AddDataErrors=0;
@@ -44,9 +44,9 @@ CtrlVar.NameOfRestartFiletoWrite=CtrlVar.NameOfRestartFiletoRead;
 
 %% Sliding law
 CtrlVar.SlidingLaw="Weertman" ;
-CtrlVar.SlidingLaw="Umbi" ;
-CtrlVar.SlidingLaw="Cornford" ;
-CtrlVar.SlidingLaw="Joughin" ;
+% CtrlVar.SlidingLaw="Umbi" ;
+% CtrlVar.SlidingLaw="Cornford" ;
+% CtrlVar.SlidingLaw="Joughin" ;
 
 pattern=["Joughin","rCW-V0"];
 if contains(CtrlVar.SlidingLaw,pattern)
@@ -74,7 +74,7 @@ CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";     % gra
 
 CtrlVar.Inverse.InvertFor='-logC-';
 CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor; 
-CtrlVar.Inverse.Iterations=10;
+CtrlVar.Inverse.Iterations=100;
 
 
 CtrlVar.Inverse.InfoLevel=1;  % Set to 1 to get some basic information, >=2 for additional info on backtracking,
@@ -99,7 +99,7 @@ CtrlVar.Inverse.Regularize.logAGlen.gs=1000 ;
 
 %% Mesh generation and remeshing parameters
 
-CtrlVar.TriNodes=6;
+CtrlVar.TriNodes=3;
 CtrlVar.meshgeneration=1;
 CtrlVar.GmshMeshingAlgorithm=8;    % see gmsh manual
 % 1=MeshAdapt
@@ -154,5 +154,9 @@ CtrlVar.Inverse.NameOfRestartInputFile=CtrlVar.Inverse.NameOfRestartOutputFile;
 %%
 
 CtrlVar.Experiment=['I-',num2str(CtrlVar.TriNodes)];
+
+%
+
+CtrlVar.Restart=1;  
 
 end
