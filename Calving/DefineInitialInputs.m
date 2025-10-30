@@ -69,7 +69,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
             CtrlVar.doplots=0;
             
             CtrlVar.TotalNumberOfForwardRunSteps=inf;
-            CtrlVar.TotalTime=inf;
+            CtrlVar.TotalTime=100;
             UserVar.Plots="-plot-flowline-";
             CtrlVar.DefineOutputsDt=1;
             CtrlVar.MassBalanceGeometryFeedback=3;
