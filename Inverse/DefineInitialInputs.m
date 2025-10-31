@@ -4,7 +4,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
 
 if ~isfield(UserVar,'RunType')
     UserVar.RunType="IceShelf";   %  A perturbation only
-    UserVar.RunType="IceStream";  %  C perturbation only
+   % UserVar.RunType="IceStream";  %  C perturbation only
 end
 
 
@@ -64,7 +64,7 @@ end
 
 
 CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased";      % Hessian-based, Matlab toolbox, only use for CtrlVar.TriNodes=3;
-CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";     % gradient-based, Matlab toolbox (not working with R2023a, fine with R2023b and later versions)
+% CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";     % gradient-based, Matlab toolbox (not working with R2023a, fine with R2023b and later versions)
 % CtrlVar.Inverse.MinimisationMethod="UaOptimization-GradientBased";       % gradient-based, Ua optimisation toolbox
 % CtrlVar.Inverse.MinimisationMethod="UaOptimization-HessianBased";        % Hessian-based, Ua optimisation toolbox, seems to work fine for CtrlVar.TriNodes>3;
 
@@ -72,9 +72,9 @@ CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";     % gra
 
 
 
-CtrlVar.Inverse.InvertFor='-logC-';
+CtrlVar.Inverse.InvertFor='-logC-logA-';
 CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor; 
-CtrlVar.Inverse.Iterations=100;
+CtrlVar.Inverse.Iterations=100000;
 
 
 CtrlVar.Inverse.InfoLevel=1;  % Set to 1 to get some basic information, >=2 for additional info on backtracking,
