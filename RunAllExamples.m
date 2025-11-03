@@ -1,7 +1,6 @@
 
 
-
-%% Beta merge with alpha:
+%% Beta merge with alpha on 11 Nov, 20255:
 %%
 %% Alpha 27 July, 2025
 %% Example Alpha 17 March 2024      : all working with Ua Alpha
@@ -15,7 +14,6 @@ cd RadialIceCap\
 Ua
 cd ..
 close all
->>>>>>> alpha
 
 cd 1dIceShelf
 Ua
