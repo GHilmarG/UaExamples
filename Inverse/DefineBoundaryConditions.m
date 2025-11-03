@@ -49,11 +49,20 @@ switch lower(UserVar.RunType)
         % periodic boundary conditions
         % find nodes along boundary
         
-        
-        BCs.ubTiedNodeA=[nodesu;nodesl]; BCs.ubTiedNodeB=[nodesd;nodesr];
-        BCs.vbTiedNodeA=[nodesu;nodesl]; BCs.vbTiedNodeB=[nodesd;nodesr];
+        % 
+        % BCs.ubTiedNodeA=[nodesu;nodesl]; BCs.ubTiedNodeB=[nodesd;nodesr];
+        % BCs.vbTiedNodeA=[nodesu;nodesl]; BCs.vbTiedNodeB=[nodesd;nodesr];
+        % BCs.hTiedNodeA=[nodesu;nodesl]; BCs.hTiedNodeB=[nodesd;nodesr];
+
+        BCs.ubTiedNodeA=nodesu; BCs.ubTiedNodeB=nodesd;
+        BCs.vbTiedNodeA=nodesu; BCs.vbTiedNodeB=nodesd;
         BCs.hTiedNodeA=[nodesu;nodesl]; BCs.hTiedNodeB=[nodesd;nodesr];
         
+        BCs.vbFixedNode=[nodesl;nodesr] ;   BCs.vbFixedValue=BCs.vbFixedNode*0;
+        
+
+
+
     case 'iceshelf'
         
         BCs.ubFixedNode=nodesu;  BCs.ubFixedValue=BCs.ubFixedNode*0;

@@ -9,6 +9,8 @@
 %% Example Alpha 2 March 2025       : all working with Ua Alpha
 %% Example Alpha 5 May 2025         : all working with Ua Alpha
 %% Example Alpha 19 July 2025       : all working with Ua Alpha with R2024b, but inverse example stalls with R2025a
+%% Example Alpha 24 Sept 2025       : With R2025a and R2025b the matrix solution produces several "almost singular" messages, whereas the same problem run fine with R2024b and earlier... 
+%% Example Alpha 3 Nov   2025       : all working with Ua Alpha under R2025b
 
 cd RadialIceCap\
 Ua
@@ -40,10 +42,7 @@ Ua
 cd ..
 close all
 
-cd Inverse   % this problem runs into numerical singular issues on some computers at the beginning of inversion iteration 
-Ua
-cd ..
-close all
+
 
 cd MismipPlus
 Ua
@@ -111,5 +110,21 @@ UserVar.RunType="Test-CalvingThroughPrescribedLevelSet-"  ;                     
 UserVar.RunType="Test-ManuallyDeactivateElements-" ;                                          Ua(UserVar) ;
 
 cd ..
+
+
+%%
+
+
+cd Inverse   
+Ua           
+cd ..
+close all
+
+%%
+
+cd Greenland\
+Ua
+cd ..
+
 
 %%

@@ -1,16 +1,50 @@
 function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,CtrlVar)
 
 
+%%
+%
+% Example of A and C inversions for simple geometries.
+%
+%
+% This example generates synthetic data (i.e. surface velocities and dh/dt) for some prescribed A and C fields. These
+% prescribed A and C fields are referred to as the "true" values of A and C.
+% 
+% The starting values for A and C are set to something very different from the true values and then the idea is to retrieve
+% the true values through the inversion. Note that the priors are also defined different from the true values and therefore
+% the retrieved A and C fields will be different from the true values, if regularization is used.
+%
+%
+%
+% Note: A can not be inferred where there are no gradients in velocity field.
+%       C can not be inferred over floating areas. 
+%
+% The gradient based algorithm: 
+% 
+%   CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";   
+%
+% with 
+%
+%   CtrlVar.Inverse.AdjointGradientPreMultiplier="M" ;  (this is the default)
+%
+% gives inter-nodal element-independent results for any element type. However 
+% 
+%   CtrlVar.Inverse.MinimisationMethod='UaOptimization-Hessian';
+%
+% only works for 3-node elements, and does not show the same nodal/element independence 
+%
+%
+%%
+
 
 if ~isfield(UserVar,'RunType')
-    UserVar.RunType="IceShelf";   %  A pertubation only
-    UserVar.RunType="IceStream";  %  C pertubation only
+    UserVar.RunType="IceShelf";   %  A perturbation only
+    UserVar.RunType="IceStream";  %  C perturbation only
 end
 
 
 UserVar.n=3;
 UserVar.m=3;
-UserVar.C0=1/20^UserVar.m ; % C without pertubation applied, not a possible modification to this value below.
+UserVar.C0=1/20^UserVar.m ; % C without perturbation applied, not a possible modification to this value below.
 UserVar.V0=1000;
 
 UserVar.AddDataErrors=0;
@@ -44,9 +78,9 @@ CtrlVar.NameOfRestartFiletoWrite=CtrlVar.NameOfRestartFiletoRead;
 
 %% Sliding law
 CtrlVar.SlidingLaw="Weertman" ;
-CtrlVar.SlidingLaw="Umbi" ;
-CtrlVar.SlidingLaw="Cornford" ;
-CtrlVar.SlidingLaw="Joughin" ;
+% CtrlVar.SlidingLaw="Umbi" ;
+% CtrlVar.SlidingLaw="Cornford" ;
+% CtrlVar.SlidingLaw="Joughin" ;
 
 pattern=["Joughin","rCW-V0"];
 if contains(CtrlVar.SlidingLaw,pattern)
@@ -59,17 +93,13 @@ end
 %CtrlVar.Inverse.MinimisationMethod='MatlabOptimization'; % {'MatlabOptimization','UaOptimization'}
 % CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased"; % 
 % CtrlVar.Inverse.AdjointGradientPreMultiplier="M" ; 
+%CtrlVar.Inverse.MinimisationMethod='UaOptimization-Hessian'; % {'MatlabOptimization','UaOptimization'}
 
-% CtrlVar.Inverse.MinimisationMethod='UaOptimization-Hessian'; % {'MatlabOptimization','UaOptimization'}
 
-
-CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased";      % Hessian-based, Matlab toolbox, only use for CtrlVar.TriNodes=3;
+% CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased";      % Hessian-based, Matlab toolbox, only use for CtrlVar.TriNodes=3;
 CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";     % gradient-based, Matlab toolbox (not working with R2023a, fine with R2023b and later versions)
 % CtrlVar.Inverse.MinimisationMethod="UaOptimization-GradientBased";       % gradient-based, Ua optimisation toolbox
 % CtrlVar.Inverse.MinimisationMethod="UaOptimization-HessianBased";        % Hessian-based, Ua optimisation toolbox, seems to work fine for CtrlVar.TriNodes>3;
-
-
-
 
 
 CtrlVar.Inverse.InvertFor='-logC-';
@@ -81,25 +111,23 @@ CtrlVar.Inverse.InfoLevel=1;  % Set to 1 to get some basic information, >=2 for 
 % >=100 for further info and plots
 
 CtrlVar.InfoLevelNonLinIt=0; CtrlVar.InfoLevel=0;
-% CtrlVar.InfoLevelNonLinIt=1; CtrlVar.InfoLevel=1;
+CtrlVar.InfoLevelNonLinIt=1; CtrlVar.InfoLevel=1;
 
 CtrlVar.Inverse.DataMisfit.Multiplier=1;
 CtrlVar.Inverse.Regularize.Multiplier=1;
 % regularisation parameters
-CtrlVar.Inverse.Regularize.C.gs=1;
-CtrlVar.Inverse.Regularize.C.ga=1;
+
 CtrlVar.Inverse.Regularize.logC.ga=0;
-CtrlVar.Inverse.Regularize.logC.gs=1000 ; % 1e6  works well with I
+CtrlVar.Inverse.Regularize.logC.gs=0e3 ; %
 
-CtrlVar.Inverse.Regularize.AGlen.gs=1000;
-CtrlVar.Inverse.Regularize.AGlen.ga=0;
 CtrlVar.Inverse.Regularize.logAGlen.ga=0;
-CtrlVar.Inverse.Regularize.logAGlen.gs=1000 ;
+CtrlVar.Inverse.Regularize.logAGlen.gs=0 ;
 
+CtrlVar.Czero=1e-4;
 
 %% Mesh generation and remeshing parameters
 
-CtrlVar.TriNodes=6;
+CtrlVar.TriNodes=3;
 CtrlVar.meshgeneration=1;
 CtrlVar.GmshMeshingAlgorithm=8;    % see gmsh manual
 % 1=MeshAdapt
@@ -153,6 +181,10 @@ CtrlVar.Inverse.NameOfRestartOutputFile=filename;
 CtrlVar.Inverse.NameOfRestartInputFile=CtrlVar.Inverse.NameOfRestartOutputFile;
 %%
 
-CtrlVar.Experiment=['I-',num2str(CtrlVar.TriNodes)];
+CtrlVar.Experiment=CtrlVar.Inverse.AdjointGradientPreMultiplier+num2str(CtrlVar.TriNodes);
+
+%
+
+CtrlVar.Restart=0;  
 
 end
