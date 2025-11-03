@@ -61,13 +61,39 @@ function UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,Inv
 %%
 
 
+if F.solution=="-none-"
+    
+   return
+
+end
+
+% for a lat/lon grid I need to find the lat lon on a grid
+x=linspace(min(F.x),max(F.x),10) ; y=linspace(min(F.y),max(F.y),10)  ; [X,Y]=ndgrid(x,y) ; [lat,lon]=psn2ll(X,Y); 
+%
+
+
+CtrlVar.VelPlotIntervalSpacing='log10'; CtrlVar.QuiverColorSpeedLimits=[1 1000] ;  
 cbar=UaPlots(CtrlVar,MUA,F,"-uv-",FigureTitle="velocities") ; title("Modelled velocities") 
+xlabel("(km)") ;  ylabel("(km)") ;
 
 cbar=UaPlots(CtrlVar,MUA,F,"-speed-",FigureTitle="speed") ; title("Modelled speed") ;  set(gca,'ColorScale','log') ; clim([1 2000])
+hold on  ; LatLonGrid(X/1000,Y/1000,lat,lon,LineColor=[0.5 0.5 0.5],LabelSpacing=200)
+xlabel("(km)") ;  ylabel("(km)") ;
 
-cbar=UaPlots(CtrlVar,MUA,F,F.h,FigureTitle="h") ; title("Ice thickness") ;  CM=cmocean('-ice',15) ; colormap(CM); title(cbar,"(m)") ; set(gca,'ColorScale','log') ; 
-
+cbar=UaPlots(CtrlVar,MUA,F,F.h,FigureTitle="h") ; title("Ice thickness") ;  colormap(othercolor("Mlightterrain",25))  ; title(cbar,"(m)") ; set(gca,'ColorScale','lin') ; 
+clim([-100 3800])
+hold on  ; LatLonGrid(X/1000,Y/1000,lat,lon,LineColor=[0.5 0.5 0.5],LabelSpacing=200)
+xlabel("(km)") ;  ylabel("(km)") ;
 
 cbar=UaPlots(CtrlVar,MUA,F,F.B,FigureTitle="B") ; title("Bedrock") ;  clim([-500 2000]) ;  title(cbar,"(m)") ;  colormap(othercolor("Mdarkterrain",25))  ;
+hold on  ; LatLonGrid(X/1000,Y/1000,lat,lon,LineColor=[0.5 0.5 0.5],LabelSpacing=200)
+xlabel("(km)") ;  ylabel("(km)") ;
+
+cbar=UaPlots(CtrlVar,MUA,F,F.s,FigureTitle="s") ; title("Ice surface") ;   colormap(othercolor("Mlightterrain",25))  ;  title(cbar,"(m)") ; set(gca,'ColorScale','lin') ;
+hold on  ; LatLonGrid(X/1000,Y/1000,lat,lon,LineColor=[0.5 0.5 0.5],LabelSpacing=200) ; ScaleBar(); axis off
+xlabel("(km)") ;  ylabel("(km)") ; clim([0 3800])
+
+
+
 
 end

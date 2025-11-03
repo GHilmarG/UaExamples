@@ -8,6 +8,7 @@
 %% Example Alpha 5 May 2025         : all working with Ua Alpha
 %% Example Alpha 19 July 2025       : all working with Ua Alpha with R2024b, but inverse example stalls with R2025a
 %% Example Alpha 24 Sept 2025       : With R2025a and R2025b the matrix solution produces several "almost singular" messages, whereas the same problem run fine with R2024b and earlier... 
+%% Example Alpha 3 Nov   2025       : all working with Ua Alpha under R2025b
 
 cd RadialIceCap\
 Ua
@@ -113,11 +114,15 @@ cd ..
 
 
 cd Inverse   
-% this problem runs into numerical singular issues on some computers at the beginning of inversion iteration and in fact does
-% not run at all with R2025a/b! Not sure what the reasons are, and this needs to be looked into. But this appears to be
-% related to the particular geometrical setup and the use of periodic boundary conditions.
 Ua           
 cd ..
 close all
+
+%%
+
+cd Greenland\
+Ua
+cd ..
+
 
 %%

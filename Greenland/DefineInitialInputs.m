@@ -56,9 +56,9 @@ CtrlVar.Restart=0;
 CtrlVar.Inverse.Iterations=10;
 
 CtrlVar.Inverse.Regularize.logAGlen.ga=1;
-CtrlVar.Inverse.Regularize.logAGlen.gs=1000 ;
+CtrlVar.Inverse.Regularize.logAGlen.gs=1e6 ;
 CtrlVar.Inverse.Regularize.logC.ga=1;
-CtrlVar.Inverse.Regularize.logC.gs=1000 ; 
+CtrlVar.Inverse.Regularize.logC.gs=1e6 ; 
 
 CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";  
 CtrlVar.Inverse.AdjointGradientPreMultiplier="M" ; 
