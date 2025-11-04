@@ -63,9 +63,10 @@ CtrlVar.Inverse.Regularize.logC.gs=1e6 ;
 CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";  
 CtrlVar.Inverse.AdjointGradientPreMultiplier="M" ; 
 %% Meshing
-MeshBoundaryCoordinates=[];
+load("GreenlandComputationalBoundary.mat","xp","yp") ;
+MeshBoundaryCoordinates=[xp,yp];
 CtrlVar.TriNodes=3 ;
-CtrlVar.MeshGenerator="UaSquareMesh";  % this is the default option
+CtrlVar.MeshGenerator="UaSquareMesh";
 CtrlVar.UaSquareMesh.xmin=-650e3;
 CtrlVar.UaSquareMesh.xmax=900e3;
 CtrlVar.UaSquareMesh.ymin=-3400e3;
