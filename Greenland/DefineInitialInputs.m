@@ -47,8 +47,8 @@ UserVar.Files.CInterpolant="C-Estimate-Weertman-Example.mat";
 
 
 CtrlVar.ForwardTimeIntegration="-uv-" ;  % Solves for velocities only (i.e. not a transient run)
-CtrlVar.InverseRun=1;                        
-CtrlVar.Restart=1;
+CtrlVar.InverseRun=0;                        
+CtrlVar.Restart=0;
 
 %% Inverse run parameters
 
