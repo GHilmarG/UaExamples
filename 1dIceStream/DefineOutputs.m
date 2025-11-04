@@ -1,9 +1,9 @@
 
 function  UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFinalValues,Priors,Meas,BCsAdjoint,RunInfo)
 
-v2struct(F);
 
-time=CtrlVar.time; 
+
+
 
 
 plots='-ubvb-e-save-';
@@ -24,63 +24,123 @@ if contains(plots,'-save-')
     end
     
     if strcmp(CtrlVar.DefineOutputsInfostring,'Last call')==0
-        %FileName=['ResultsFiles/',sprintf('%07i',round(100*time)),'-TransPlots-',CtrlVar.Experiment]; good for transient runs
+        
         
         FileName=['ResultsFiles/',sprintf('%07i',CtrlVar.DefineOutputsCounter),'-TransPlots-',CtrlVar.Experiment];
         
         fprintf(' Saving data in %s \n',FileName)
-        save(FileName,'CtrlVar','MUA','time','s','b','S','B','h','u','v','dhdt','dsdt','dbdt','C','AGlen','m','n','rho','rhow','as','ab','GF')
+        save(FileName,"CtrlVar","MUA","F","BCs","RunInfo","UserVar")
         
     end
 end
 
 % only do plots at end of run
-if ~strcmp(CtrlVar.DefineOutputsInfostring,'Last call') ; return ; end
+% if ~strcmp(CtrlVar.DefineOutputsInfostring,'Last call') ; return ; end
 
-[~,I]=sort(x) ;
+[~,I]=sort(F.x) ;
 
 if contains(plots,'-txzb(x)-')
     
-    [txzb,tyzb]=CalcNodalStrainRatesAndStresses(CtrlVar,MUA,AGlen,n,C,m,GF,s,b,ub,vb);
+    [txzb,tyzb]=CalcNodalStrainRatesAndStresses(CtrlVar,UserVar,MUA,F); 
     
-    figure ;  plot(x/CtrlVar.PlotXYscale,txzb) ; title('txzb(x)')
+    figure ;  plot(F.x/CtrlVar.PlotXYscale,txzb) ; title('txzb(x)')
     
 end
 
+
+
+
+
+Iy0Nodes=abs(F.y)<0.01; % pick out nodes that are very close to have y=0 coordinates
+
+hy0=F.h(Iy0Nodes);
+uy0=F.ub(Iy0Nodes);
+dhdt0=F.dhdt(Iy0Nodes);
+xy0=F.x(Iy0Nodes);
+[xSorted,ISorted]=sort(xy0);
+
+
+
+% Fh=scatteredInterpolant(F.x,F.y,F.h);
+Fu=scatteredInterpolant(F.x,F.y,F.ub);
+FG=scatteredInterpolant(F.x,F.y,F.GF.node);
+% Fdhdt=scatteredInterpolant(F.x,F.y,F.dhdt);
+xProfile=linspace(-100e3,100e3,1000);
+yProfile=xProfile*0;
+% hProfile=Fh(xProfile,yProfile);
+uProfile=Fu(xProfile,yProfile);
+% dhdtProfile=Fdhdt(xProfile,yProfile);
 
 if contains(plots,'-ub(x)-')
-    figure
-    plot(x(I)/CtrlVar.PlotXYscale,ub(I)) ;
-    title(sprintf('u_b(x) at t=%-g ',time)) ; xlabel('x') ; ylabel('u_b')
-    drawnow
+
+    figVel=FindOrCreateFigure("Vel");
+    plot(xProfile/CtrlVar.PlotXYscale,uProfile/1000,DisplayName="$v_x$ at $y=0$ (interpolated") ;
+    hold on
+    plot(xSorted/CtrlVar.PlotXYscale,uy0(ISorted)/1000,DisplayName="$v_x$ at $y=0$ (nodal values)",Color="g",LineStyle="none",Marker="o",MarkerFaceColor="b")
+
+    title(sprintf('Velocity at t=%-g ',F.time)) ; 
+    xlabel("$x$ (km) ",Interpreter="latex") ; 
+    ylabel("Velocity, $u$, (km/yr)",Interpreter="latex")
+    legend(Interpreter="latex")
+    
 end
 
-
 if contains(plots,'-dhdt(x)-')
-    figure
-    plot(x(I)/CtrlVar.PlotXYscale,dhdt(I)) ;
-    title(sprintf('dhdt(x) at t=%-g ',time)) ; xlabel('x') ; ylabel('dh/dt')
-    drawnow
+    figdhdt=FindOrCreateFigure("dh/dt") ;
+    % plot(xProfile/CtrlVar.PlotXYscale,dhdtProfile,DisplayName="$dt/dt$ at $y=0$ (interpolated") ;
+    % hold on
+    plot(xSorted/CtrlVar.PlotXYscale,dhdt0(ISorted),DisplayName="$dh/dt$ at $y=0$ (nodal values)",Color="r",LineStyle="-",Marker="o",MarkerFaceColor="r")
+    hold on 
+    title(sprintf("$dh/dt$ at $t$=%-g ",F.time),Interpreter="latex") ; xlabel("$x$ (km)",Interpreter='latex') ; ylabel("$dh/dt$ (m/yr)",Interpreter='latex')
+    legend(Interpreter="latex")
 end
 
 
 if contains(plots,'-h(x)-')
-    figure;
-    plotyy(x(I)/CtrlVar.PlotXYscale,h(I),x(I)/CtrlVar.PlotXYscale,GF.node(I)) ;
+    fig=FindOrCreateFigure("h(x)") ; clf(fig)
+    yyaxis left
+    hold off
+
+
+ 
+  %  plot(x(I)/CtrlVar.PlotXYscale,h(I),DisplayName="$h$",Color="b")
     
+    % plot(xProfile/CtrlVar.PlotXYscale,hProfile,DisplayName="$h$ profile at $y=0$ (interpolated)",Color="b",LineWidth=1.5)
+    % hold on
+    plot(xSorted/CtrlVar.PlotXYscale,hy0(ISorted),DisplayName="$h$ at $y=0$ (nodal values)",Color="b",LineStyle="-",Marker="o",MarkerFaceColor="b")
+    hold on
+    ylabel("ice thickness, $h$ (m)",Interpreter="latex")
+    ylim([820 1020])
+
+    yyaxis right 
+    G=FG(xProfile,yProfile);
+    %plot(x(I)/CtrlVar.PlotXYscale,GF.node(I),DisplayName="$\mathcal{G}$") ;
+    plot(xProfile/CtrlVar.PlotXYscale,G,DisplayName="$\mathcal{G}$") ;
+    ylabel("flotation mask, $\mathcal{G}$",Interpreter="latex")
+    ylim([-0.1 1.1])
+
     if CtrlVar.Implicituvh
-        title(sprintf('fully-implicit h(x) at t=%-g (%s)',time,CtrlVar.uvhImplicitTimeSteppingMethod)) ;
+
+        title(sprintf("fully-implicit: $h(x)$ at $t$=%-g with $\\Delta t$=%g",F.time,F.dt),interpreter="latex") ;
+        subtitle(sprintf("%s with $\\beta_0$=%g, $\\theta$=%g",CtrlVar.uvhImplicitTimeSteppingMethod,CtrlVar.SUPG.beta0,CtrlVar.theta),interpreter="latex") ;
+
     else
-        title(sprintf('semi-implicit h(x) at t=%-g (TG3=%i)',time,CtrlVar.TG3)) ;
+     
+        title(sprintf("semi-implicit: $h(x)$ at $t$=%-g with $\\Delta t$=%g",F.time,F.dt),interpreter="latex") ;
+        subtitle(sprintf("%s with $\\beta_0$=%g, $\\theta$=%g",CtrlVar.uvhImplicitTimeSteppingMethod,CtrlVar.SUPG.beta0,CtrlVar.theta),interpreter="latex") ;
+
+
     end
-    xlabel('x') ; ylabel('h')
+    xlabel('$x$ (km)',Interpreter='latex') ;
+    legend(Interpreter="latex")
+    %fig.Position=[50 800 800 450];
     drawnow
 end
 
 if contains(plots,'-ud(x)-')
     figure
-   plot(x/CtrlVar.PlotXYscale,ud) ;
-    title(sprintf('u_d(x) at t=%-g ',time)) ; xlabel('x') ; ylabel('u_d')
+   plot(F.x/CtrlVar.PlotXYscale,ud) ;
+    title(sprintf('u_d(x) at t=%-g ',F.time)) ; xlabel('x') ; ylabel('u_d')
 end
 
 
@@ -92,81 +152,14 @@ if contains(plots,'-sbSB(x)-')
     plot(x(I)/CtrlVar.PlotXYscale,b(I),'b') ; 
     plot(x(I)/CtrlVar.PlotXYscale,s(I),'b') ;
     
-    title(sprintf('sbSB(x) at t=%-g ',time)) ; xlabel('x') ; ylabel('z')
+    title(sprintf('sbSB(x) at t=%-g ',F.time)) ; xlabel('x') ; ylabel('z')
     drawnow
 end
 
 
-if contains(plots,'-sbB-')
-    figure(5)
-    hold off
-    if isempty(TRI) ;  TRI = delaunay(x,y); end
-    trisurf(TRI,x/CtrlVar.PlotXYscale,y/CtrlVar.PlotXYscale,s,'EdgeColor','none') ; hold on
-    trisurf(TRI,x/CtrlVar.PlotXYscale,y/CtrlVar.PlotXYscale,b,'EdgeColor','none') ;
-    trisurf(TRI,x/CtrlVar.PlotXYscale,y/CtrlVar.PlotXYscale,B,'EdgeColor','none') ;
-    view(50,20); lightangle(-45,30) ; lighting phong ;
-    xlabel('y') ; ylabel('x') ;
-    colorbar ; title(colorbar,'(m)')
-    hold on
-    
-    title(sprintf('sbB at t=%#5.1g ',time))
-    axis equal ; tt=daspect ; daspect([mean(tt(1)+tt(2)) mean(tt(1)+tt(2)) tt(3)*CtrlVar.PlotXYscale]); axis tight
-    hold off
-end
 
 
-if contains(plots,'-ubvb-')
-    % plotting horizontal velocities
-    figure
-    N=1;
-    %speed=sqrt(ub.*ub+vb.*vb);
-    %CtrlVar.VelPlotIntervalSpacing='log10';
-    %CtrlVar.VelColorMap='hot';
-    %CtrlVar.RelativeVelArrowSize=10;
-    QuiverColorGHG(x(1:N:end),y(1:N:end),ub(1:N:end),vb(1:N:end),CtrlVar);
-    hold on
-    title(sprintf('(ub,vb) t=%-g ',time)) ; xlabel('xps (km)') ; ylabel('yps (km)')
-    axis equal tight
-    
-end
 
-if contains(plots,'-udvd-')
-    % plotting horizontal velocities
-    figure
-    N=1;
-    %speed=sqrt(ud.*ud+vd.*vd);
-    %CtrlVar.VelPlotIntervalSpacing='log10';
-    %CtrlVar.RelativeVelArrowSize=10;
-    %CtrlVar.VelColorMap='hot';
-    QuiverColorGHG(x(1:N:end),y(1:N:end),ud(1:N:end),vd(1:N:end),CtrlVar);
-    hold on
-    title(sprintf('(ud,vd) t=%-g ',time)) ; xlabel('xps (km)') ; ylabel('yps (km)')
-    axis equal tight
-    
-end
-
-if contains(plots,'-e-')
-    % plotting effectiv strain rates
-    
-    % first get effective strain rates, e :
-    [etaInt,xint,yint,exx,eyy,exy,Eint,e,txx,tyy,txy]=calcStrainRatesEtaInt(CtrlVar,MUA,u,v,AGlen,n);
-    % all these variables are are element variables defined on integration points
-    % therfore if plotting on nodes, must first project these onto nodes
-    eNod=ProjectFintOntoNodes(MUA,e);
-    
-    figure
-    [FigHandle,ColorbarHandel,tri]=PlotNodalBasedQuantities(MUA.connectivity,MUA.coordinates,eNod,CtrlVar)    ;
-    title(sprintf('e t=%-g ',time)) ; xlabel('x (km)') ; ylabel('y (km)')
-    
-end
-
-if ~isempty(strfind(plots,'-ub-'))
-    
-    figure
-    [FigHandle,ColorbarHandel,tri]=PlotNodalBasedQuantities(MUA.connectivity,MUA.coordinates,ub,CtrlVar)    ;
-    title(sprintf('ub t=%-g ',time)) ; xlabel('x (km)') ; ylabel('y (km)')
-    
-end
 
 
 end

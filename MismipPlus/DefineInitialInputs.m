@@ -10,9 +10,10 @@ CtrlVar.SlidingLaw="W" ;  % options:  "W","W-N0","minCW-N0","C","rpCW-N0", and "
 CtrlVar.Experiment=['MismipPlus-',UserVar.MisExperiment];   
 %% Types of run
 %
-CtrlVar.TimeDependentRun=0; 
-CtrlVar.TotalNumberOfForwardRunSteps=10;
-CtrlVar.TotalTime=100;
+CtrlVar.TimeDependentRun=1; 
+CtrlVar.TotalNumberOfForwardRunSteps=100;
+CtrlVar.StartTime=99;
+CtrlVar.EndTime=100;
 CtrlVar.Restart=0;  
 CtrlVar.InfoLevelNonLinIt=1;  % try setting to 100 for more info and plots on non-linear convergence  
 CtrlVar.NRitmax=500;            % maximum number of NR iteration
@@ -90,9 +91,9 @@ CtrlVar.SaveAdaptMeshFileName='AdaptMesh.mat';
 
 
 
-CtrlVar.AdaptMeshInitial=1 ;       % if true, then a remeshing will always be performed at the inital step
+CtrlVar.AdaptMeshInitial=1 ;       % if true, then a re-meshing will always be performed at the inital step
 CtrlVar.AdaptMeshAndThenStop=0;    % if true, then mesh will be adapted but no further calculations performed
-                                   % usefull, for example, when trying out different remeshing options (then use CtrlVar.doRemeshPlots=1 to get plots)
+                                   % useful, for example, when trying out different re-meshing options (then use CtrlVar.doRemeshPlots=1 to get plots)
 
 
 CtrlVar.AdaptMeshRunStepInterval=1;  % number of run-steps between mesh adaptation

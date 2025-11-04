@@ -1,17 +1,22 @@
-function [UserVar,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened]=...
-            DefineDesiredEleSize(UserVar,CtrlVar,MUA,x,y,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened,s,b,S,B,rho,rhow,ub,vb,ud,vd,GF,NodalErrorIndicators)
-        
+
+
+
+
+
+
+function [UserVar,RunInfo,F,l,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened]=...
+    DefineDesiredEleSize(UserVar,RunInfo,CtrlVar,MUA,BCs,F,l,x,y,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened,NodalErrorIndicators)
+
 
 %%
-% Define desired sizes of elements or specify which elements to refine or
-% coarsen.
+% Define desired sizes of elements or specify which elements to refine or coarsen.
 %
 %   [UserVar,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened]=...
 %            DefineDesiredEleSize(UserVar,CtrlVar,MUA,x,y,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened,s,b,S,B,rho,rhow,ub,vb,ud,vd,GF,NodalErrorIndicators)
 %
 % Only used in combination with adaptive meshing.
 %
-% You need to set 
+% You need to set
 %
 %   CtrlVar.AdaptMesh=1;  
 %
@@ -24,7 +29,7 @@ function [UserVar,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened]=...
 % * ElementsToBeRefined and ElementsToBeCoarsened when using local mesh refinement with the the newest vertex bisection
 % 
 %
-% On input EleSize are desired ele sizes at (x,y) as
+% On input EleSize are desired element sizes at (x,y) as
 % calculated by Úa based on some user-defined criteria.
 %
 % On output EleSize are user-modified values.
@@ -32,7 +37,7 @@ function [UserVar,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened]=...
 % Do not modify the size of the (nodal) vector `EleSizeDesired' or the logical (element)
 % vector 'ElementsToBeRefine', only the values.
 %
-% When using the gobal remeshing option x,y are the locations where new element sizes are specifed (these are the coordinates of the mesh)
+% When using the global remeshing option x,y are the locations where new element sizes are specified (these are the coordinates of the mesh)
 % 
 % *Note: When using the local remeshing option, x and y as given on input are not relevant. 
 %       In this case use MUA.xEle and MUA.yEle as the x, y locations where the elements are to be refined or coarsened.* 
@@ -45,7 +50,7 @@ function [UserVar,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened]=...
 % used. These options must be set accordingly in Ua2D_InitialUserInput.
 %
 % 
-% *Example:* To set desired ele sized to 1000 within a given boundary (this boundary
+% *Example:* To set desired element size to 1000 within a given boundary (this boundary
 % must of course be within the overall boundary of the computational
 % domain):
 %
@@ -57,7 +62,7 @@ function [UserVar,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened]=...
 %   I=inpoly([x y],Boundary) ;
 %   EleSizeDesired(I)=1000; 
 %
-% Here Boundary doese not have to be just a simple square, it can be a polygon of any shape.   
+% Here Boundary does not have to be just a simple square, it can be a polygon of any shape.   
 %
 % *Example:* To set all ele size of all floating elements (i.e. ice shelves)
 % to 1000:
@@ -94,13 +99,27 @@ function [UserVar,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoarsened]=...
 %             ind=MUA.xEle < xmax & MUA.xEle > xmin & MUA.yEle >ymin & MUA.yEle < ymax ;
 %       
 %             ElementsToBeRefined(~ind)=false; 
-% 
+%
 %     end
-% 
-% 
-% 
+%
+%
+%
 %%
- 
- 
-    
+if  UserVar.AdaptMesh ==" int/nodal "
+
+    % here using the "Recovery-based error estimator"
+    R=ElementErrorEstimator(CtrlVar,MUA,F);
+
+
+    UaPlots(CtrlVar,MUA,F,R); % set(gca,'ColorScale','log')
+    title(sprintf("max(R)=%g",max(R)))
+
+    Rcrit=10;
+    ElementsToBeRefined=R>Rcrit;
+    ElementsToBeCoarsened=false(MUA.Nele,1);
+
+    fprintf("DefineDesiredEleSizes: Refine %i \t Coarsen %i \n",numel(find((ElementsToBeRefined))),numel(find((ElementsToBeCoarsened))))
+
+end
+
 end

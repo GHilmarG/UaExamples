@@ -19,9 +19,7 @@ CtrlVar.AdaptMeshMaxIterations=2;
 CtrlVar.Experiment='Crack';
 CtrlVar.TimeDependentRun=0;
 CtrlVar.Restart=0;
-CtrlVar.time=0 ; 
-CtrlVar.dt=1e-5; 
-CtrlVar.TotalNumberOfForwardRunSteps=1;
+CtrlVar.TotalNumberOfForwardRunSteps=5;
 
 %%
 

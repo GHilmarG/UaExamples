@@ -29,9 +29,9 @@ CtrlVar.FlowApproximation="SSTREAM" ;
 % This run requires some additional input files. They are too big to be kept on Github so you
 % will have to get those separately. 
 %
-% You can https://livenorthumbriaac-my.sharepoint.com/:f:/g/personal/hilmar_gudmundsson_northumbria_ac_uk/EgrEImnkQuJNmf1GEB80VbwB1hgKNnRMscUitVpBrghjRg?e=yMZEOs
+% You can find those at: https://livenorthumbriaac-my.sharepoint.com/:f:/g/personal/hilmar_gudmundsson_northumbria_ac_uk/EgrEImnkQuJNmf1GEB80VbwB1hgKNnRMscUitVpBrghjRg?e=yMZEOs
 % 
-% Put the OneDrive folder `Interpolants' into you directory so that it can be reaced as ../Interpolants with respect to you rundirectory. 
+% Put the OneDrive folder `Interpolants' into you directory so that it can be reached as ../Interpolants with respect to you rundirectory. 
 %
 %
 
@@ -146,9 +146,10 @@ end
 
 
 CtrlVar.dt=1e-5; CtrlVar.dtmin=1e-7;  
-CtrlVar.time=0;
+CtrlVar.StartTime=0;
+CtrlVar.EndTime=500;
 CtrlVar.TotalNumberOfForwardRunSteps=inf; 
-CtrlVar.TotalTime=500;
+
 
 % time interval between calls to DefineOutputs.m
 CtrlVar.DefineOutputsDt=50; 

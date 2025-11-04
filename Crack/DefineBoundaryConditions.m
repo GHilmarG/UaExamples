@@ -1,11 +1,12 @@
-function  [UserVar,BCs]=DefineBoundaryConditions(UserVar,CtrlVar,MUA,BCs,time,s,b,h,S,B,ub,vb,ud,vd,GF)
+
+    function [UserVar,BCs]=DefineBoundaryConditions(UserVar,CtrlVar,MUA,F,BCs)
+
 %%
-% User m-file to define boundary conditions 
 % BCs=DefineBoundaryConditions(UserVar,CtrlVar,MUA,BCs,time,s,b,h,S,B,ub,vb,ud,vd,GF)
 %
-% BC is a matlab object with the following fields 
+% BC is a MATLAB object with the following fields 
 %
-% BCs = 
+%   BCs = 
 % 
 %   BoundaryConditions with properties:
 % 
@@ -35,24 +36,48 @@ function  [UserVar,BCs]=DefineBoundaryConditions(UserVar,CtrlVar,MUA,BCs,time,s,
 %               hTiedNodeB: []
 %                 hPosNode: []
 %                hPosValue: []
-%                
-               
-x=MUA.coordinates(:,1); y=MUA.coordinates(:,2);
+%       
+%
+% see also BoundaryConditions.m
+% 
+% Examples:
+%
+%  To set velocities at all grounded nodes along the boundary to zero:
+%
+%   GroundedBoundaryNodes=MUA.Boundary.Nodes(GF.node(MUA.Boundary.Nodes)>0.5);
+%   BCs.vbFixedNode=GroundedBoundaryNodes; 
+%   BCs.ubFixedNode=GroundedBoundaryNodes; 
+%   BCs.ubFixedValue=BCs.ubFixedNode*0;
+%   BCs.vbFixedValue=BCs.vbFixedNode*0;
+%
+% 
+%%
 
-% implementing periodic boundary conditions
-% find nodes along boundary 
-xd=max(x(:)) ; xu=min(x(:)); yl=max(y(:)) ; yr=min(y(:));
-nodesd=find(abs(x-xd)<1e-5); [~,ind]=sort(MUA.coordinates(nodesd,2)); nodesd=nodesd(ind);
-nodesu=find(abs(x-xu)<1e-5); [~,ind]=sort(MUA.coordinates(nodesu,2)); nodesu=nodesu(ind);
-nodesl=find(abs(y-yl)<1e-5); [~,ind]=sort(MUA.coordinates(nodesl,1)); nodesl=nodesl(ind);
-nodesr=find(abs(y-yr)<1e-5); [~,ind]=sort(MUA.coordinates(nodesr,1)); nodesr=nodesr(ind);
+xd=max(F.x) ; xu=min(F.x); yl=max(F.y) ; yr=min(F.y);
 
 
-   U=10000;
-   BCs.ubFixedNode=[nodesu;nodesd]; BCs.ubFixedValue=[nodesu*0-U;nodesd*0+U]; 
-   BCs.vbFixedNode=[nodesu;nodesd;nodesl;nodesr]; BCs.vbFixedValue= BCs.vbFixedNode*0;
+% Find nodes along boundary, simple approach
+% nodesd=find(abs(x-xd)<1e-5); [~,ind]=sort(MUA.coordinates(nodesd,2)); nodesd=nodesd(ind);
+% nodesu=find(abs(x-xu)<1e-5); [~,ind]=sort(MUA.coordinates(nodesu,2)); nodesu=nodesu(ind);
+% nodesl=find(abs(y-yl)<1e-5); [~,ind]=sort(MUA.coordinates(nodesl,1)); nodesl=nodesl(ind);
+% nodesr=find(abs(y-yr)<1e-5); [~,ind]=sort(MUA.coordinates(nodesr,1)); nodesr=nodesr(ind);
 
-% BCs.ubFixedNode=nodesu; BCs.ubFixedValue=nodesu;
-% BCs.vbFixedNode=[nodesu;nodesl;nodesr]; BCs.vbFixedValue= BCs.vbFixedNode*0;
+% Find nodes along boundary, more robust approach.
+% Here we are using the fact that all nodes along the boundary are in the list:
+%
+%   MUA.Boundary.Nodes
+%
+% And we only limit the search to those nodes.
+%
+L=min(sqrt(MUA.EleAreas)/1000); % set a distance tolerance which is a fraction of smallest element size
+nodesd=MUA.Boundary.Nodes(abs(MUA.coordinates(MUA.Boundary.Nodes,1)-xd)<L) ; 
+nodesu=MUA.Boundary.Nodes(abs(MUA.coordinates(MUA.Boundary.Nodes,1)-xu)<L) ; 
+nodesl=MUA.Boundary.Nodes(abs(MUA.coordinates(MUA.Boundary.Nodes,2)-yl)<L);
+nodesr=MUA.Boundary.Nodes(abs(MUA.coordinates(MUA.Boundary.Nodes,2)-yr)<L);
+
+U=10000;
+BCs.ubFixedNode=[nodesu;nodesd]; BCs.ubFixedValue=[nodesu*0-U;nodesd*0+U];
+BCs.vbFixedNode=[nodesu;nodesd;nodesl;nodesr]; BCs.vbFixedValue= BCs.vbFixedNode*0;
+
 
 end

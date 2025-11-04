@@ -1,4 +1,4 @@
-function [UserVar,C,m,q,muk,V0]=DefineSlipperyDistribution(UserVar,CtrlVar,MUA,time,s,b,h,S,B,rho,rhow,GF)
+function [UserVar,C,m,q,muk,V0]=DefineSlipperyDistribution(UserVar,CtrlVar,MUA,F)
 
 
 %m=3 ;  C=1/20^m+zeros(Nnodes,1); % m=3 , 1 m/a and basal shear stress of 20 kPa
@@ -20,16 +20,12 @@ if CtrlVar.doDiagnostic
     switch lower(UserVar.RunType)
         
         case 'icestream'
-            
-            
-            x=MUA.coordinates(:,1) ;
-            y=MUA.coordinates(:,2);
-            
+       
             
             
             sx=10e3 ; sy=10e3;
-            C=C.*(1+100*exp(-(x.*x/sx^2+y.*y./sy^2)));
-            C=C.*(1+0.1*exp(-(x.*x/sx^2+y.*y./sy^2)));
+            C=C.*(1+100*exp(-(F.x.*F.x/sx^2+F.y.*F.y./sy^2)));
+            C=C.*(1+0.1*exp(-(F.x.*F.x/sx^2+F.y.*F.y./sy^2)));
             
         case 'iceshelf'
             
