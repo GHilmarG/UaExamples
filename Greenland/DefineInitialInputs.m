@@ -53,7 +53,7 @@ CtrlVar.Restart=0;
 %% Inverse run parameters
 
 
-CtrlVar.Inverse.Iterations=10;
+CtrlVar.Inverse.Iterations=100;
 
 CtrlVar.Inverse.Regularize.logAGlen.ga=1;
 CtrlVar.Inverse.Regularize.logAGlen.gs=1e6 ;
@@ -63,9 +63,10 @@ CtrlVar.Inverse.Regularize.logC.gs=1e6 ;
 CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";  
 CtrlVar.Inverse.AdjointGradientPreMultiplier="M" ; 
 %% Meshing
-MeshBoundaryCoordinates=[];
+load("GreenlandComputationalBoundary.mat","xp","yp") ;
+MeshBoundaryCoordinates=[xp,yp];
 CtrlVar.TriNodes=3 ;
-CtrlVar.MeshGenerator="UaSquareMesh";  % this is the default option
+CtrlVar.MeshGenerator="UaSquareMesh";
 CtrlVar.UaSquareMesh.xmin=-650e3;
 CtrlVar.UaSquareMesh.xmax=900e3;
 CtrlVar.UaSquareMesh.ymin=-3400e3;
@@ -83,8 +84,8 @@ CtrlVar.SaveInitialMeshFileName='NewMeshfile.mat';
 
 %%
 
-Experiment=UserVar.Experiment;
-CtrlVar.NameOfRestartFiletoWrite=Experiment+"-RestartFile.mat";
+CtrlVar.Experiment=UserVar.Experiment;
+CtrlVar.NameOfRestartFiletoWrite=CtrlVar.Experiment+"-RestartFile.mat";
 CtrlVar.NameOfRestartFiletoRead=CtrlVar.NameOfRestartFiletoWrite;
 
 
