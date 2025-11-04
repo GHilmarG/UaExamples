@@ -47,13 +47,13 @@ UserVar.Files.CInterpolant="C-Estimate-Weertman-Example.mat";
 
 
 CtrlVar.ForwardTimeIntegration="-uv-" ;  % Solves for velocities only (i.e. not a transient run)
-CtrlVar.InverseRun=0;                        
-CtrlVar.Restart=0;
+CtrlVar.InverseRun=1;                        
+CtrlVar.Restart=1;
 
 %% Inverse run parameters
 
 
-CtrlVar.Inverse.Iterations=10;
+CtrlVar.Inverse.Iterations=100;
 
 CtrlVar.Inverse.Regularize.logAGlen.ga=1;
 CtrlVar.Inverse.Regularize.logAGlen.gs=1e6 ;
@@ -83,8 +83,8 @@ CtrlVar.SaveInitialMeshFileName='NewMeshfile.mat';
 
 %%
 
-Experiment=UserVar.Experiment;
-CtrlVar.NameOfRestartFiletoWrite=Experiment+"-RestartFile.mat";
+CtrlVar.Experiment=UserVar.Experiment;
+CtrlVar.NameOfRestartFiletoWrite=CtrlVar.Experiment+"-RestartFile.mat";
 CtrlVar.NameOfRestartFiletoRead=CtrlVar.NameOfRestartFiletoWrite;
 
 
