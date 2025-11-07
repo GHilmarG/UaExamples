@@ -68,7 +68,7 @@ if F.solution=="-none-"
 end
 
 % for a lat/lon grid I need to find the lat lon on a grid
-x=linspace(min(F.x),max(F.x),10) ; y=linspace(min(F.y),max(F.y),10)  ; [X,Y]=ndgrid(x,y) ; [lat,lon]=psn2ll(X,Y); 
+x=linspace(min(F.x),max(F.x),100) ; y=linspace(min(F.y),max(F.y),100)  ; [X,Y]=ndgrid(x,y) ; [lat,lon]=psn2ll(X,Y); 
 %
 
 
@@ -89,11 +89,23 @@ cbar=UaPlots(CtrlVar,MUA,F,F.B,FigureTitle="B") ; title("Bedrock") ;  clim([-500
 hold on  ; LatLonGrid(X/1000,Y/1000,lat,lon,LineColor=[0.5 0.5 0.5],LabelSpacing=200)
 xlabel("(km)") ;  ylabel("(km)") ;
 
-cbar=UaPlots(CtrlVar,MUA,F,F.s,FigureTitle="s") ; title("Ice surface") ;   colormap(othercolor("Mlightterrain",25))  ;  title(cbar,"(m)") ; set(gca,'ColorScale','lin') ;
+cbar=UaPlots(CtrlVar,MUA,F,F.s,FigureTitle="s") ;
+title("Ice surface") ;   colormap(othercolor("Mlightterrain",25))  ;  title(cbar,"(m)") ; set(gca,'ColorScale','lin') ;
 hold on  ; LatLonGrid(X/1000,Y/1000,lat,lon,LineColor=[0.5 0.5 0.5],LabelSpacing=200) ; ScaleBar(); axis off
 xlabel("(km)") ;  ylabel("(km)") ; clim([0 3800])
 
+cbar=UaPlots(CtrlVar,MUA,F,F.as,FigureTitle="as") ;
+title("Surface mass balance") ;   
+title(cbar,"(mWE/yr)") ; set(gca,'ColorScale','lin') ;
+hold on  ; LatLonGrid(X/1000,Y/1000,lat,lon,LineColor=[0.5 0.5 0.5],LabelSpacing=200) ; ScaleBar(); axis off
+clim([-7 5]) ; CM=cmocean('-balanced',25,'pivot',0) ; colormap(CM);
+xlabel("(km)") ;  ylabel("(km)") ; 
 
-
+UaPlots(CtrlVar,MUA,F,F.dhdt,FigureTitle="dh/dt")
+title("dh/dt") ;    title(cbar,"(m/yr)") ; set(gca,'ColorScale','lin') ;
+hold on  ; LatLonGrid(X/1000,Y/1000,lat,lon,LineColor=[0.5 0.5 0.5],LabelSpacing=200) ; ScaleBar(); axis off
+xlabel("(km)") ;  ylabel("(km)") ;
+clim([-10 10])
+CM=cmocean('balanced',25,'pivot',0) ; colormap(CM);
 
 end

@@ -30,7 +30,7 @@ function   [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar
 %% UserVar
 %
 
-UserVar.Experiment="GreenlandExample";
+UserVar.Experiment="GreenlandExample-TDR1-IR0-";
 
 % These are files with Bedmachine geometry and ITS_LIVE velocities. Note that these are heavily downsampled (stride=10 in both x and y
 % dimensions) and for any realistic modeling of Greenland these need to be replaced. 
@@ -41,28 +41,51 @@ UserVar.Files.GeometryInterpolants="BedMachineGreenland-v5-Stride10-GriddedInter
 
 UserVar.Files.AInterpolant="AGlen-Estimate-Example.mat";
 UserVar.Files.CInterpolant="C-Estimate-Weertman-Example.mat";
+UserVar.Files.FasInterpolant="Fas-Fmask-MARv3k14-ERA5-2023-Greenland-GriddedInterpolant.mat"; 
 
 % copyfile C-Estimate.mat C-Estimate-Weertman-Example.mat  ; copyfile AGlen-Estimate.mat AGlen-Estimate-Example.mat ;
 %% Type of run
+CtrlVar.TimeDependentRun=logical(str2double(extractBetween(UserVar.Experiment,"-TDR","-")));
 
 
-CtrlVar.ForwardTimeIntegration="-uv-" ;  % Solves for velocities only (i.e. not a transient run)
-CtrlVar.InverseRun=0;                        
+CtrlVar.InverseRun=logical(str2double(extractBetween(UserVar.Experiment,"-IR","-")));
+
 CtrlVar.Restart=0;
+%% time stepping
 
+CtrlVar.StartTime=0; 
+CtrlVar.EndTime=100;
+CtrlVar.dt=1e-3;
+CtrlVar.AdaptiveTimeStepping=1 ;  
+
+if CtrlVar.TimeDependentRun
+    CtrlVar.TotalNumberOfForwardRunSteps=inf;
+    CtrlVar.DefineOutputsDt=0.1;           
+else 
+    CtrlVar.TotalNumberOfForwardRunSteps=1;
+    CtrlVar.DefineOutputsDt=0;             
+end
+
+
+%% non-linear solver
+CtrlVar.NRitmax=150;       % maximum number of NR iteration
 %% Inverse run parameters
-
-
-CtrlVar.Inverse.Iterations=100;
+CtrlVar.Inverse.Iterations=1000;
 
 CtrlVar.Inverse.Regularize.logAGlen.ga=1;
-CtrlVar.Inverse.Regularize.logAGlen.gs=1e3 ;
+CtrlVar.Inverse.Regularize.logAGlen.gs=1e4 ;
 CtrlVar.Inverse.Regularize.logC.ga=1;
-CtrlVar.Inverse.Regularize.logC.gs=1e6 ; 
+CtrlVar.Inverse.Regularize.logC.gs=1e4 ; 
 
 CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";  
 CtrlVar.Inverse.AdjointGradientPreMultiplier="M" ; 
 %% Meshing
+%
+% Here the UaSquareMesh generator is used. This creates an initial simple square mesh with uniform resolution. Afterwards all
+% elements outside of the MeshBoundaryCoordinates are deactivated.
+%
+% As always, further mesh refinements and deactivations, etc., are then possible based on user inputs.
+%
 load("GreenlandComputationalBoundary.mat","xp","yp") ;
 MeshBoundaryCoordinates=[xp,yp];
 CtrlVar.TriNodes=3 ;
@@ -85,7 +108,7 @@ CtrlVar.SaveInitialMeshFileName='NewMeshfile.mat';
 %%
 
 CtrlVar.Experiment=UserVar.Experiment;
-CtrlVar.NameOfRestartFiletoWrite=CtrlVar.Experiment+"-RestartFile.mat";
+CtrlVar.NameOfRestartFiletoWrite=CtrlVar.Experiment+"RestartFile.mat";
 CtrlVar.NameOfRestartFiletoRead=CtrlVar.NameOfRestartFiletoWrite;
 
 
@@ -94,8 +117,8 @@ CtrlVar.NameOfRestartFiletoRead=CtrlVar.NameOfRestartFiletoWrite;
 CtrlVar.PlotXYscale=1000;
 
 
-%% Adaptive Time Stepping (ATS) time stepping variables
-CtrlVar.AdaptiveTimeStepping=1 ;   % true if time step should potentially be modified
+
+
 
 
 %%
