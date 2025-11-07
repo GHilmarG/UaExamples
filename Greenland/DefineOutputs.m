@@ -95,17 +95,20 @@ hold on  ; LatLonGrid(X/1000,Y/1000,lat,lon,LineColor=[0.5 0.5 0.5],LabelSpacing
 xlabel("(km)") ;  ylabel("(km)") ; clim([0 3800])
 
 cbar=UaPlots(CtrlVar,MUA,F,F.as,FigureTitle="as") ;
-title("Surface mass balance") ;   
+title("Surface mass balance") ;
 title(cbar,"(mWE/yr)") ; set(gca,'ColorScale','lin') ;
 hold on  ; LatLonGrid(X/1000,Y/1000,lat,lon,LineColor=[0.5 0.5 0.5],LabelSpacing=200) ; ScaleBar(); axis off
 clim([-7 5]) ; CM=cmocean('-balanced',25,'pivot',0) ; colormap(CM);
-xlabel("(km)") ;  ylabel("(km)") ; 
-
-UaPlots(CtrlVar,MUA,F,F.dhdt,FigureTitle="dh/dt")
-title("dh/dt") ;    title(cbar,"(m/yr)") ; set(gca,'ColorScale','lin') ;
-hold on  ; LatLonGrid(X/1000,Y/1000,lat,lon,LineColor=[0.5 0.5 0.5],LabelSpacing=200) ; ScaleBar(); axis off
 xlabel("(km)") ;  ylabel("(km)") ;
-clim([-10 10])
-CM=cmocean('balanced',25,'pivot',0) ; colormap(CM);
+
+if ~(F.solution=="-uv-")
+    UaPlots(CtrlVar,MUA,F,F.dhdt,FigureTitle="dh/dt")
+    title("Modelled dh/dt") ;    title(cbar,"(m/yr)") ; set(gca,'ColorScale','lin') ;
+    hold on  ; LatLonGrid(X/1000,Y/1000,lat,lon,LineColor=[0.5 0.5 0.5],LabelSpacing=200) ; ScaleBar(); axis off
+    xlabel("(km)") ;  ylabel("(km)") ;
+    clim([-10 10])
+    CM=cmocean('balanced',25,'pivot',0) ; colormap(CM);
+end
+
 
 end

@@ -30,7 +30,7 @@ function   [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar
 %% UserVar
 %
 
-UserVar.Experiment="GreenlandExample-TDR1-IR0-";
+UserVar.Experiment="GreenlandExample-TDR0-IR0-";
 
 % These are files with Bedmachine geometry and ITS_LIVE velocities. Note that these are heavily downsampled (stride=10 in both x and y
 % dimensions) and for any realistic modeling of Greenland these need to be replaced. 
