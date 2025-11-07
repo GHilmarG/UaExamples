@@ -56,7 +56,7 @@ CtrlVar.Restart=0;
 CtrlVar.Inverse.Iterations=100;
 
 CtrlVar.Inverse.Regularize.logAGlen.ga=1;
-CtrlVar.Inverse.Regularize.logAGlen.gs=1e6 ;
+CtrlVar.Inverse.Regularize.logAGlen.gs=1e3 ;
 CtrlVar.Inverse.Regularize.logC.ga=1;
 CtrlVar.Inverse.Regularize.logC.gs=1e6 ; 
 
