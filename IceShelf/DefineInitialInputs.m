@@ -121,7 +121,7 @@ CtrlVar.doplots=0;          % if true then plotting during runs by Ua are allowe
 CtrlVar.ThickMin=1; % minimum allowed thickness without (potentially) doing something about it
 CtrlVar.ResetThicknessToMinThickness=0;  % if true, thickness values less than ThickMin will be set to ThickMin
 CtrlVar.ThicknessConstraints=1  ;        % if true, min thickness is enforced using active set method
-CtrlVar.ThicknessConstraintsItMax=2500  ;
+CtrlVar.ThicknessConstraintsItMax=5  ;
 
 CtrlVar.DefineOutputsDt=20;
 
