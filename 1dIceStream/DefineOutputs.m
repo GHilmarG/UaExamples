@@ -119,15 +119,18 @@ if contains(plots,'-h(x)-')
     ylabel("flotation mask, $\mathcal{G}$",Interpreter="latex")
     ylim([-0.1 1.1])
 
-    if CtrlVar.Implicituvh
+    if CtrlVar.ForwardTimeIntegration=="-uv-h-"
 
         title(sprintf("fully-implicit: $h(x)$ at $t$=%-g with $\\Delta t$=%g",F.time,F.dt),interpreter="latex") ;
         subtitle(sprintf("%s with $\\beta_0$=%g, $\\theta$=%g",CtrlVar.uvhImplicitTimeSteppingMethod,CtrlVar.SUPG.beta0,CtrlVar.theta),interpreter="latex") ;
 
-    else
-     
+    elseif CtrlVar.ForwardTimeIntegration=="-uvh-"
+
         title(sprintf("semi-implicit: $h(x)$ at $t$=%-g with $\\Delta t$=%g",F.time,F.dt),interpreter="latex") ;
         subtitle(sprintf("%s with $\\beta_0$=%g, $\\theta$=%g",CtrlVar.uvhImplicitTimeSteppingMethod,CtrlVar.SUPG.beta0,CtrlVar.theta),interpreter="latex") ;
+    else
+        
+        error("Case not found ")
 
 
     end
