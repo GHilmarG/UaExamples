@@ -131,7 +131,7 @@ CM=cmocean('-balanced',25,'pivot',0) ; colormap(CM);
 % 
 %%
 
-% drawnow limitrate nocallbacks
+drawnow limitrate nocallbacks
 
 
 end
