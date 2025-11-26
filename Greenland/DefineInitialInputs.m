@@ -124,4 +124,15 @@ CtrlVar.PlotXYscale=1000;
 %%
 CtrlVar.ThicknessConstraints=1;
 CtrlVar.ThickMin=1;
+
+%% use some parallel options?
+% Note: Ahead of running Ua, open up a parallel pool. See MATLAB documentation on how to do this.
+if contains(UserVar.Experiment,"-par-")
+    CtrlVar.Parallel.uvhAssembly.spmd.isOn=true ;        % assembly in parallel using spmd over sub-domain (domain decomposition)
+    CtrlVar.Parallel.uvAssembly.spmd.isOn=true;          % assembly in parallel using spmd over sub-domain (domain decomposition)
+    CtrlVar.Parallel.Distribute=false;                   % linsolve NOT done using distributed arrays
+    CtrlVar.Parallel.isTest=false;                       % compare parallel and sequential options         
+end
+
+
 end

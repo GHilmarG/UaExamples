@@ -1,4 +1,5 @@
 
+
 function UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFinalValues,Priors,Meas,BCsAdjoint,RunInfo)
 %%
 % This routine is called during the run and can be used for saving and/or plotting data.
@@ -131,8 +132,7 @@ CM=cmocean('-balanced',25,'pivot',0) ; colormap(CM);
 % 
 %%
 
-% drawnow limitrate nocallbacks
+drawnow limitrate nocallbacks
 
 
 end
-
