@@ -118,9 +118,10 @@ hold on  ;
 LatLonGrid(X/1000,Y/1000,lat,lon,LineColor=[0.5 0.5 0.5],LabelSpacing=200,LevelStepLat=5,LevelStepLon=10) ;
 ScaleBar(); axis off
 xlabel("(km)") ;  ylabel("(km)") ;
-dhdtSTD=std(F.dhdt) ;
-if dhdtSTD> 0
-    clim([-3*dhdtSTD 3*dhdtSTD])
+
+
+if min(F.dhdt)< 0 && max(F.dhdt)>0
+    dhdtSTD=std(F.dhdt) ; clim([-3*dhdtSTD 3*dhdtSTD])
     CM=cmocean('-balanced',25,'pivot',0) ; colormap(CM);
 end
 
