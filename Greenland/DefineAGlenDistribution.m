@@ -1,20 +1,33 @@
 
 function   [UserVar,A,n]=DefineAGlenDistribution(UserVar,CtrlVar,MUA,F)
 
-persistent FA
+persistent FA DateFileWasLastRead
 
 
-% Check if we already have a file with an estimate for A.
-if isempty(FA)
 
-    if isfile(UserVar.Files.AInterpolant) 
+if isempty(DateFileWasLastRead)
+    DateFileWasLastRead=datetime(1971,11,3)  ;
+else
+    DateFileWasLastRead=datetime(DateFileWasLastRead); % Matlab seems to store datetime variables as strings 
+         % and the datetime variables therefore needs to be recreated from that sting.
+end
 
-        load(UserVar.Files.AInterpolant,"AGlen","n","xA","yA")
+
+
+if isfile(UserVar.Files.AInterpolant)
+
+    fileInfo=dir(UserVar.Files.AInterpolant) ; 
+    if fileInfo.date-DateFileWasLastRead > 0 % has the file be modified since last time it was read?
+
+        load(UserVar.Files.AInterpolant,"AGlen","xA","yA")
         FA=scatteredInterpolant(xA,yA,AGlen) ;
-        
+        DateFileWasLastRead=fileInfo.date;
     end
 
+
 end
+
+
 
 if ~isempty(FA)
 
