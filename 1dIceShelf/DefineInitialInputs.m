@@ -12,8 +12,7 @@ xd=100e3; xu=-100e3 ; yl=100e3 ; yr=-100e3;
 MeshBoundaryCoordinates=flipud([xu yr ; xd yr ; xd yl ; xu yl]);
 
 %% Types of runs
-CtrlVar.doPrognostic=0 ;
-CtrlVar.doDiagnostic=1 ;
+CtrlVar.TimeDependentRun=false ;
 CtrlVar.doInverseStep=0;
 CtrlVar.time=0 ;
 CtrlVar.dt=0.1;

@@ -8,9 +8,6 @@ function [UserVar,InvStartValues,Priors,Meas,BCsAdjoint,RunInfo]=DefineInputsFor
 
 
 
-x=MUA.coordinates(:,1) ; y=MUA.coordinates(:,2);
-
-
 %
 
 %% Define boundary conditions of adjoint problem
@@ -34,11 +31,11 @@ Priors.muk=0.5 ;
 Priors.V0=UserVar.V0 ;
 %% Start values
 % 
-wavelength=(max(x)-min(x))/4 ; 
+wavelength=(max(F.x)-min(F.x))/4 ; 
 Ampl=0.1; 
-InvStartValues.C=Priors.C.*(1+Ampl.*sin(2*pi*x/wavelength)) ;
+InvStartValues.C=Priors.C.*(1+Ampl.*sin(2*pi*F.x/wavelength)) ;
 InvStartValues.m=Priors.m;
-InvStartValues.AGlen=Priors.AGlen.*(1+Ampl.*sin(2*pi*x/wavelength)) ;
+InvStartValues.AGlen=Priors.AGlen.*(1+Ampl.*sin(2*pi*F.x/wavelength)) ;
 InvStartValues.n=Priors.n;
 InvStartValues.q=Priors.q ; 
 InvStartValues.muk=Priors.muk ;
@@ -50,8 +47,8 @@ InvStartValues.V0=Priors.V0 ;
 fprintf(' Creating synthetic data \n')
 
 CtrlVar.doDiagnostic=1;
-[UserVar,F.C,F.m,F.q,F.muk,F.V0]=DefineSlipperyDistribution(UserVar,CtrlVar,MUA,CtrlVar.time,F.s,F.b,F.s-F.b,F.S,F.B,F.rho,F.rhow,GF);
-[UserVar,F.AGlen,F.n]=DefineAGlenDistribution(UserVar,CtrlVar,MUA,CtrlVar.time,F.s,F.b,F.s-F.b,F.S,F.B,F.rho,F.rhow,GF);
+[UserVar,F.C,F.m,F.q,F.muk,F.V0]=DefineSlipperyDistribution(UserVar,CtrlVar,MUA,F);
+[UserVar,F.AGlen,F.n]=DefineAGlenDistribution(UserVar,CtrlVar,MUA,F);
 
 [F.C,F.m,F.q,F.muk,F.V0]=TestSlipperinessInputValues(CtrlVar,MUA,F.C,F.m,F.q,F.muk,F.V0);
 

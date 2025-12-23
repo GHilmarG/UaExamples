@@ -1,18 +1,26 @@
 
+function  [UserVar,AGlen,n]=DefineAGlenDistribution(UserVar,CtrlVar,MUA,F)
 
-function [UserVar,AGlen,n]=DefineAGlenDistribution(UserVar,CtrlVar,MUA,time,s,b,h,S,B,rho,rhow,GF)
 
 %%
-%  User input m-file to define A and n in the Glenn-Steinemann flow law
-% [UserVar,AGlen,n]=DefineAGlenDistribution(UserVar,CtrlVar,MUA,time,s,b,h,S,B,rho,rhow,GF)
 %
-% Usually A is defined on the nodes, but sometimes in an inverse run A might be
-% defined as an element variable. The user makes this decision by setting
-% CtrlVar.AGlenisElementBased to true or false in Ua2D_InitialUserInput
+% User input m-file to define A and n in the Glenn-Steinemann flow law
+%
+%   [UserVar,AGlen,n]=DefineAGlenDistribution(UserVar,CtrlVar,MUA,F)
+% 
+%   [UserVar,AGlen,n]=DefineAGlenDistribution(UserVar,CtrlVar,MUA,time,s,b,h,S,B,rho,rhow,GF)
+%
+% Note: Use
+%
+%   [AGlen,B]=AGlenVersusTemp(T)
+%
+% to get A in the units kPa^{-3} yr^{-1} for some temperature T (degrees Celsius) 
+%
+%% 
 
-n=3 ; AGlen=AGlenVersusTemp(-25);
- 
-% n=1; eps=0.01 ; tau=100; AGlen=eps/tau ; %     % eps=A*tau^n ;  eps=0.01 ; tau=100; 
+
+
+n=3 ; AGlen=AGlenVersusTemp(-25); % A in the units kPa^{-3} yr^{-1}
 
 end
 
