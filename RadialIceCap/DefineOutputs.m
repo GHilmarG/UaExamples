@@ -1,3 +1,7 @@
+
+
+
+
 function UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFinalValues,Priors,Meas,BCsAdjoint,RunInfo)
 %%
 % This routine is called during the run and can be used for saving and/or plotting data.
@@ -98,18 +102,23 @@ r=sqrt(F.x.*F.x+F.y.*F.y) ;
 [rMin,iloc]=min(r);
 hVector(iCounter)=F.h(iloc);
 tVector(iCounter)=F.time;
-iCounter=iCounter+1; 
+iCounter=iCounter+1;
 
 
 
 
 if contains(plots,'-plot-')
 
-    cbar=UaPlots(CtrlVar,MUA,F,F.h,FigureTitle="ice thickness") ;
+    fig=FindOrCreateFigure("RadialIceCap") ;
+    T=tiledlayout("flow");
+
+    T1=nexttile;
+    cbar=UaPlots(CtrlVar,MUA,F,F.h,CreateNewFigure=false) ;
     title(sprintf("ice thickness at t=%5.2f",F.time)) ;
     title(cbar,"(m)")
 
-    fh0=FindOrCreateFigure("h0(t)") ; 
+    T2=nexttile;
+
     plot(tVector,hVector,"or-")
     xlabel("time (yr)")
     ylabel("h(r=0) (m)")
@@ -120,15 +129,32 @@ if contains(plots,'-plot-')
     xProfile=linspace(-UserVar.R,UserVar.R,50) ;
     hProfile=Fh(xProfile,xProfile*0);
 
-    FindOrCreateFigure("h(x)")
+    T3=nexttile ;
+
     plot(xProfile/1000,hProfile,"or-")
     title(sprintf("ice thickness profile at t=%5.2f",F.time)) ;
     xlabel("x (km)")
     ylabel("h (m)")
 
+    T4=nexttile;
+    UaPlots(CtrlVar,MUA,F,"-speed-",CreateNewFigure=false)
+
+end
 
 
 end
 
 
-end
+
+
+
+
+
+
+
+
+
+
+
+
+
