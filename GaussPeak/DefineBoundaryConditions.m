@@ -88,19 +88,14 @@ BCs.vbTiedNodeB=[nodesd;nodesr];
 %  dl <-> dr (this is now redundant)
 %
 % The solution is to get rid of the dl <-> dr link
+%
+% But it is also possible to just ignore this redundancy, and set
+%
+%
+%  CtrlVar.BCsRowSubsetSelection=true;  (must be done in DefineInitialInputs.m) 
+%
+% in which case a row-selection algorithm is used internally to pick rows of Aeq that are maximally linearly independent. 
+%
 
-% ul=intersect(nodesu,nodesl) ;
-% dl=intersect(nodesd,nodesl) ;
-% dr=intersect(nodesd,nodesr) ;
-% ur=intersect(nodesu,nodesr) ;
-% 
-% nodesd=setdiff(nodesd,[dr;dl]);
-% nodesu=setdiff(nodesu,[ur;ul]);
-% 
-% BCs.ubTiedNodeA=[nodesu;nodesl];
-% BCs.ubTiedNodeB=[nodesd;nodesr];
-% 
-% BCs.vbTiedNodeA=[nodesu;nodesl];
-% BCs.vbTiedNodeB=[nodesd;nodesr];
 
 end

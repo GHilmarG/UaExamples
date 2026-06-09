@@ -21,6 +21,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
     %%
     xd=200e3; xu=-200e3 ; yl=200e3 ; yr=-200e3;
     MeshBoundaryCoordinates=flipud([xu yr ; xd yr ; xd yl ; xu yl]);
+    CtrlVar.alpha=0.05; 
 
 
     CtrlVar.GmshGeoFileAdditionalInputLines{1}='Periodic Line {1,2} = {3,4};';  % these lines are added to the gmsh .geo input file each time such a file is created
@@ -78,7 +79,9 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
     CtrlVar.ExplicitMeshRefinementCriteria(I).Use=false;
     
     
-    
+    %% BCs
+
+    CtrlVar.BCsRowSubsetSelection=true; 
     
     
     %%
