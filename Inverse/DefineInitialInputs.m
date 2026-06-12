@@ -69,7 +69,9 @@ MeshBoundaryCoordinates=flipud(MeshBoundaryCoordinates);
 %% Types of runs
 CtrlVar.InverseRun=1;
 
+%% BCs
 
+ CtrlVar.BCsRowSubsetSelection=true; 
 
 %% Restart
 CtrlVar.Restart=0;  CtrlVar.WriteRestartFile=1;

@@ -5,7 +5,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
     CtrlVar.Experiment='TestGaussPeak';
      %%
     
-    CtrlVar.TimeDependentRun=false ;
+    CtrlVar.TimeDependentRun=true ;
    
     CtrlVar.Restart=0;  
     
@@ -36,7 +36,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
     
     CtrlVar.AdaptMesh=1;
     CtrlVar.AdaptMeshInitial=1  ;
-    CtrlVar.AdaptMeshMaxIterations=20;
+    CtrlVar.AdaptMeshMaxIterations=5;
     CtrlVar.AdaptMeshUntilChangeInNumberOfElementsLessThan=0;  
     CtrlVar.AdaptMeshAndThenStop=0;
     
@@ -96,6 +96,6 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
     CtrlVar.PlotXYscale=1000;     % used to scale x and y axis of some of the figures, only used for plotting purposes
     CtrlVar.PlotLabels=0 ; CtrlVar.PlotMesh=1; CtrlVar.PlotBCs=00;CtrlVar.PlotNodes=1;
     
-    CtrlVar.InfoLevelNonLinIt=1000;
+    CtrlVar.InfoLevelNonLinIt=1;
     
 end
