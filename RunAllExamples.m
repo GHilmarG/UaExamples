@@ -1,16 +1,16 @@
 
 
-%% Beta merge with alpha on 11 Nov, 20255:
+%% Beta merge with Alpha on 4 Nov, 2025:
 %%
-%% Alpha 27 July, 2025
-%% Example Alpha 17 March 2024      : all working with Ua Alpha
-%% Example Alpha 01 August 2024     : all working with Ua Alpha
-%% Example Alpha 29 Dec 2024        : all working with Ua Alpha
-%% Example Alpha 2 March 2025       : all working with Ua Alpha
-%% Example Alpha 5 May 2025         : all working with Ua Alpha
-%% Example Alpha 19 July 2025       : all working with Ua Alpha with R2024b, but inverse example stalls with R2025a
-%% Example Alpha 24 Sept 2025       : With R2025a and R2025b the matrix solution produces several "almost singular" messages, whereas the same problem run fine with R2024b and earlier... 
-%% Example Alpha 3 Nov   2025       : all working with Ua Alpha under R2025b
+%% Beta 27 July, 2025
+%% Example Beta 17 March 2024      : all working with Ua Beta
+%% Example Beta 01 August 2024     : all working with Ua Beta
+%% Example Beta 29 Dec 2024        : all working with Ua Beta
+%% Example Beta 2 March 2025       : all working with Ua Beta
+%% Example Beta 5 May 2025         : all working with Ua Beta
+%% Example Beta 19 July 2025       : all working with Ua Beta with R2024b, but inverse example stalls with R2025a
+%% Example Beta 24 Sept 2025       : With R2025a and R2025b the matrix solution produces several "almost singular" messages, whereas the same problem run fine with R2024b and earlier... 
+%% Example Beta 3 Nov   2025       : all working with Ua Beta under R2025b
 
 cd RadialIceCap\
 Ua

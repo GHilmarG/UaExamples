@@ -8,7 +8,7 @@ function  UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,In
 
 
 plots='-ubvb-e-save-';
-plots='-sbB-udvd-ubvb-ub-';
+plots='-sbB-udvd-ubvb-speed-';
 %plots='-mesh-';
 
 UserVar.CreateVideo=1;
@@ -138,11 +138,12 @@ if contains(plots,'-e-')
     
 end
 
-if contains(plots,'-ub-')
-    
-    FindOrCreateFigure("-ub-")
-    [FigHandle,ColorbarHandel,tri]=PlotNodalBasedQuantities(MUA.connectivity,MUA.coordinates,F.ub,CtrlVar)    ;
-    title(sprintf('ub t=%-g ',F.time)) ; xlabel('x (km)') ; ylabel('y (km)')
+if contains(plots,'-speed-')
+
+    FindOrCreateFigure("uv log") ; 
+    UaPlots(CtrlVar,MUA,F,"-speed-")
+
+
     
 end
 
