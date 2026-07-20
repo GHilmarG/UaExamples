@@ -106,13 +106,26 @@ function [UserVar,RunInfo,F,l,EleSizeDesired,ElementsToBeRefined,ElementsToBeCoa
 % 
 %%
  
- 
+switch lower(CtrlVar.MeshRefinementMethod)
+    
+    case 'explicit:global'
 
-I=x>-120e3 & x<120e3 & y<120e3 & y>-120e3 ;
+        x=MUA.coordinates(:,1) ; y=MUA.coordinates(:,1) ;
+        I=x>-120e3 & x<120e3 & y<120e3 & y>-120e3 ;
+        EleSizeDesired(~I)=CtrlVar.MeshSizeMax;
+        
+    case 'explicit:local:newest vertex bisection'
 
-EleSizeDesired(~I)=CtrlVar.MeshSizeMax;
-ElementsToBeRefined(~I)=false;
-ElementsToBeCoarsened(~I)=false;  % This may appear to be a bit risky way of creating an array, but MATLAB accepts this syntax.
+        x=MUA.xEle; y=MUA.yEle ; 
 
+        I=x>-120e3 & x<120e3 & y<120e3 & y>-120e3 ;
+        ElementsToBeRefined(~I)=false;
+        ElementsToBeCoarsened(~I)=false;
+
+    otherwise
+        
+        error("Case not fou8nd")
+        
+end 
     
 end
