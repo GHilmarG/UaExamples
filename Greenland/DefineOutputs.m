@@ -137,6 +137,10 @@ end
 % 
 %%
 
+
+FindOrCreateFigure("mesh") ;  PlotMuaMesh(CtrlVar,MUA) ; axis tight 
+
+
 drawnow limitrate nocallbacks
 
 
