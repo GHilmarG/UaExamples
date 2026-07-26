@@ -65,7 +65,7 @@ CtrlVar.Experiment=UserVar.RunType;
 
 switch UserVar.RunType
     
-    case {'Inverse-MatOpt','Inverse-ConjGrad','Inverse-MatOpt-FixPoint','Inverse-ConjGrad-FixPoint','Inverse-SteepestDesent','Inverse-UaOpt'}
+    case {'Inverse-MatOpt','Inverse-ConjGrad','Inverse-MatOpt-FixPoint','Inverse-ConjGrad-FixPoint','Inverse-SteepestDesent','Inverse-UaOpt','Inverse-UaOptConjGrad'}
         
         CtrlVar.InverseRun=1;
         CtrlVar.Restart=0;
@@ -253,7 +253,7 @@ CtrlVar.Inverse.TestAdjoint.iRange=[100,121] ;  % range of nodes/elements over w
 % end, testing adjoint parameters. 
 
 
-if contains(UserVar.RunType,'UatOpt')
+if contains(UserVar.RunType,'UaOpt')
     
     CtrlVar.Inverse.MinimisationMethod='UaOptimization';
     if contains(UserVar.RunType,'ConjGrad')
