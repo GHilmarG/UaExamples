@@ -63,7 +63,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
     
     switch UserVar.RunType
         
-        case {"-1dAnalyticalIceShelf-","Test-1dAnalyticalIceShelf-CalvingThroughMassBalanceFeedback-","Test-1dAnalyticalIceShelf-CalvingThroughPrescribedLevelSet-"}
+        case {"-1dAnalyticalIceShelf-","Test-1dAnalyticalIceShelf-","Test-1dAnalyticalIceShelf-CalvingThroughMassBalanceFeedback-","Test-1dAnalyticalIceShelf-CalvingThroughPrescribedLevelSet-"}
             
             UserVar.InitialGeometry="-Constant-" ;
             CtrlVar.doplots=0;
