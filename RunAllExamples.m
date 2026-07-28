@@ -1,14 +1,5 @@
 
-%% Alpha 27 July, 2025
-
-%% Example Alpha 17 March 2024      : all working with Ua Alpha
-%% Example Alpha 01 August 2024     : all working with Ua Alpha
-%% Example Alpha 29 Dec 2024        : all working with Ua Alpha
-%% Example Alpha 2 March 2025       : all working with Ua Alpha
-%% Example Alpha 5 May 2025         : all working with Ua Alpha
-%% Example Alpha 19 July 2025       : all working with Ua Alpha with R2024b, but inverse example stalls with R2025a
-%% Example Alpha 24 Sept 2025       : With R2025a and R2025b the matrix solution produces several "almost singular" messages, whereas the same problem run fine with R2024b and earlier... 
-%% Example Alpha 3 Nov   2025       : all working with Ua Alpha under R2025b
+%% Alpha 20 July, 2026
 
 cd RadialIceCap\
 Ua
@@ -124,5 +115,3 @@ cd Greenland\
 Ua
 cd ..
 
-
-%%
