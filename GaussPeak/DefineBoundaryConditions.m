@@ -1,4 +1,4 @@
-function  [UserVar,BCs]=DefineBoundaryConditions(UserVar,CtrlVar,MUA,F,BCs)
+function  BCs=DefineBoundaryConditions(UserVar,CtrlVar,MUA,BCs,time,s,b,h,S,B,ub,vb,ud,vd,GF)
 %%
 % BCs=DefineBoundaryConditions(UserVar,CtrlVar,MUA,BCs,time,s,b,h,S,B,ub,vb,ud,vd,GF)
 %
@@ -51,26 +51,25 @@ function  [UserVar,BCs]=DefineBoundaryConditions(UserVar,CtrlVar,MUA,F,BCs)
 % 
 %%
 
-xd=max(F.x(:)) ; xu=min(F.x(:)); yl=max(F.y(:)) ; yr=min(F.y(:));
+%% Note:
+% There is a duplicatoin in the BCs. So set
+% 
+%   CtrlVar.BCsRowSubsetSelection=true; 
+%
+% in 
+% 
+%   DefineInitialInputs.m 
+% to automatically get rid of duplication.
+%
+x=MUA.coordinates(:,1); y=MUA.coordinates(:,2);
 
-% find nodes along boundary, simple approach:
-% nodesd=find(abs(F.x-xd)<1e-5); [~,ind]=sort(MUA.coordinates(nodesd,2)); nodesd=nodesd(ind);
-% nodesu=find(abs(F.x-xu)<1e-5); [~,ind]=sort(MUA.coordinates(nodesu,2)); nodesu=nodesu(ind);
-% nodesl=find(abs(F.y-yl)<1e-5); [~,ind]=sort(MUA.coordinates(nodesl,1)); nodesl=nodesl(ind);
-% nodesr=find(abs(F.y-yr)<1e-5); [~,ind]=sort(MUA.coordinates(nodesr,1)); nodesr=nodesr(ind);
-%
-% Find nodes along boundary, more robust approach:
-% Here we are using the fact that all nodes along the boundary are in the list:
-%
-%   MUA.Boundary.Nodes
-%
-% And we only limit the search to those nodes.
-%
-L=min(sqrt(MUA.EleAreas)/1000); % set a distance tolerance which is a fraction of smallest element size
-nodesd=MUA.Boundary.Nodes(abs(MUA.coordinates(MUA.Boundary.Nodes,1)-xd)<L) ; 
-nodesu=MUA.Boundary.Nodes(abs(MUA.coordinates(MUA.Boundary.Nodes,1)-xu)<L) ; 
-nodesl=MUA.Boundary.Nodes(abs(MUA.coordinates(MUA.Boundary.Nodes,2)-yl)<L);
-nodesr=MUA.Boundary.Nodes(abs(MUA.coordinates(MUA.Boundary.Nodes,2)-yr)<L);
+% find nodes along boundary 
+xd=max(x(:)) ; xu=min(x(:)); yl=max(y(:)) ; yr=min(y(:));
+nodesd=find(abs(x-xd)<1e-5); [~,ind]=sort(MUA.coordinates(nodesd,2)); nodesd=nodesd(ind);
+nodesu=find(abs(x-xu)<1e-5); [~,ind]=sort(MUA.coordinates(nodesu,2)); nodesu=nodesu(ind);
+nodesl=find(abs(y-yl)<1e-5); [~,ind]=sort(MUA.coordinates(nodesl,1)); nodesl=nodesl(ind);
+nodesr=find(abs(y-yr)<1e-5); [~,ind]=sort(MUA.coordinates(nodesr,1)); nodesr=nodesr(ind);
+
 
 
 BCs.ubTiedNodeA=[nodesu;nodesl];
@@ -78,6 +77,16 @@ BCs.vbTiedNodeA=[nodesu;nodesl];
 
 BCs.ubTiedNodeB=[nodesd;nodesr];
 BCs.vbTiedNodeB=[nodesd;nodesr];
+
+
+
+BCs.udTiedNodeA=[nodesu;nodesl];
+BCs.vdTiedNodeA=[nodesu;nodesl];
+
+BCs.udTiedNodeB=[nodesd;nodesr];
+BCs.vdTiedNodeB=[nodesd;nodesr];
+
+
 
 
 

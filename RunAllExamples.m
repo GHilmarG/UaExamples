@@ -1,6 +1,8 @@
 
 
-%%  Master 17 March 2024, 01 August 2024, 23 Dec 2025
+
+%%  Master 17 March 2024, 01 August 2024, 23 Dec 2025, 19 August 2026
+
 
 
 cd RadialIceCap\
@@ -117,6 +119,10 @@ close all
 cd Greenland\
 Ua
 cd ..
+
+
+%%
+
 
 
 %%
