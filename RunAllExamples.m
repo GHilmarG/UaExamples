@@ -102,15 +102,15 @@ cd ..
 
 
 %%
-
+close all
 
 cd Inverse   
 Ua           
 cd ..
-close all
+
 
 %%
-
+close all
 cd Greenland\
 Ua
 cd ..
