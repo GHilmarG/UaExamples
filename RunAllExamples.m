@@ -102,11 +102,12 @@ cd ..
 
 
 %%
-
+close all
 
 cd Inverse   
 Ua           
 cd ..
+
 close all
 
 %%
@@ -115,9 +116,3 @@ cd Greenland\
 Ua
 cd ..
 
-
-%%
-
-
-
-%%
