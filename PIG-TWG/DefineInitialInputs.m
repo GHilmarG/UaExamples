@@ -20,7 +20,7 @@ if isempty(UserVar) || ~isfield(UserVar,'m')
 end
 
 
-CtrlVar.FlowApproximation="SSTREAM" ;
+
 %%
 % This run requires some additional input files. They are too big to be kept on Github so you
 % will have to get those separately. 
@@ -63,9 +63,9 @@ end
 
 CtrlVar.Experiment=UserVar.RunType;
 
-switch UserVar.RunType
-    
-    case {'Inverse-MatOpt','Inverse-ConjGrad','Inverse-MatOpt-FixPoint','Inverse-ConjGrad-FixPoint','Inverse-SteepestDesent','Inverse-UaOpt','Inverse-UaOptConjGrad'}
+if contains(UserVar.RunType,"Inverse")
+
+   % case {'Inverse-MatOpt','Inverse-ConjGrad','Inverse-MatOpt-FixPoint','Inverse-ConjGrad-FixPoint','Inverse-SteepestDesent','Inverse-UaOpt','Inverse-UaOptConjGrad'}
         
         CtrlVar.InverseRun=1;
         CtrlVar.Restart=0;
@@ -73,35 +73,28 @@ switch UserVar.RunType
         CtrlVar.InfoLevelNonLinIt=0;
         CtrlVar.Inverse.InfoLevel=1;
         CtrlVar.InfoLevel=0;
-        
+
         UserVar.Slipperiness.ReadFromFile=1;
         UserVar.AGlen.ReadFromFile=1;
         CtrlVar.ReadInitialMesh=1;
         CtrlVar.AdaptMesh=0;
-        
+
         CtrlVar.Inverse.Iterations=5;
-        CtrlVar.Inverse.InvertFor='logA-logC' ; % '-logAGlen-logC-' ; % {'-C-','-logC-','-AGlen-','-logAGlen-'}
+        CtrlVar.Inverse.InvertFor='logA-logC' ; % 
         CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor;
-        
+
         CtrlVar.Inverse.Measurements='-uv-' ;  % {'-uv-,'-uv-dhdt-','-dhdt-'}
-        
-        
-        
-        if contains(UserVar.RunType,'FixPoint')
-            
-            % FixPoint inversion is an ad-hoc method of estimating the gradient of the cost function with respect to C.
-            % It can produce quite good estimates for C using just one or two inversion iterations, but then typically stagnates.
-            % The FixPoint method can often be used right at the start of an inversion to get a reasonably good C estimate,
-            % after which in a restart step one can switch to gradient calculation using the adjoint method 
-            CtrlVar.Inverse.DataMisfit.GradientCalculation='FixPoint' ;
-            CtrlVar.Inverse.InvertFor='logC' ;
-            CtrlVar.Inverse.Iterations=1;
-            CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor;
-          
+
+
+        if contains(UserVar.RunType,"UaOptConjGrad")
+            CtrlVar.Inverse.MinimisationMethod="UaOptimization-GradientBased";
+        else
+            CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";
         end
-        
-        
-    case 'Forward-Transient'
+
+
+elseif contains(UserVar.RunType,"Forward-Transient")
+
         
         CtrlVar.InverseRun=0;
         CtrlVar.TimeDependentRun=1;
@@ -111,9 +104,9 @@ switch UserVar.RunType
         UserVar.AGlen.ReadFromFile=1;
         CtrlVar.ReadInitialMesh=1;
         CtrlVar.AdaptMesh=0;
-        
-    case 'Forward-Diagnostic'
-               
+
+elseif contains(UserVar.RunType,"Forward-Diagnostic") 
+
         CtrlVar.InverseRun=0;
         CtrlVar.TimeDependentRun=0;
         CtrlVar.Restart=0;
@@ -122,9 +115,10 @@ switch UserVar.RunType
         UserVar.AGlen.ReadFromFile=1;
         CtrlVar.ReadInitialMesh=1;
         CtrlVar.AdaptMesh=0;
-        
-    case 'TestingMeshOptions'
-        
+
+elseif contains(UserVar.RunType,"TestingMeshOptions")
+
+       
         CtrlVar.TimeDependentRun=0;  % {0|1} if true (i.e. set to 1) then the run is a forward transient one, if not
         CtrlVar.InverseRun=0;
         CtrlVar.Restart=0;
@@ -138,6 +132,9 @@ switch UserVar.RunType
         CtrlVar.AdaptMeshAndThenStop=1;    % if true, then mesh will be adapted but no further calculations performed
         % useful, for example, when trying out different remeshing options (then use CtrlVar.doAdaptMeshPlots=1 to get plots)
         CtrlVar.InfoLevelAdaptiveMeshing=10;
+
+else
+    error("CaseNotFound")
 end
 
 
@@ -175,10 +172,7 @@ CtrlVar.MaxNumberOfElements=70e3;
 CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';   
 %CtrlVar.MeshRefinementMethod='explicit:local:red-green';
 % CtrlVar.MeshRefinementMethod='explicit:global';   
-
-CtrlVar.MeshGenerator='gmsh' ; % 'mesh2d';
 CtrlVar.MeshGenerator='mesh2d' ; % 'mesh2d';
-CtrlVar.GmshMeshingAlgorithm=8; 
 CtrlVar.MeshSizeMax=20e3;
 CtrlVar.MeshSize=CtrlVar.MeshSizeMax/2;
 CtrlVar.MeshSizeMin=CtrlVar.MeshSizeMax/20;
@@ -188,8 +182,6 @@ MeshBoundaryCoordinates=CreateMeshBoundaryCoordinatesForPIGandTWG(UserVar,CtrlVa
 CtrlVar.AdaptMeshInitial=1  ;   
 CtrlVar.AdaptMeshMaxIterations=5;
 CtrlVar.SaveAdaptMeshFileName='MeshFileAdapt';    %  file name for saving adapt mesh. If left empty, no file is written
-
-
 
 
 I=1;
@@ -202,33 +194,6 @@ CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
 CtrlVar.ExplicitMeshRefinementCriteria(I).Use=true;
 
 
-I=I+1;
-CtrlVar.ExplicitMeshRefinementCriteria(I).Name='flotation';
-CtrlVar.ExplicitMeshRefinementCriteria(I).Scale=0.0001;
-CtrlVar.ExplicitMeshRefinementCriteria(I).EleMin=[];
-CtrlVar.ExplicitMeshRefinementCriteria(I).EleMax=[];
-CtrlVar.ExplicitMeshRefinementCriteria(I).p=[];
-CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
-CtrlVar.ExplicitMeshRefinementCriteria(I).Use=false;
-
-I=I+1;
-CtrlVar.ExplicitMeshRefinementCriteria(I).Name='thickness gradient';
-CtrlVar.ExplicitMeshRefinementCriteria(I).Scale=0.01;
-CtrlVar.ExplicitMeshRefinementCriteria(I).EleMin=[];
-CtrlVar.ExplicitMeshRefinementCriteria(I).EleMax=[];
-CtrlVar.ExplicitMeshRefinementCriteria(I).p=[];
-CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
-CtrlVar.ExplicitMeshRefinementCriteria(I).Use=false;
-
-
-I=I+1;
-CtrlVar.ExplicitMeshRefinementCriteria(I).Name='upper surface gradient';
-CtrlVar.ExplicitMeshRefinementCriteria(I).Scale=0.01;
-CtrlVar.ExplicitMeshRefinementCriteria(I).EleMin=[];
-CtrlVar.ExplicitMeshRefinementCriteria(I).EleMax=[];
-CtrlVar.ExplicitMeshRefinementCriteria(I).p=[];
-CtrlVar.ExplicitMeshRefinementCriteria(I).InfoLevel=1;
-CtrlVar.ExplicitMeshRefinementCriteria(I).Use=false;
 
 %%
                                                         
@@ -246,23 +211,12 @@ CtrlVar.Inverse.TestAdjoint.isTrue=0; % If true then perform a brute force calcu
                                       % of the directional derivative of the objective function.  
 CtrlVar.Inverse.TestAdjointFiniteDifferenceType='second-order' ; % {'central','forward'}
 CtrlVar.Inverse.TestAdjointFiniteDifferenceStepSize=1e-8 ;
-CtrlVar.Inverse.TestAdjoint.iRange=[100,121] ;  % range of nodes/elements over which brute force gradient is to be calculated.
-                                         % if left empty, values are calulated for every node/element within the mesh. 
+CtrlVar.Inverse.TestAdjoint.iRange=[] ;  % range of nodes/elements over which brute force gradient is to be calculated.
+                                         % if left empty, values are calculated fro 20 random nodes
                                          % If set to for example [1,10,45] values are calculated for these three
                                          % nodes/elements.
 % end, testing adjoint parameters. 
 
-
-if contains(UserVar.RunType,'UaOpt')
-    
-    CtrlVar.Inverse.MinimisationMethod='UaOptimization';
-    if contains(UserVar.RunType,'ConjGrad')
-        CtrlVar.Inverse.GradientUpgradeMethod='ConjGrad' ; %{'SteepestDecent','ConjGrad'}
-    else
-        CtrlVar.Inverse.GradientUpgradeMethod='SteepestDecent' ; %{'SteepestDecent','ConjGrad'}
-    end
-    
-end
 
                                                     
 
@@ -295,7 +249,6 @@ if CtrlVar.InverseRun
         +CtrlVar.ReadInitialMeshFileName...
         +CtrlVar.Inverse.InvertFor...
         +CtrlVar.Inverse.MinimisationMethod...
-        +"-"+CtrlVar.Inverse.AdjointGradientPreMultiplier...
         +CtrlVar.Inverse.DataMisfit.GradientCalculation...
         +CtrlVar.Inverse.Hessian...
         +"-"+CtrlVar.SlidingLaw...
@@ -310,7 +263,6 @@ filename=sprintf('IR-%s-%s-Nod%i-%s-%s-Cga%f-Cgs%f-Aga%f-Ags%f-m%i-%s',...
     UserVar.RunType,...
     CtrlVar.Inverse.MinimisationMethod,...
     CtrlVar.TriNodes,...
-    CtrlVar.Inverse.AdjointGradientPreMultiplier,...
     CtrlVar.Inverse.DataMisfit.GradientCalculation,...
     CtrlVar.Inverse.Regularize.logC.ga,...
     CtrlVar.Inverse.Regularize.logC.gs,...
@@ -324,5 +276,10 @@ filename=replace(filename,'.','k');
 
 CtrlVar.Inverse.NameOfRestartOutputFile=filename;
 CtrlVar.Inverse.NameOfRestartInputFile=CtrlVar.Inverse.NameOfRestartOutputFile;
+
+
+% CtrlVar.Inverse.TestAdjoint.isTrue=true;  CtrlVar.Inverse.AdjointGradientPreMultiplier="l2";
+
+ CtrlVar.Inverse.AdjointGradientPreMultiplier="L2";
 
 end

@@ -41,12 +41,12 @@ cd IceBerg
 Ua
 cd ..
 
-
+%%
 cd PIG-TWG
 
 
 UserVar.RunType='Inverse-MatOpt'; Ua(UserVar) ;                                                                                         %  01/03/2025, 19/07/2025
-UserVar.RunType='Inverse-UaOpt' ; Ua(UserVar) ;                                                                                         %  01/03/2025, 19/07/2025
+UserVar.RunType='Inverse-UaOptConjGrad' ; Ua(UserVar) ;                                                                                         %  01/03/2025, 19/07/2025
 UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased"; Ua(UserVar,CtrlVar) ;       %  01/03/2025, 19/07/2025
 
 Klear
