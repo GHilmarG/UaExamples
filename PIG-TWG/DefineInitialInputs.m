@@ -79,7 +79,7 @@ if contains(UserVar.RunType,"Inverse")
         CtrlVar.ReadInitialMesh=1;
         CtrlVar.AdaptMesh=0;
 
-        CtrlVar.Inverse.Iterations=300;
+        CtrlVar.Inverse.Iterations=5;
         CtrlVar.Inverse.InvertFor='logA-logC' ; % 
         CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor;
 
@@ -89,8 +89,7 @@ if contains(UserVar.RunType,"Inverse")
         if contains(UserVar.RunType,"UaOptConjGrad")
             CtrlVar.Inverse.MinimisationMethod="UaOptimization-GradientBased";
             CtrlVar.Inverse.UaConjugatedGradients.UpdateMethod="-ConjGrad-" ; %{'SteepestDecent','ConjGrad'}
-           
-            CtrlVar.ConjugatedGradientsUpdate="HS"; % (FR|PR|HS|DY)
+            CtrlVar.Inverse.UaConjugatedGradients.Update="HS";  % (FR|PR|HS|DY)
         else
             CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";
         end
