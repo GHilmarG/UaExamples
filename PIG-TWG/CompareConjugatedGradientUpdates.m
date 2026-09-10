@@ -1,4 +1,3 @@
-
 Steepest-Descent:
 It #cgUpdate  #fEval      J           I          R          decrement      gamma  
     0	    0	    0    95.2873     47.7477     47.5396  7.03956e+06  	 2.93362e-07 
@@ -521,3 +520,9 @@ violation, 0.000000e+00, is less than options.ConstraintTolerance = 1.000000e-10
 
  Inversion stopped after 300 iterations, exit flag 5 : maximum number of iterations (300) reached. 
  Totals: 521 cost function evaluations, 521 gradient evaluations, 0 CG restarts. 
+
+%[appendix]{"version":"1.0"}
+%---
+%[metadata:view]
+%   data: {"layout":"onright"}
+%---
