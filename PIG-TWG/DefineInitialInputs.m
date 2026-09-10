@@ -79,7 +79,7 @@ if contains(UserVar.RunType,"Inverse")
         CtrlVar.ReadInitialMesh=1;
         CtrlVar.AdaptMesh=0;
 
-        CtrlVar.Inverse.Iterations=100;
+        CtrlVar.Inverse.Iterations=300;
         CtrlVar.Inverse.InvertFor='logA-logC' ; % 
         CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor;
 
