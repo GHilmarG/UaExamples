@@ -94,6 +94,13 @@ if contains(UserVar.RunType,"Inverse")
             CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";
         end
 
+        if contains(CtrlVar.Inverse.MinimisationMethod,"Gradient")
+            CtrlVar.Inverse.RieszMapGradient=true;
+        elseif contains(CtrlVar.Inverse.MinimisationMethod,"Hessian")
+            CtrlVar.Inverse.RieszMapGradient=false;
+        end
+
+
 
 elseif contains(UserVar.RunType,"Forward-Transient")
 
@@ -209,7 +216,7 @@ CtrlVar.Cmin=1e-20;  CtrlVar.Cmax=1e20;
 
 
 %% Testing adjoint parameters, start:
-CtrlVar.Inverse.TestAdjoint.isTrue=0; % If true then perform a brute force calculation 
+ % If true then perform a brute force calculation 
                                       % of the directional derivative of the objective function.  
 CtrlVar.Inverse.TestAdjointFiniteDifferenceType='second-order' ; % {'central','forward'}
 CtrlVar.Inverse.TestAdjointFiniteDifferenceStepSize=1e-8 ;
