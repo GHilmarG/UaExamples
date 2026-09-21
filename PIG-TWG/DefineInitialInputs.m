@@ -74,32 +74,40 @@ if contains(UserVar.RunType,"Inverse")
         CtrlVar.Inverse.InfoLevel=1;
         CtrlVar.InfoLevel=0;
 
-        UserVar.Slipperiness.ReadFromFile=1;
-        UserVar.AGlen.ReadFromFile=1;
+        UserVar.Slipperiness.ReadFromFile=0;
+        UserVar.AGlen.ReadFromFile=0;
         CtrlVar.ReadInitialMesh=1;
         CtrlVar.AdaptMesh=0;
 
-        CtrlVar.Inverse.Iterations=50;
-        CtrlVar.Inverse.InvertFor='logA-logC' ; % 
+        CtrlVar.Inverse.Iterations=10;
+        CtrlVar.Inverse.InvertFor='logA-logC' ; %
         CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor;
 
         CtrlVar.Inverse.Measurements='-uv-' ;  % {'-uv-,'-uv-dhdt-','-dhdt-'}
 
 
-        if contains(UserVar.RunType,"UaOptConjGrad")
-            CtrlVar.Inverse.MinimisationMethod="UaOptimization-GradientBased";
-            CtrlVar.Inverse.UaConjugatedGradients.UpdateMethod="-ConjGrad-" ; %{'SteepestDecent','ConjGrad'}
-            CtrlVar.Inverse.UaConjugatedGradients.Update="HS";  % (FR|PR|HS|DY)
+        if contains(UserVar.RunType,"-UaOptimisation-GradientBased-")
+
+            CtrlVar.Inverse.MinimisationMethod="-UaOptimisation-GradientBased-";
+
+        elseif contains(UserVar.RunType,"MatlabOptimisation-GradientBased-")
+
+            CtrlVar.Inverse.MinimisationMethod="-MatlabOptimisation-GradientBased-";
+
+        elseif contains(UserVar.RunType,"-MatlabOptimisation-HessianBased-")
+
+            CtrlVar.Inverse.MinimisationMethod="-MatlabOptimisation-HessianBased-";
+            CtrlVar.Inverse.Hessian="-Jpp-Fpp-";
+
+        elseif contains(UserVar.RunType,"-UaOptimisation-HessianBased-")
+
+            CtrlVar.Inverse.MinimisationMethod="-UaOptimisation-HessianBased-";
+            CtrlVar.Inverse.Hessian="-Jpp-Fpp-";
+
         else
-            CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";
-        end
+            error("CaseNotFound")
 
-        if contains(CtrlVar.Inverse.MinimisationMethod,"Gradient")
-            CtrlVar.Inverse.RieszMapGradient=true;
-        elseif contains(CtrlVar.Inverse.MinimisationMethod,"Hessian")
-            CtrlVar.Inverse.RieszMapGradient=false;
         end
-
 
 
 elseif contains(UserVar.RunType,"Forward-Transient")
@@ -227,20 +235,18 @@ CtrlVar.Inverse.TestAdjoint.iRange=[] ;  % range of nodes/elements over which br
 % end, testing adjoint parameters. 
 
 
-                                                    
+CtrlVar.Inverse.Methodology="-Matern-" ; % either "-Tikhonov-" or "-Matern-"
 
-CtrlVar.Inverse.Regularize.C.gs=1;
-CtrlVar.Inverse.Regularize.C.ga=1;
-CtrlVar.Inverse.Regularize.logC.ga=1;
-CtrlVar.Inverse.Regularize.logC.gs=1e5 ;
+alphaMatern=2;  rhoMatern=10e3; sigmaMatern=1;
+[kappaMatern,tauMatern,nuMatern]=Matern_rho_sigma(alphaMatern,rhoMatern,sigmaMatern) ;
 
-CtrlVar.Inverse.Regularize.logC.ga=1; 
-CtrlVar.Inverse.Regularize.logC.gs=1e5 ; 
+CtrlVar.Inverse.Matern.logC.alpha=alphaMatern;
+CtrlVar.Inverse.Matern.logC.kappa=kappaMatern;
+CtrlVar.Inverse.Matern.logC.tau=tauMatern;
 
-CtrlVar.Inverse.Regularize.AGlen.gs=1;
-CtrlVar.Inverse.Regularize.AGlen.ga=1;
-CtrlVar.Inverse.Regularize.logAGlen.ga=1;
-CtrlVar.Inverse.Regularize.logAGlen.gs=1e3 ;
+CtrlVar.Inverse.Matern.logAGlen.alpha=alphaMatern;
+CtrlVar.Inverse.Matern.logAGlen.kappa=kappaMatern;
+CtrlVar.Inverse.Matern.logAGlen.tau=tauMatern;  
 
 
 %%
@@ -280,6 +286,9 @@ filename=sprintf('IR-%s-%s-Nod%i-%s-Cga%f-Cgs%f-Aga%f-Ags%f-m%i-%s',...
     UserVar.m,...
     CtrlVar.Inverse.InvertFor);
 
+filename=replace(filename,"---","-");
+filename=replace(filename,"--","-");
+
 CtrlVar.Experiment=replace(CtrlVar.Experiment," ","-");
 filename=replace(filename,'.','k');
 
@@ -287,8 +296,5 @@ CtrlVar.Inverse.NameOfRestartOutputFile=filename;
 CtrlVar.Inverse.NameOfRestartInputFile=CtrlVar.Inverse.NameOfRestartOutputFile;
 
 
-% CtrlVar.Inverse.TestAdjoint.isTrue=true;  CtrlVar.Inverse.AdjointGradientPreMultiplier="l2";
-
- CtrlVar.Inverse.AdjointGradientPreMultiplier="L2";
 
 end

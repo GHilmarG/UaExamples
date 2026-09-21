@@ -20,7 +20,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
 %
 % The gradient based algorithm: 
 % 
-%   CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";   
+%   CtrlVar.Inverse.MinimisationMethod="MatlabOptimisation-GradientBased";   
 %
 % with 
 %
@@ -28,7 +28,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
 %
 % gives inter-nodal element-independent results for any element type. However 
 % 
-%   CtrlVar.Inverse.MinimisationMethod='UaOptimization-Hessian';
+%   CtrlVar.Inverse.MinimisationMethod='UaOptimisation-Hessian';
 %
 % only works for 3-node elements, and does not show the same nodal/element independence 
 %
@@ -67,7 +67,7 @@ xd=200e3; xu=-200e3 ; yl=200e3 ; yr=-200e3;
 MeshBoundaryCoordinates=[xu yr ; xd yr ; xd yl ; xu yl];
 MeshBoundaryCoordinates=flipud(MeshBoundaryCoordinates);
 %% Types of runs
-CtrlVar.InverseRun=1;
+CtrlVar.InverseRun=true;
 
 %% BCs
 
@@ -92,38 +92,34 @@ end
 
 
 %% Inverse   -inverse
-%CtrlVar.Inverse.MinimisationMethod='MatlabOptimization'; % {'MatlabOptimization','UaOptimization'}
-% CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased"; % 
-% CtrlVar.Inverse.AdjointGradientPreMultiplier="M" ; 
-%CtrlVar.Inverse.MinimisationMethod='UaOptimization-Hessian'; % {'MatlabOptimization','UaOptimization'}
-
-
-% CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased";      % Hessian-based, Matlab toolbox, only use for CtrlVar.TriNodes=3;
-CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";     % gradient-based, Matlab toolbox (not working with R2023a, fine with R2023b and later versions)
-% CtrlVar.Inverse.MinimisationMethod="UaOptimization-GradientBased";       % gradient-based, Ua optimisation toolbox
-% CtrlVar.Inverse.MinimisationMethod="UaOptimization-HessianBased";        % Hessian-based, Ua optimisation toolbox, seems to work fine for CtrlVar.TriNodes>3;
 
 
 CtrlVar.Inverse.InvertFor='-logC-';
-CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor; 
 CtrlVar.Inverse.Iterations=10;
 
+CtrlVar.Inverse.MinimisationMethod="-UaOptimisation-GradientBased-";
 
 CtrlVar.Inverse.InfoLevel=1;  % Set to 1 to get some basic information, >=2 for additional info on backtracking,
 % >=100 for further info and plots
 
-CtrlVar.InfoLevelNonLinIt=0; CtrlVar.InfoLevel=0;
-CtrlVar.InfoLevelNonLinIt=1; CtrlVar.InfoLevel=1;
+if CtrlVar.InverseRun
+    CtrlVar.InfoLevelNonLinIt=0; CtrlVar.InfoLevel=0;
+end
 
-CtrlVar.Inverse.DataMisfit.Multiplier=1;
-CtrlVar.Inverse.Regularize.Multiplier=1;
-% regularisation parameters
+CtrlVar.Inverse.Methodology="-Matern-" ; % either "-Tikhonov-" or "-Matern-"
 
-CtrlVar.Inverse.Regularize.logC.ga=0;
-CtrlVar.Inverse.Regularize.logC.gs=0e3 ; %
+alphaMatern=2;  rhoMatern=10e3; sigmaMatern=1;
+[kappaMatern,tauMatern,nuMatern]=Matern_rho_sigma(alphaMatern,rhoMatern,sigmaMatern) ;
 
-CtrlVar.Inverse.Regularize.logAGlen.ga=0;
-CtrlVar.Inverse.Regularize.logAGlen.gs=0 ;
+CtrlVar.Inverse.Matern.logC.alpha=alphaMatern;
+CtrlVar.Inverse.Matern.logC.kappa=kappaMatern;
+CtrlVar.Inverse.Matern.logC.tau=tauMatern;
+
+CtrlVar.Inverse.Matern.logAGlen.alpha=alphaMatern;
+CtrlVar.Inverse.Matern.logAGlen.kappa=kappaMatern;
+CtrlVar.Inverse.Matern.logAGlen.tau=tauMatern;
+
+
 
 CtrlVar.Czero=1e-4;
 
@@ -170,20 +166,13 @@ filename=sprintf('IR-%s-%s-Nod%i-%s-Cga%f-Cgs%f-Aga%f-Ags%f-%i-%i-%s',...
     UserVar.RunType,...
     CtrlVar.Inverse.MinimisationMethod,...
     CtrlVar.TriNodes,...
-    CtrlVar.Inverse.AdjointGradientPreMultiplier,...
-    CtrlVar.Inverse.Regularize.logC.ga,...
-    CtrlVar.Inverse.Regularize.logC.gs,...
-    CtrlVar.Inverse.Regularize.logAGlen.ga,...
-    CtrlVar.Inverse.Regularize.logAGlen.gs,...
-    CtrlVar.CisElementBased,...
-    CtrlVar.AGlenisElementBased,...
     CtrlVar.Inverse.InvertFor);
 filename=replace(filename,'.','k');
 CtrlVar.Inverse.NameOfRestartOutputFile=filename;
 CtrlVar.Inverse.NameOfRestartInputFile=CtrlVar.Inverse.NameOfRestartOutputFile;
 %%
 
-CtrlVar.Experiment=CtrlVar.Inverse.AdjointGradientPreMultiplier+num2str(CtrlVar.TriNodes);
+CtrlVar.Experiment="test";
 
 %
 

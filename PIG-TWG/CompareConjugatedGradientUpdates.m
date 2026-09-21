@@ -210,7 +210,7 @@ ____________________________________________________________
    22      61    7.634761e+01    0.000e+00    2.770e+04    2.350e-01
    23      66    7.627547e+01    0.000e+00    1.393e+04    2.350e-01
 
-Optimization stopped because the relative changes in all elements of x are
+Optimisation stopped because the relative changes in all elements of x are
 less than options.StepTolerance = 1.000000e-30, and the relative maximum constraint
 violation, 0.000000e+00, is less than options.ConstraintTolerance = 1.000000e-10.
 

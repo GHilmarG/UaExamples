@@ -1,5 +1,15 @@
 
-%% Alpha 20 July, 2026
+%% Alpha 20 July, 2026, 21 Sept 2026
+
+
+
+% To suppress visibility of figures:
+%
+%  set(0,'DefaultFigureVisible','off') 
+%
+% but don't forget to put back on afterwards. 
+%
+
 
 cd RadialIceCap\
 Ua
@@ -36,7 +46,7 @@ close all
 cd MismipPlus
 Ua
 cd ..
-
+cd 
 cd IceBerg
 Ua
 cd ..
@@ -45,19 +55,14 @@ cd ..
 cd PIG-TWG
 
 
-UserVar.RunType='Inverse-MatOpt'; Ua(UserVar) ;                                                                                         %  01/03/2025, 19/07/2025
-UserVar.RunType='Inverse-UaOptConjGrad' ; Ua(UserVar) ;                                                                                         %  01/03/2025, 19/07/2025
-UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased"; Ua(UserVar,CtrlVar) ;       %  01/03/2025, 19/07/2025
 
-Klear
-UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased"; Ua(UserVar,CtrlVar) ;      % no-longer working as of Matlab 2021b...?
-                                                                                                                                        % The reasons are unclear, but for the time being gradient-based optimization 
-                                                                                                                                        % with the Matlab toolbox can not be done with MATLAB R2022a.
-                                                                                                                                        % This is not too much of an issue as the default option is the Hessian-based approach anyhow, 
-                                                                                                                                        % which is also the better option.
-                                                                                                                                        % But as of R2024b, and possibly earlier, this is again working... 01/03/2024                                                                                                                                 
-                                                                                                                                       
-UserVar.RunType='TestingMeshOptions' ; Ua(UserVar) ;                                                                                    %  01/03/2025, 19/07/2025
+UserVar.RunType="Inverse-MatlabOptimisation-GradientBased-"   ;  Ua(UserVar) ;       %  01/03/2025, 19/07/2025 , 20/09/2026
+UserVar.RunType="Inverse-UaOptimisation-GradientBased-"       ;  Ua(UserVar) ;       %  01/03/2025, 19/07/2025 , 20/09/2026
+UserVar.RunType="Inverse-MatlabOptimisation-HessianBased-"    ;  Ua(UserVar) ;       %  01/03/2025, 19/07/2025 , 20/09/2026
+UserVar.RunType="Inverse-UaOptimisation-HessianBased-"        ;  Ua(UserVar) ;       %  01/03/2025, 19/07/2025 , 20/09/2026
+
+
+UserVar.RunType='TestingMeshOptions' ; Ua(UserVar) ;                                 %  01/03/2025, 19/07/2025
 
 cd ..                   
 close all
