@@ -1,5 +1,5 @@
 
-function [UserVar,CtrlVar,MeshBoundaryCoordinates]=Ua2D_InitialUserInput(UserVar,CtrlVar)
+function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,CtrlVar)
 
 
 
@@ -42,7 +42,7 @@ CtrlVar.MaxNumberOfElements=1000;
 CtrlVar.AdaptMesh=1;
 CtrlVar.GmshMeshingAlgorithm=8;     % see gmsh manual
 
-CtrlVar.AdaptMeshInitial=1  ; % remesh in first run-step irrespecitivy of the value of AdaptMeshInterval
+CtrlVar.AdaptMeshInitial=1  ; % remesh in first run-step irrespective of the value of AdaptMeshInterval
 CtrlVar.AdaptMeshRunStepInterval=1 ; % Number of run-steps between mesh adaptation 
 CtrlVar.AdaptMeshMaxIterations=10;  % Number of adapt mesh iterations within each run-step.
 CtrlVar.AdaptMeshUntilChangeInNumberOfElementsLessThan=0;  

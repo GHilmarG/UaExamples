@@ -75,20 +75,36 @@ x=linspace(min(F.x),max(F.x),100) ; y=linspace(min(F.y),max(F.y),100)  ;
 % zero bedrock line
 [xB0,yB0]=CalcMuaFieldsContourLine(CtrlVar,MUA,F.B,0);
 
+
+
+FindOrCreateFigure("mesh") ;  PlotMuaMesh(CtrlVar,MUA) ; axis tight 
+
+
 CtrlVar.VelPlotIntervalSpacing='log10'; CtrlVar.QuiverColorSpeedLimits=[1 1000] ;  
 cbar=UaPlots(CtrlVar,MUA,F,"-uv-",FigureTitle="velocities") ; title("Modelled velocities") 
 xlabel("(km)") ;  ylabel("(km)") ;
 
-cbar=UaPlots(CtrlVar,MUA,F,"-speed-",FigureTitle="speed") ; title("Modelled speed") ;  set(gca,'ColorScale','log') ; clim([1 2000])
+%%
+cbar=UaPlots(CtrlVar,MUA,F,"-speed-",FigureTitle="speed") ; title("Modelled speed") ;  
+set(gca,'ColorScale','log') ; clim([1 2000])
 hold on  ; 
 LatLonGrid(X/1000,Y/1000,lat,lon,LineColor=[0.5 0.5 0.5],LabelSpacing=200,LevelStepLat=5,LevelStepLon=10);
 xlabel("(km)") ;  ylabel("(km)") ;
+ScaleBar(250,"250 km",[0.8 0.01],3,"k") 
+axis off
+CM=cmocean('-ice',15); colormap(CM)
+cbar.Location="southoutside" ;
+
+
+%%
+
 
 cbar=UaPlots(CtrlVar,MUA,F,F.h,FigureTitle="h") ; title("Ice thickness") ;  
 colormap(othercolor("Mlightterrain",25))  ; title(cbar,"(m)") ; set(gca,'ColorScale','lin') ; 
 clim([-100 3800])
 hold on  ; LatLonGrid(X/1000,Y/1000,lat,lon,LineColor=[0.5 0.5 0.5],LabelSpacing=200,LevelStepLat=5,LevelStepLon=10);
 xlabel("(km)") ;  ylabel("(km)") ;
+ScaleBar ; axis off
 
 cbar=UaPlots(CtrlVar,MUA,F,F.B,FigureTitle="B") ; title("Bedrock") ;  clim([-500 2000]) ;  
 title(cbar,"(m a.s.l.)") ;  colormap(othercolor("Mdarkterrain",25))  ;
@@ -96,7 +112,7 @@ hold on ; plot(xB0/1000,yB0/1000,LineStyle="-",Color=[0.8 0.8 0.8])
 hold on  ; LatLonGrid(X/1000,Y/1000,lat,lon,LineColor=[0.5 0.5 0.5],LabelSpacing=200,LevelStepLat=5,LevelStepLon=10) ;
 subtitle("Grounding lines in red, zero bedrock elevation in white")
 xlabel("(km)") ;  ylabel("(km)") ;
-
+ScaleBar ; axis off
 
 cbar=UaPlots(CtrlVar,MUA,F,F.s,FigureTitle="s") ;
 title("Ice surface") ;   colormap(othercolor("Mlightterrain",25))  ;  title(cbar,"(m a.s.l.)") ; set(gca,'ColorScale','lin') ;
@@ -108,15 +124,24 @@ cbar=UaPlots(CtrlVar,MUA,F,F.as,FigureTitle="as") ;
 title("Surface mass balance") ;   
 title(cbar,"(mWE/yr)") ; set(gca,'ColorScale','lin') ;
 hold on  ; LatLonGrid(X/1000,Y/1000,lat,lon,LineColor=[0.5 0.5 0.5],LabelSpacing=200,LevelStepLat=5,LevelStepLon=10) ; 
-ScaleBar(); axis off
+ScaleBar(250,"250 km",[0.8 0.01],3,"k") 
+axis off
 clim([-7 5]) ; CM=cmocean('-balanced',25,'pivot',0) ; colormap(CM);
 xlabel("(km)") ;  ylabel("(km)") ;
+cbar.Location="southoutside" ;
 
-UaPlots(CtrlVar,MUA,F,F.dhdt,FigureTitle="dh/dt")
-title("dh/dt") ;    title(cbar,"(m/yr)") ; set(gca,'ColorScale','lin') ;
+if all(F.dhdt==0)   % have dh/dt been calculated already? If this is a diagnostic run, then most likely not and all values will be zero
+    [~,F.dhdt]=dhdtExplicit([],CtrlVar,MUA,F,BCs) ; 
+end
+
+cbar=UaPlots(CtrlVar,MUA,F,F.dhdt,FigureTitle="dh/dt");
+title("$\dot{h}$",Interpreter="latex") ;    
+title(cbar,"(m/yr)") ; 
+set(gca,'ColorScale','lin') ;
 hold on  ;
 LatLonGrid(X/1000,Y/1000,lat,lon,LineColor=[0.5 0.5 0.5],LabelSpacing=200,LevelStepLat=5,LevelStepLon=10) ;
-ScaleBar(); axis off
+ScaleBar(250,"250 km",[0.8 0.01],3,"k") 
+axis off
 xlabel("(km)") ;  ylabel("(km)") ;
 
 
@@ -125,6 +150,7 @@ if min(F.dhdt)< 0 && max(F.dhdt)>0
     CM=cmocean('-balanced',25,'pivot',0) ; colormap(CM);
 end
 
+cbar.Location="southoutside" ;
 
 
 
@@ -137,8 +163,6 @@ end
 % 
 %%
 
-
-FindOrCreateFigure("mesh") ;  PlotMuaMesh(CtrlVar,MUA) ; axis tight 
 
 
 drawnow limitrate nocallbacks

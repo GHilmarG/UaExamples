@@ -7,7 +7,7 @@
 function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,CtrlVar)
 
 
-UserVar.AdaptMesh=" int/nodal ";
+UserVar.AdaptMesh="-Recovery-based error estimate-"; 
 
 
 CtrlVar.Experiment='Test1dIceStream';
@@ -73,7 +73,7 @@ CtrlVar.MaxNumberOfElements=25000;
 %% for adaptive meshing
 
 
-if UserVar.AdaptMesh ==" int/nodal "
+if contains(UserVar.AdaptMesh,"-Recovery-based error estimate-")
 
     CtrlVar.AdaptMesh=1;
     CtrlVar.AdaptMeshRunStepInterval=1 ;   % Number of run-steps between mesh adaptation. Note: in a transient run this number most likely could be increased

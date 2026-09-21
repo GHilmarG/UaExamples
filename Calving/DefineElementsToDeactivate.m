@@ -1,5 +1,12 @@
-function [UserVar,ElementsToBeDeactivated]=...
-    DefineElementsToDeactivate(UserVar,RunInfo,CtrlVar,MUA,xEle,yEle,ElementsToBeDeactivated,s,b,S,B,rho,rhow,ub,vb,ud,vd,GF)
+
+
+
+function [UserVar,ElementsToBeDeactivated]=DefineElementsToDeactivate(UserVar,RunInfo,CtrlVar,MUA,F,BCs,ElementsToBeDeactivated);
+
+
+% 
+% function [UserVar,ElementsToBeDeactivated]=...
+%     DefineElementsToDeactivate(UserVar,RunInfo,CtrlVar,MUA,xEle,yEle,ElementsToBeDeactivated,s,b,S,B,rho,rhow,ub,vb,ud,vd,GF)
 
 %%  Manually deactivate elements within a mesh.   
 %
@@ -35,11 +42,11 @@ fprintf(' DefineElementsToDeactivate \n')
 if CtrlVar.time > 2
     
     if UserVar.InitialGeometry=="-MismipPlus-"
-        GF=IceSheetIceShelves(CtrlVar,MUA,GF);
-        ElementsToBeDeactivated=GF.ElementsDownstreamOfGroundingLines & (MUA.xEle>500e3) ;
+        F.GF=IceSheetIceShelves(CtrlVar,MUA,F.GF);
+        ElementsToBeDeactivated=F.GF.ElementsDownstreamOfGroundingLines & (MUA.xEle>500e3) ;
 
     else  % flow-line case 
-        ElementsToBeDeactivated=GF.ElementsDownstreamOfGroundingLines & (MUA.xEle>500e3) ;
+        ElementsToBeDeactivated=F.GF.ElementsDownstreamOfGroundingLines & (MUA.xEle>500e3) ;
     end
     
 end
