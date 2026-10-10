@@ -235,7 +235,7 @@ if contains(plots,'-dhdt-')
     ti=title("Rate of thickness changes, $dh/dt$"+CtrlVar.FigTitleText,Interpreter="latex");  ti.FontSize=14;
     subtitle(sprintf("$t$=%g ",F.time),Interpreter="latex")
     xlabel("x (km)") ; ylabel("y (km)")
-    fig=gcf ; fig.Position=[3500 450 800 700]; 
+    fig=gcf ; %fig.Position=[3500 450 800 700]; 
    
     %%
 
@@ -251,7 +251,7 @@ if contains(plots,'-s-')
     subtitle(sprintf("$t$=%g ",F.time),Interpreter="latex")
     xlabel("x (km)") ; ylabel("y (km)")
     CM=cmocean('-ice',15) ; clim([0 4000]); colormap(CM);
-    fig=gcf ; fig.Position=[3600 450 800 700]; 
+    fig=gcf ; % fig.Position=[3600 450 800 700]; 
     %%
 end
 
@@ -265,7 +265,7 @@ if contains(plots,'-ubvb-')
     ti=title("Velocities, $\mathbf{v}$"+CtrlVar.FigTitleText,Interpreter="latex");  ti.FontSize=14;
     subtitle(sprintf("$t$=%g ",F.time),Interpreter="latex")
     xlabel('x (km)') ; ylabel('y (km)')
-    fig=gcf ; fig.Position=[3700 450 800 700]; 
+    fig=gcf ; %fig.Position=[3700 450 800 700]; 
     %%
     
 end

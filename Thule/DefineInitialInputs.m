@@ -83,7 +83,7 @@ CtrlVar.Restart=0;
 
 %% Runsteps, runtime, runtype
 
-CtrlVar.TotalNumberOfForwardRunSteps=inf; 
+CtrlVar.TotalNumberOfForwardRunSteps=10; 
 
 CtrlVar.dt=1e-4;   
 CtrlVar.ATSdtMin=1e-4  ; 
@@ -219,6 +219,18 @@ CtrlVar.NameOfRestartFiletoRead="Restart"+UserVar.RunType;
 CtrlVar.NameOfRestartFiletoRead=replace(CtrlVar.NameOfRestartFiletoRead,".","k")+".mat";
 CtrlVar.NameOfRestartFiletoWrite=CtrlVar.NameOfRestartFiletoRead;
 
+%% Testing options
 
+
+CtrlVar.uvhSolver="Root-Finding Newton";
+CtrlVar.uvhSolver="uvh_GaussNewton_fsolve";
+
+CtrlVar.uvhFsolve.CheckGradients=false;
+CtrlVar.uvhFsolve.Display="iter";
+
+CtrlVar.uvhFsolve.MaxIterations=150;
+CtrlVar.uvhFsolve.StepTolerance=1e-12 ;
+CtrlVar.uvhFsolve.OptimalityTolerance=1e-20;          % fsolve's first-order optimality is absolute and depends on the scaling of J, so it is not used as the main stopping criterion
+CtrlVar.uvhFsolve.ForceTolerance=1e-8;                % [] : set to CtrlVar.uvhDesiredWorkAndForceTolerances(2). Convergence if norm(f)^2 is below this value
 
 end
