@@ -115,10 +115,8 @@ CtrlVar.MaxNumberOfElements=70e3;
 
 if isfile(CtrlVar.ReadInitialMeshFileName)
     CtrlVar.ReadInitialMesh=1;  
-    CtrlVar.OnlyMeshDomainAndThenStop=0;
 else
     CtrlVar.ReadInitialMesh=0;  
-    CtrlVar.OnlyMeshDomainAndThenStop=1;
 end
 
 
