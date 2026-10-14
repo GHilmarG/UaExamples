@@ -167,30 +167,6 @@ if contains(plots,'-LSF-')
    FindOrCreateFigure("sbB")
 
 
-
-
-%    [xp,yp,d]=CreatePIGprofile(2);
-% 
-%    Fs=scatteredInterpolant() ; 
-%    Fs.Points=[F.x(:) ,F.y(:)];
-%    Fb=Fs;
-%    FB=Fs;
-%    Fs.Values=F.s;
-%    Fb.Values=F.b;
-%    FB.Values=F.B;
-%    sp=Fs(xp,yp) ; 
-%    bp=Fb(xp,yp) ; 
-%    Bp=FB(xp,yp) ; 
-%    
-%    FindOrCreateFigure("profile")
-%    plot(d/1000,sp,'-b')
-%    hold on
-%    plot(d/1000,bp,'-b')
-%    plot(d/1000,Bp,'-k')
-%    title(sprintf('PIG profile at t=%g (yr)',CtrlVar.time),Interpreter="latex") ;
-%    xlabel(" distance (km) ",Interpreter="latex")
-%    ylabel("$s$, $b$ and $B$ (m) ",Interpreter="latex")
-
 end
 
 if contains(plots,'-sbB-')
@@ -226,17 +202,18 @@ end
 if contains(plots,'-dhdt-')
     %%
     UaPlots(CtrlVar,MUA,F,F.dhdt,FigureTitle="dh/dt",GetRidOfValuesDownStreamOfCalvingFronts=false,PlotUnderMesh=true,MeshColor="w")
-    plot(F.x(BCs.hPosNode)/1000,F.y(BCs.hPosNode)/1000,"or",MarkerSize=2)
+    plot(F.x(BCs.hPosNode)/1000,F.y(BCs.hPosNode)/1000,"or",MarkerSize=2,DisplayName="Active Set")
     CL=clim;
     if CL(1) < 0 && CL(2)> 0
         CM=cmocean('balanced',25,'pivot',0) ; colormap(CM);
     end
     title(colorbar,'(m/yr)')
-    ti=title("Rate of thickness changes, $dh/dt$"+CtrlVar.FigTitleText,Interpreter="latex");  ti.FontSize=14;
+    ti=title("Rate of thickness changes, $\dot{h}$"+CtrlVar.FigTitleText,Interpreter="latex");  ti.FontSize=14;
     subtitle(sprintf("$t$=%g ",F.time),Interpreter="latex")
     xlabel("x (km)") ; ylabel("y (km)")
     fig=gcf ; %fig.Position=[3500 450 800 700]; 
-   
+    lg=legend(Interpreter="latex");
+
     %%
 
 end
