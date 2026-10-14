@@ -52,7 +52,7 @@ UserVar.RunType="-Thule-C-Tmin-C-NV2.0-ES10km-" ;
 UserVar.RunType="-Thule-P-SSmin-ES10km-Cxy-" ;  
 UserVar.RunType="-Thule-P-SSmax-ES10km-Cxy-" ;  
 
-UserVar.RunType="-Thule-P-SSmax-ES50km-Cxy-SUPGtaus-" ;  % This is a very coarse mesh resolution, but OK for testing
+UserVar.RunType="-Thule-P-SSmax-ES50km-Cxy-" ;  % This is a very coarse mesh resolution, but OK for testing
 
 
 UserVar.Region="-Thule-" ;
@@ -171,25 +171,7 @@ if contains(UserVar.RunType,"-P-")  % This indicates that calving fronts positio
 
 end
 
-%% This is for testing different SUPG options
 
-if contains(UserVar.RunType,"-SUPG")
-    CtrlVar.uvh.SUPG.tau=extractBetween(UserVar.RunType,"-SUPG","-");
-    CtrlVar.h.SUPG.tau=extractBetween(UserVar.RunType,"-SUPG","-") ;
-    CtrlVar.Tracer.SUPG.tau=extractBetween(UserVar.RunType,"-SUPG","-");
-end
-switch CtrlVar.uvh.SUPG.tau
-    case "taus"
-        CtrlVar.FigTitleText=", $\tau_{\mathrm{SUPG}}=\tau_s$";
-    case "taut"
-        CtrlVar.FigTitleText=", $\tau_{\mathrm{SUPG}}=\tau_t$";
-    case "tau1"
-        CtrlVar.FigTitleText=", $\tau_{\mathrm{SUPG}}=\tau_1$";
-    case "tau2"
-        CtrlVar.FigTitleText=", $\tau_{\mathrm{SUPG}}=\tau_2$";
-    otherwise
-        error("case not found")
-end
 
 %%
 CtrlVar.Experiment=UserVar.RunType;
