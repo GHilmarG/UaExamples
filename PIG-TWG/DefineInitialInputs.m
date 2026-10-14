@@ -97,12 +97,12 @@ if contains(UserVar.RunType,"Inverse")
         elseif contains(UserVar.RunType,"-MatlabOptimisation-HessianBased-")
 
             CtrlVar.Inverse.MinimisationMethod="-MatlabOptimisation-HessianBased-";
-            CtrlVar.Inverse.Hessian="-Jpp-Fpp-";
+         
 
         elseif contains(UserVar.RunType,"-UaOptimisation-HessianBased-")
 
             CtrlVar.Inverse.MinimisationMethod="-UaOptimisation-HessianBased-";
-            CtrlVar.Inverse.Hessian="-Jpp-Fpp-";
+      
 
         else
             error("CaseNotFound")
@@ -213,16 +213,7 @@ CtrlVar.ExplicitMeshRefinementCriteria(I).Use=true;
 
 
 %%
-                                                        
-%%  Bounds on C and AGlen
-%CtrlVar.AGlenmin=1e-10; CtrlVar.AGlenmax=1e-5;
-
-CtrlVar.Cmin=1e-20;  CtrlVar.Cmax=1e20;        
-
-%CtrlVar.CisElementBased=0;   
-%CtrlVar.AGlenisElementBased=0;   
-
-
+  
 %% Testing adjoint parameters, start:
  % If true then perform a brute force calculation 
                                       % of the directional derivative of the objective function.  
@@ -250,8 +241,8 @@ CtrlVar.Inverse.Matern.logAGlen.tau=tauMatern;
 
 
 %%
-CtrlVar.ThicknessConstraints=0;
-CtrlVar.ResetThicknessToMinThickness=1;  % change this later on
+CtrlVar.ThicknessConstraints=1;
+CtrlVar.ResetThicknessToMinThickness=0;  % change this later on
 CtrlVar.ThickMin=1;
 
 %% Filenames
@@ -264,8 +255,6 @@ if CtrlVar.InverseRun
         +CtrlVar.ReadInitialMeshFileName...
         +CtrlVar.Inverse.InvertFor...
         +CtrlVar.Inverse.MinimisationMethod...
-        +CtrlVar.Inverse.DataMisfit.GradientCalculation...
-        +CtrlVar.Inverse.Hessian...
         +"-"+CtrlVar.SlidingLaw...
         +"-"+num2str(CtrlVar.DevelopmentVersion);
 else
