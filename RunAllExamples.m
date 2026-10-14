@@ -121,3 +121,10 @@ cd Greenland\
 Ua
 cd ..
 
+close all
+%%
+
+cd Thule\
+Ua
+cd ..
+%%
