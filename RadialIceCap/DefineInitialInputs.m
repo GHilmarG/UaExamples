@@ -17,7 +17,12 @@ UserVar.Outputsdirectory='ResultsFiles'; % This I use in DefineOutputs
 CtrlVar.Experiment="RadialDome" ;
 %% Types of run
 %
-CtrlVar.TimeDependentRun=1; 
+
+
+CtrlVar.ForwardTimeIntegration="-uvh-"; % options "-uvh-", "-uv-", "-uv-h-" 
+                                        % "-uvh-"  : time-dependent monolithic solver
+                                        % "-uv-"   : time-independent velocity-only solve
+                                        % "-uv-h-" : time-dependent staggered solver
 CtrlVar.Restart=0;  
 %%
 %CtrlVar.FlowApproximation="SSHEET" ;  
@@ -33,8 +38,8 @@ CtrlVar.InfoLevelAdaptiveMeshing=1; % for 5=> some plots are generated as well (
 %% Run-stop criteria
 % The run stops once either forward run steps or (model) time has reached prescribed
 % values. 
-CtrlVar.TotalNumberOfForwardRunSteps=inf;
-CtrlVar.TotalTime=100;
+CtrlVar.TotalNumberOfForwardRunSteps=1000;
+CtrlVar.TotalTime=10;
 CtrlVar.UseUserDefinedRunStopCriterion=false; % one can also introduce UserDefined run stop criterion
                                               % through DefineRunStopCriterion.m
 
@@ -69,11 +74,11 @@ CtrlVar.SaveInitialMeshFileName='NewMeshFile.mat';
 %% Plotting options
 % Some plots can be generated automatically. However, once model is running, these plots
 % are typically disabled. 
-CtrlVar.doplots=1;  % set to 0 to suppress all plots. 
-CtrlVar.PlotMesh=1; 
+CtrlVar.doplots=0;  % set to 0 to suppress all plots. 
+CtrlVar.PlotMesh=0; 
 CtrlVar.PlotBCs=0;
 CtrlVar.WhenPlottingMesh_PlotMeshBoundaryCoordinatesToo=1;
-CtrlVar.doRemeshPlots=1;
+CtrlVar.doRemeshPlots=0;
 CtrlVar.PlotXYscale=1000; 
 %%
 
@@ -112,7 +117,7 @@ CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';
 
 CtrlVar.AdaptMeshInitial=1 ;       % if true, then a remeshing will always be performed at the inital step
 CtrlVar.AdaptMeshAndThenStop=0;    % if true, then mesh will be adapted but no further calculations performed
-
+CtrlVar.AdaptMeshTimeInterval=1  ;
 
 
 
@@ -128,5 +133,28 @@ UserVar.R=100e3 ;
 theta=linspace(0,2*pi,100); theta=theta(:) ; theta=theta(1:end-1) ;
 MeshBoundaryCoordinates=[UserVar.R*sin(theta)  UserVar.R*cos(theta)];
 
+%% Test
+% There is an issue with the implementation of the thickness penalty.
+%
+% This problem runs without a problem when it is switched off, ie for 
+%
+%   CtrlVar.ThicknessPenalty=false; 
+%
+% but the Newton Raphson iteration stagnates as soon as it is switched on, ie for  
+%
+%   CtrlVar.ThicknessPenalty=true; 
+%
+% The thickness is initially at zero, and in the course of the run the thickness never becomes negative. Even if the
+% thickness penalty is not used. So in principle there is not need for having it switched on. However, the run should
+% converge as well with it is switched on. So what is going on here? Is the implementation of the thickness penalty not correct? 
+% Are the corresponding additions to the Newton system somehow inconsistent?  
+%
+%
+CtrlVar.ThicknessPenalty=0; CtrlVar.InfoLevelThickMin=0; CtrlVar.ForwardTimeIntegration="-uvh-"; CtrlVar.TotalTime=56.333333333;
+CtrlVar.ThicknessPenaltyNodal=true; 
+CtrlVar.InfoLevelThickMin=0; 
+CtrlVar.ThicknessPenaltyMassBalanceFeedbackSoftPlus.K=100; 
+CtrlVar.ThicknessPenaltyMassBalanceFeedbackSoftPlus.l=0.01;
  
+
 end

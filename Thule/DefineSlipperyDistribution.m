@@ -42,8 +42,8 @@ if contains(UserVar.RunType,"-Cxy-")
     % Here the bed slipperiness is prescribed as a function of the bedrock
     % (B) elevation.
 
-    log10Cmax=-1;
-    log10Cmin=-3 ; 
+    log10Cmax=-3;
+    log10Cmin=-6 ; 
     Bmax=2000;
     Bmin=-500;
 

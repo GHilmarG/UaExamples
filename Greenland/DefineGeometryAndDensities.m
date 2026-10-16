@@ -105,6 +105,19 @@ g=9.81/1000;
 % cbar= UaPlots(CtrlVar,MUA,F,s) ; colormap(othercolor("Mdarkterrain",25)) ; clim([0 3300]) ; title("Surface") ; subtitle("")  ; title(cbar,"(m a.s.l.)")
 %%
 
+
+if contains(FieldsToBeDefined,"-S-") && contains(FieldsToBeDefined,"-s-")
+
+    if any((s-S)<CtrlVar.ThickMin)
+
+        ind=(s-S)< CtrlVar.ThickMin;
+        s(ind)=S(ind)+CtrlVar.ThickMin;
+    end
+
+end
+
+
+
 end
 
 
