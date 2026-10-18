@@ -3,14 +3,6 @@
 
 
 
-% To suppress visibility of figures:
-%
-%  set(0,'DefaultFigureVisible','off') 
-%
-% but don't forget to put back on afterwards. 
-%
-
-
 cd RadialIceCap\
 Ua
 cd ..
