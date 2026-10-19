@@ -50,8 +50,10 @@ cd PIG-TWG
 
 UserVar.RunType="Inverse-MatlabOptimisation-GradientBased-"   ;  Ua(UserVar) ;       %  01/03/2025, 19/07/2025 , 20/09/2026
 UserVar.RunType="Inverse-UaOptimisation-GradientBased-"       ;  Ua(UserVar) ;       %  01/03/2025, 19/07/2025 , 20/09/2026
-UserVar.RunType="Inverse-MatlabOptimisation-HessianBased-"    ;  Ua(UserVar) ;       %  01/03/2025, 19/07/2025 , 20/09/2026
-UserVar.RunType="Inverse-UaOptimisation-HessianBased-"        ;  Ua(UserVar) ;       %  01/03/2025, 19/07/2025 , 20/09/2026
+
+% Hessian: This works, but now (as of late 2026) the full Hessian is calculated, and this requires memory of the order n^3
+%UserVar.RunType="Inverse-MatlabOptimisation-HessianBased-"    ;  Ua(UserVar) ;       %  01/03/2025, 19/07/2025 , 20/09/2026
+%UserVar.RunType="Inverse-UaOptimisation-HessianBased-"        ;  Ua(UserVar) ;       %  01/03/2025, 19/07/2025 , 20/09/2026
 
 
 UserVar.RunType='TestingMeshOptions' ; Ua(UserVar) ;                                 %  01/03/2025, 19/07/2025
