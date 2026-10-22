@@ -34,7 +34,7 @@ function [UserVar,LSF,c]=DefineCalving(UserVar,CtrlVar,MUA,LSF,c,F,BCs)
 % input variable similar to the input as and ab for upper and lower surface balance,
 % etc.)
 %
-% Initilizing the LSF is the task of the user and needs to be done in this m-file.
+% Initializing the LSF is the task of the user and needs to be done in this m-file.
 % Typically LSF is defined as a signed distance function from the initial calving
 % front position. There are various ways of doing this and you might find the matlab
 % function
@@ -43,7 +43,7 @@ function [UserVar,LSF,c]=DefineCalving(UserVar,CtrlVar,MUA,LSF,c,F,BCs)
 %
 % usefull to do this.
 %
-% Note: Currenlty only prescribed calving front movements are allowed. 
+% Note: Currently only prescribed calving front movements are allowed. 
 %       So define LSF in every call. 
 %%
 

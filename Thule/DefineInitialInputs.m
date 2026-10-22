@@ -52,7 +52,7 @@ UserVar.RunType="-Thule-C-Tmin-C-NV2.0-ES10km-" ;
 UserVar.RunType="-Thule-P-SSmin-ES10km-Cxy-" ;  
 UserVar.RunType="-Thule-P-SSmax-ES10km-Cxy-" ;  
 
-UserVar.RunType="-Thule-P-SSmax-ES50km-Cxy-SUPGtaus-" ;  % This is a very coarse mesh resolution, but OK for testing
+UserVar.RunType="-Thule-P-SSmax-ES50km-Cxy-" ;  % This is a very coarse mesh resolution, but OK for testing
 
 
 UserVar.Region="-Thule-" ;
@@ -65,9 +65,8 @@ UserVar.CalvingFront0.Yc=Yc(:);
 %% Used in DefineOutputs.m
 UserVar.DefineOutputs="-ubvb-LSF-h-sbB-s-B-dhdt-save-log10speed-";
 UserVar.DefineOutputs="-ubvb-LSF-h-sbB-s-B-dhdt-log10speed-";
-UserVar.DefineOutputs="-EastWestProfile-dhdt-ubvb-s-";
+%UserVar.DefineOutputs="-EastWestProfile-dhdt-ubvb-s-";
 
-CtrlVar.DefineOutputsDt=0.1;  % controls time interval between calls do DefineOutPuts.m
 
 
 %% Sliding law
@@ -76,21 +75,14 @@ CtrlVar.SlidingLaw="Weertman" ; % "Umbi" ; % "Weertman" ; % "Tsai" ; % "Cornford
 
 
 
-%% Runtype
-CtrlVar.InverseRun=0;
-CtrlVar.TimeDependentRun=1;
+%% Run type: time stepping and duration, time-integration  
+CtrlVar.ForwardTimeIntegration="-uvh-" ; % "-uvh-" , "-uv-h-" , "-uv-" , "-h-" ; 
 CtrlVar.Restart=0;
 
-%% Runsteps, runtime, runtype
 
-CtrlVar.TotalNumberOfForwardRunSteps=inf; 
+CtrlVar.TotalNumberOfForwardRunSteps=1000; 
 
-CtrlVar.dt=1e-4;   
-CtrlVar.ATSdtMin=1e-4  ; 
-
-
-
-
+CtrlVar.dt=0.001;   
 CtrlVar.StartTime=0; 
 CtrlVar.EndTime=1; 
 
@@ -101,10 +93,8 @@ CtrlVar.InfoLevelNonLinIt=1;  % info provided on solution procedure, 1 is basic 
 CtrlVar.InfoLevelThickMin=0; % This provides information on whether the ice thickness drops below min ice thickness. Set to zero to suppress.
 
 
-
-
-
-%%
+%% Plots and outputs
+CtrlVar.DefineOutputsDt=0.1;  % controls time interval between calls do DefineOutPuts.m
 CtrlVar.doplots=1;
 CtrlVar.PlotMesh=0;
 CtrlVar.PlotBCs=1 ;
@@ -114,7 +104,6 @@ CtrlVar.doAdaptMeshPlots=5;
 %% Meshing
 
 CtrlVar.TriNodes=3 ;
-CtrlVar.AdaptMesh=0;
 CtrlVar.MeshSizeMax=NaN;
 CtrlVar.MeshSize=str2double(extractBetween(UserVar.RunType,"-ES","km-"))*1000; 
 CtrlVar.MeshSizeMin=CtrlVar.MeshSizeMax/20;
@@ -126,10 +115,8 @@ CtrlVar.MaxNumberOfElements=70e3;
 
 if isfile(CtrlVar.ReadInitialMeshFileName)
     CtrlVar.ReadInitialMesh=1;  
-    CtrlVar.OnlyMeshDomainAndThenStop=0;
 else
     CtrlVar.ReadInitialMesh=0;  
-    CtrlVar.OnlyMeshDomainAndThenStop=1;
 end
 
 
@@ -138,35 +125,26 @@ theta=linspace(0,2*pi,100);
 x=R*cos(theta); y=R*sin(theta) ; x(end)=[] ; y(end )=[];
 MeshBoundaryCoordinates=[x(:) y(:)];
 
+%% Adaptive meshing
+
+CtrlVar.AdaptMesh=1;
+CtrlVar.AdaptMeshTimeInterval=0.05;   
+CtrlVar.AdaptMeshMaxIterations=10;  
+CtrlVar.MeshRefinementMethod="explicit:local:newest vertex bisection";
+CtrlVar.MeshAdapt.CFrange=[CtrlVar.MeshSize*2 CtrlVar.MeshSize/2 ; CtrlVar.MeshSize CtrlVar.MeshSize/5];            
+
 
 %% Min thickness:
 
 CtrlVar.ThickMin=1;   % This is the minimum thickness allowed. This should always be "small" thickness, i.e. small compared to any thicknesses of interest,
 
 
-% Enforcing min thickness:
-% There are different ways of enforcing the minimum thickness condition. The recommended approach is to use the active set
-% method, possibly in combination with a penalty mass-balance feedback.
 
-
-CtrlVar.ResetThicknessToMinThickness=0;    % (brutally) resets thickness to min ice-thickness, not recommended approach. Can cause convergence issues.
 CtrlVar.ThicknessConstraints=1;            % use thickness constraints. Here minimum thickness is enforced using Lagrange multipliers.
                                            % This is the recommended approach, but it does lead to additional solves and this will increase computational time.
-CtrlVar.ThicknessConstraintsItMax=1  ;
+CtrlVar.ThicknessConstraintsItMax=10  ;
 
 
-CtrlVar.ThicknessPenalty=1;                                         % set to 1 for using thickness penalty term. This creates an
-                                                                    % additional mass-balance term, ab,  on the form:
-                                                                    %         ab =  a1*(h-hmin)+a3*(hint-hmin).^3) 
-                                                                    % that is added, and applied at integration points where  h<hmin.
-                                                                    % The "Thickness Penalty" option can be used in combination with the "Thickness Constraints" option, and this may possibly
-                                                                    % improve convergence and may reduce the number of active-set updates required.
-
-CtrlVar.ThicknessPenaltyMassBalanceFeedbackCoeffLin=0;              % a1 in the equation for the additional mass balance term (correct sign is enforced in Ua)
-CtrlVar.ThicknessPenaltyMassBalanceFeedbackCoeffQuad=1e5;           % a2 in the equation for the additional mass balance term (correct sign is enforced in Ua)
-CtrlVar.ThicknessPenaltyMassBalanceFeedbackCoeffCubic=0;            % a3 in the equation for the additional mass balance term (Correct sign is enforced in Ua)
-                                                                    % The term is only applied at integration points where h < hmin. Therefore if a1<0 and a3<0, the resulting ab is greater than
-                                                                    % zero, and mass is added. 
 
                                                                     %% Calving
 
@@ -181,9 +159,9 @@ if contains(UserVar.RunType,"-P-")  % This indicates that calving fronts positio
     %
     CtrlVar.LevelSetMethod=1;
     CtrlVar.LevelSetEvolution="-Prescribed-"  ; 
-    CtrlVar.LevelSetMinIceThickness=CtrlVar.ThickMin; 
+    CtrlVar.LevelSetEvolution="-By solving the level set equation-" ;
 
-    CtrlVar.LevelSetMethodAutomaticallyApplyMassBalanceFeedback=1;
+    CtrlVar.LevelSetMethodAutomaticallyApplyMassBalanceFeedback=0;
     % abLSF =LM.* ( a1*(hint-hmin)+a3*(hint-hmin).^3) ;      % The additional mass-balance term applied where the level-set
     % function (phi) is negative, i.e. LM = \phi < 0  ;
     CtrlVar.LevelSetMethodMassBalanceFeedbackCoeffLin=1000;  % a1=-abs(CtrlVar.LevelSetMethodMassBalanceFeedbackCoeffLin;
@@ -191,25 +169,7 @@ if contains(UserVar.RunType,"-P-")  % This indicates that calving fronts positio
 
 end
 
-%% This is for testing different SUPG options
 
-if contains(UserVar.RunType,"-SUPG")
-    CtrlVar.uvh.SUPG.tau=extractBetween(UserVar.RunType,"-SUPG","-");
-    CtrlVar.h.SUPG.tau=extractBetween(UserVar.RunType,"-SUPG","-") ;
-    CtrlVar.Tracer.SUPG.tau=extractBetween(UserVar.RunType,"-SUPG","-");
-end
-switch CtrlVar.uvh.SUPG.tau
-    case "taus"
-        CtrlVar.FigTitleText=", $\tau_{\mathrm{SUPG}}=\tau_s$";
-    case "taut"
-        CtrlVar.FigTitleText=", $\tau_{\mathrm{SUPG}}=\tau_t$";
-    case "tau1"
-        CtrlVar.FigTitleText=", $\tau_{\mathrm{SUPG}}=\tau_1$";
-    case "tau2"
-        CtrlVar.FigTitleText=", $\tau_{\mathrm{SUPG}}=\tau_2$";
-    otherwise
-        error("case not found")
-end
 
 %%
 CtrlVar.Experiment=UserVar.RunType;
@@ -218,6 +178,8 @@ CtrlVar.Experiment=UserVar.RunType;
 CtrlVar.NameOfRestartFiletoRead="Restart"+UserVar.RunType;
 CtrlVar.NameOfRestartFiletoRead=replace(CtrlVar.NameOfRestartFiletoRead,".","k")+".mat";
 CtrlVar.NameOfRestartFiletoWrite=CtrlVar.NameOfRestartFiletoRead;
+
+%% Testing options
 
 
 

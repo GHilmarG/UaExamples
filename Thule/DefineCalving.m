@@ -50,7 +50,7 @@ function [UserVar,LSF,c]=DefineCalving(UserVar,CtrlVar,MUA,F,BCs)
 %
 %       c=NaN;
 %
-% then the level-set is NOT evolved in time using by solving the level-set equation. This can be usefull if, for example, the
+% then the level-set is NOT evolved in time using by solving the level-set equation. This can be useful if, for example, the
 % user simply wants to manually prescribe the calving front position at each time step. 
 %
 %%
@@ -69,10 +69,10 @@ if isempty(F.LSF)   % Do I need to initialize the level set function?
 
     % figure ; PlotMuaMesh(CtrlVar,MUA);   hold on ; plot(F.x(io)/1000,F.y(io)/1000,'or')
 
-    [xc,yc,LSF]=CalvingFrontLevelSetGeometricalInitialisation(CtrlVar,MUA,Xc,Yc,LSF,plot=true);
+    [xc,yc,LSF]=CalvingFrontLevelSetGeometricalInitialisation(CtrlVar,MUA,Xc,Yc,LSF,plot=false);
 
 else
-    LSF=F.LSF ;  % remember to pass LSF through, in no initialisation is required
+    LSF=F.LSF ;  % remember to pass LSF through, if no initialisation is required
 end
 
 %% Define calving rate (if needed)
@@ -81,7 +81,9 @@ if  strcmpi(CtrlVar.LevelSetEvolution,"-prescribed-")
 
       
     c=nan;   % setting the calving rate to nan implies that the level set is not evolved
-    return
+else
+
+    c=10e3 ; 
 
 end
 

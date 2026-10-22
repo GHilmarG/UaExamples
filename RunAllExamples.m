@@ -1,8 +1,5 @@
 
-
-
 %%  Master 17 March 2024, 01 August 2024, 23 Dec 2025, 19 August 2026, 22 October 2026
-
 
 
 cd RadialIceCap\
@@ -41,33 +38,30 @@ close all
 cd MismipPlus
 Ua
 cd ..
-
+cd 
 cd IceBerg
 Ua
 cd ..
 
-
+%%
 cd PIG-TWG
 
 
-UserVar.RunType='Inverse-MatOpt'; Ua(UserVar) ;                                                                                         %  01/03/2025, 19/07/2025
-UserVar.RunType='Inverse-UaOpt' ; Ua(UserVar) ;                                                                                         %  01/03/2025, 19/07/2025
-UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-HessianBased"; Ua(UserVar,CtrlVar) ;       %  01/03/2025, 19/07/2025
 
-Klear
-UserVar.RunType='Inverse-MatOpt' ;    CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased"; Ua(UserVar,CtrlVar) ;      % no-longer working as of Matlab 2021b...?
-                                                                                                                                        % The reasons are unclear, but for the time being gradient-based optimization 
-                                                                                                                                        % with the Matlab toolbox can not be done with MATLAB R2022a.
-                                                                                                                                        % This is not too much of an issue as the default option is the Hessian-based approach anyhow, 
-                                                                                                                                        % which is also the better option.
-                                                                                                                                        % But as of R2024b, and possibly earlier, this is again working... 01/03/2024                                                                                                                                 
-                                                                                                                                       
-UserVar.RunType='TestingMeshOptions' ; Ua(UserVar) ;                                                                                    %  01/03/2025, 19/07/2025
+UserVar.RunType="Inverse-MatlabOptimisation-GradientBased-"   ;  Ua(UserVar) ;       %  01/03/2025, 19/07/2025 , 20/09/2026
+UserVar.RunType="Inverse-UaOptimisation-GradientBased-"       ;  Ua(UserVar) ;       %  01/03/2025, 19/07/2025 , 20/09/2026
+
+% Hessian: This works, but now (as of late 2026) the full Hessian is calculated, and this requires memory of the order n^3
+%UserVar.RunType="Inverse-MatlabOptimisation-HessianBased-"    ;  Ua(UserVar) ;       %  01/03/2025, 19/07/2025 , 20/09/2026
+%UserVar.RunType="Inverse-UaOptimisation-HessianBased-"        ;  Ua(UserVar) ;       %  01/03/2025, 19/07/2025 , 20/09/2026
+
+
+UserVar.RunType='TestingMeshOptions' ; Ua(UserVar) ;                                 %  01/03/2025, 19/07/2025
 
 cd ..                   
 close all
 
-
+%%
 
 cd MassBalanceFeedback
 Ua
@@ -107,11 +101,12 @@ cd ..
 
 
 %%
-
+close all
 
 cd Inverse   
 Ua           
 cd ..
+
 close all
 
 %%
@@ -120,9 +115,10 @@ cd Greenland\
 Ua
 cd ..
 
-
+close all
 %%
 
-
-
+cd Thule\
+Ua
+cd ..
 %%

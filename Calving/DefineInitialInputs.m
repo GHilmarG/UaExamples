@@ -63,7 +63,7 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
     
     switch UserVar.RunType
         
-        case {"-1dAnalyticalIceShelf-","Test-1dAnalyticalIceShelf-CalvingThroughMassBalanceFeedback-","Test-1dAnalyticalIceShelf-CalvingThroughPrescribedLevelSet-"}
+        case {"-1dAnalyticalIceShelf-","Test-1dAnalyticalIceShelf-","Test-1dAnalyticalIceShelf-CalvingThroughMassBalanceFeedback-","Test-1dAnalyticalIceShelf-CalvingThroughPrescribedLevelSet-"}
             
             UserVar.InitialGeometry="-Constant-" ;
             CtrlVar.doplots=0;
@@ -142,7 +142,6 @@ function [UserVar,CtrlVar,MeshBoundaryCoordinates]=DefineInitialInputs(UserVar,C
     CtrlVar.LevelSetMethodMassBalanceFeedbackCoeffLin=-1;  % This is the constant a1, it has units 1/time.  
                                                            % Default value is -1
     
-    CtrlVar.LevelSetMinIceThickness=CtrlVar.ThickMin;    % this is the hmin constant, i.e. the accepted min ice thickness 
                                                            % over the 'ice-free' areas. 
                                                            % Default value is CtrlVar.ThickMin
     

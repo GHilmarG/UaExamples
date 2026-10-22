@@ -4,24 +4,10 @@ function  UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,In
 
 
 
-switch CtrlVar.DefineOutputsInfostring
-    
-    case 'Start of Inverse Run'
-        
-        plots='-meas-';
-        
-    otherwise
-        
-        return;
-        
-end
-
-
-
 %plots='-sbB-udvd-ubvb-ub-';
 
 TRI=[];
-
+plots="";
 
   
 if contains(plots,'-save-')
@@ -44,6 +30,10 @@ if contains(plots,'-save-')
     end
 end
 
+
+
+
+UaPlots(CtrlVar,MUA,F,"-uv-",FigureTitle="-uv-")
 
 
 if contains(plots,'-sbB-')

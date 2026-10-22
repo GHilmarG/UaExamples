@@ -48,7 +48,7 @@ Meas.vsCov=sparse(1:MUA.Nnodes,1:MUA.Nnodes,vsError.^2,MUA.Nnodes,MUA.Nnodes);
 
 %% Define Priors
 
-Priors.AGlen=AGlenVersusTemp(-10);
+Priors.AGlen=AGlenVersusTemp(-10)+zeros(MUA.Nnodes,1);
 Priors.n=F.n; 
 
 
@@ -117,11 +117,12 @@ if UserVar.AGlen.ReadFromFile
     InvStartValues.AGlen=kk_proj(InvStartValues.AGlen,CtrlVar.AGlenmax,CtrlVar.AGlenmin) ;
 end
 
+UaPlots(CtrlVar,MUA,F,InvStartValues.C,FigureTitle="C start",logColorbar=true)  
+title("$C$ starting distribution for inversion",Interpreter="latex"); subtitle("")
+
+UaPlots(CtrlVar,MUA,F,InvStartValues.AGlen+zeros(MUA.Nnodes,1),FigureTitle="A start",logColorbar=true)  
+title("$A$ starting distribution for inversion",Interpreter="latex"); subtitle("")
 
 
 
-
-    
-    
-    
 end

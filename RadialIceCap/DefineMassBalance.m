@@ -109,8 +109,12 @@ function [UserVar,as,ab]=DefineMassBalance(UserVar,CtrlVar,MUA,F)
 
 
 
-as=0.5;
-ab=0; 
+% Test setup (8 Oct 2026): accumulation in the interior, ablation towards the margin,
+% so that the positive-thickness active set is exercised.
+r  = sqrt(F.x.^2+F.y.^2);
+r0 = 60e3;  w = 5e3;                         % transition radius and width (m)
+as = 0.5 - 2.5*(1+tanh((r-r0)/w))/2;         % +0.5 m/yr inside, -2 m/yr outside r0
+ab = zeros(MUA.Nnodes,1);
 
 
 

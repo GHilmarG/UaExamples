@@ -77,7 +77,7 @@ CtrlVar.Inverse.Regularize.logAGlen.gs=1e4 ;
 CtrlVar.Inverse.Regularize.logC.ga=1;
 CtrlVar.Inverse.Regularize.logC.gs=1e4 ; 
 
-CtrlVar.Inverse.MinimisationMethod="MatlabOptimization-GradientBased";  
+CtrlVar.Inverse.MinimisationMethod="MatlabOptimisation-GradientBased";  
 CtrlVar.Inverse.AdjointGradientPreMultiplier="M" ; 
 %% Meshing
 %
