@@ -62,7 +62,7 @@ if isempty(F.LSF)   % Do I need to initialize the level set function?
     Xc=UserVar.CalvingFront0.Xc;
     Yc=UserVar.CalvingFront0.Yc;
 
-    % A rough sign-correct initialisation for the LSF
+    % A rough sign-correct initialization for the LSF
     io=UaInpoly2([F.x F.y],[Xc(:) Yc(:)]);
     LSF=-ones(MUA.Nnodes,1) ;
     LSF(io)=+1;
@@ -72,13 +72,12 @@ if isempty(F.LSF)   % Do I need to initialize the level set function?
     [xc,yc,LSF]=CalvingFrontLevelSetGeometricalInitialisation(CtrlVar,MUA,Xc,Yc,LSF,plot=false);
 
 else
-    LSF=F.LSF ;  % remember to pass LSF through, if no initialisation is required
+    LSF=F.LSF ;  % remember to pass LSF through, if no initialization is required
 end
 
 %% Define calving rate (if needed)
 
 if  strcmpi(CtrlVar.LevelSetEvolution,"-prescribed-")  
-
       
     c=nan;   % setting the calving rate to nan implies that the level set is not evolved
 else

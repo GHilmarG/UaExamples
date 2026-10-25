@@ -53,6 +53,7 @@ UserVar.RunType="-Thule-P-SSmin-ES10km-Cxy-" ;
 UserVar.RunType="-Thule-P-SSmax-ES10km-Cxy-" ;  
 
 UserVar.RunType="-Thule-P-SSmax-ES50km-Cxy-" ;  % This is a very coarse mesh resolution, but OK for testing
+UserVar.RunType="-Thule-C-SSmax-ES50km-Cxy-" ;  % This is a very coarse mesh resolution, but OK for testing
 
 
 UserVar.Region="-Thule-" ;
@@ -63,9 +64,12 @@ UserVar.CalvingFront0.Xc=Xc(:);
 UserVar.CalvingFront0.Yc=Yc(:);
 
 %% Used in DefineOutputs.m
-UserVar.DefineOutputs="-ubvb-LSF-h-sbB-s-B-dhdt-save-log10speed-";
-UserVar.DefineOutputs="-ubvb-LSF-h-sbB-s-B-dhdt-log10speed-";
-%UserVar.DefineOutputs="-EastWestProfile-dhdt-ubvb-s-";
+UserVar.DefineOutputs="-ubvb-LSF-h-sbB-s-B-dhdt-speed-EastWestProfile-NorthSouthProfile-";
+
+
+clear DefineOutputs % clear persistent variables 
+
+
 
 
 
@@ -80,11 +84,11 @@ CtrlVar.ForwardTimeIntegration="-uvh-" ; % "-uvh-" , "-uv-h-" , "-uv-" , "-h-" ;
 CtrlVar.Restart=0;
 
 
-CtrlVar.TotalNumberOfForwardRunSteps=1000; 
+CtrlVar.TotalNumberOfForwardRunSteps=inf; 
 
 CtrlVar.dt=0.001;   
 CtrlVar.StartTime=0; 
-CtrlVar.EndTime=1; 
+CtrlVar.EndTime=10; 
 
 
 
@@ -97,9 +101,9 @@ CtrlVar.InfoLevelThickMin=0; % This provides information on whether the ice thic
 CtrlVar.DefineOutputsDt=0.1;  % controls time interval between calls do DefineOutPuts.m
 CtrlVar.doplots=1;
 CtrlVar.PlotMesh=0;
-CtrlVar.PlotBCs=1 ;
+CtrlVar.PlotBCs=0 ;
 CtrlVar.PlotXYscale=1000;
-CtrlVar.doAdaptMeshPlots=5;
+CtrlVar.doAdaptMeshPlots=0;
 
 %% Meshing
 
@@ -128,44 +132,41 @@ MeshBoundaryCoordinates=[x(:) y(:)];
 %% Adaptive meshing
 
 CtrlVar.AdaptMesh=1;
+CtrlVar.AdaptMeshRunStepInterval=0 ;
 CtrlVar.AdaptMeshTimeInterval=0.05;   
 CtrlVar.AdaptMeshMaxIterations=10;  
 CtrlVar.MeshRefinementMethod="explicit:local:newest vertex bisection";
 CtrlVar.MeshAdapt.CFrange=[CtrlVar.MeshSize*2 CtrlVar.MeshSize/2 ; CtrlVar.MeshSize CtrlVar.MeshSize/5];            
-
+CtrlVar.MeshAdapt.GLrange=CtrlVar.MeshAdapt.CFrange;
 
 %% Min thickness:
 
 CtrlVar.ThickMin=1;   % This is the minimum thickness allowed. This should always be "small" thickness, i.e. small compared to any thicknesses of interest,
-
-
-
 CtrlVar.ThicknessConstraints=1;            % use thickness constraints. Here minimum thickness is enforced using Lagrange multipliers.
-                                           % This is the recommended approach, but it does lead to additional solves and this will increase computational time.
 CtrlVar.ThicknessConstraintsItMax=10  ;
 
 
 
-                                                                    %% Calving
-
-if contains(UserVar.RunType,"-P-")  % This indicates that calving fronts positions are prescribed and that the level-set methods is used. 
+%% Calving
+CtrlVar.LevelSetMethodAutomaticallyApplyMassBalanceFeedback=0;
+if contains(UserVar.RunType,"-P-")  % This indicates that calving fronts positions are prescribed and that the level-set methods is used.
 
     % Here the calving front positions are prescribed by the user. This is done in DefineCalving.m
     % The level set method is used, but the level set equation is not solved since the calving front positions, and here the
-    % level-set function itself, is defined directly by the user (done in DefineCalving.m) 
+    % level-set function itself, is defined directly by the user (done in DefineCalving.m)
     %
     % The level-set functionality of Ua is here only used to ensure that the ice downstream of calving fronts is set to some
-    % small value. 
+    % small value.
     %
     CtrlVar.LevelSetMethod=1;
-    CtrlVar.LevelSetEvolution="-Prescribed-"  ; 
-    CtrlVar.LevelSetEvolution="-By solving the level set equation-" ;
+    CtrlVar.LevelSetEvolution="-Prescribed-"  ;
+    fprintf("The level set is not evolved (ie the level-set is prescribed directly by user) \n")
 
-    CtrlVar.LevelSetMethodAutomaticallyApplyMassBalanceFeedback=0;
-    % abLSF =LM.* ( a1*(hint-hmin)+a3*(hint-hmin).^3) ;      % The additional mass-balance term applied where the level-set
-    % function (phi) is negative, i.e. LM = \phi < 0  ;
-    CtrlVar.LevelSetMethodMassBalanceFeedbackCoeffLin=1000;  % a1=-abs(CtrlVar.LevelSetMethodMassBalanceFeedbackCoeffLin;
-    CtrlVar.LevelSetMethodMassBalanceFeedbackCoeffCubic=0;   % a3=-abs(CtrlVar.LevelSetMethodMassBalanceFeedbackCoeffCubic;
+elseif contains(UserVar.RunType,"-C-")  % This indicates that calving fronts positions are prescribed and that the level-set methods is used.
+
+    CtrlVar.LevelSetMethod=1;
+    CtrlVar.LevelSetEvolution="-By solving the level set equation-" ;
+    fprintf("The level set is evolved (ie by solving the level-set equation) \n")
 
 end
 
@@ -173,14 +174,30 @@ end
 
 %%
 CtrlVar.Experiment=UserVar.RunType;
-
-
 CtrlVar.NameOfRestartFiletoRead="Restart"+UserVar.RunType;
 CtrlVar.NameOfRestartFiletoRead=replace(CtrlVar.NameOfRestartFiletoRead,".","k")+".mat";
 CtrlVar.NameOfRestartFiletoWrite=CtrlVar.NameOfRestartFiletoRead;
 
-%% Testing options
+
+%% PARDISO/MATLAB linear solvers
+
+CtrlVar.LinearSolver.Type="PARDISO" ;
+
+%% Parallel
+CtrlVar.Parallel.uvhAssembly.spmd.isOn=true;
+CtrlVar.Parallel.uvAssembly.spmd.isOn=true;
 
 
+%% Parpool, open a pool, provided none is already open
+if isempty(gcp('nocreate'))
+    parpool("Threads",4)
+end
+
+%% Active set
+
+CtrlVar.ActiveSet.DeferReleases=true;   % (25 Oct 2026) active-set test: defer release-only updates to the next time step
+CtrlVar.ActiveSet.DeferReleasesMaxThickening=1;   % (25 Oct 2026) active-set test: defer only if all released nodes thicken by less than ThickMin
+
+%%
 
 end

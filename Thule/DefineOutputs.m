@@ -6,7 +6,7 @@
 function  UserVar=DefineOutputs(UserVar,CtrlVar,MUA,BCs,F,l,GF,InvStartValues,InvFinalValues,Priors,Meas,BCsAdjoint,RunInfo)
 
 
-persistent cyMax ctime icCounter iGLCounter GLMax GLtime    
+persistent cyMax ctime icCounter iGLCounter GLMax GLtime   EastWestVideo NorthSouthVideo dhdtVideo
 
 
 if isempty(cyMax)
@@ -34,13 +34,9 @@ if iGLCounter > numel(GLMax)
 
 end
 
-
-% f=gcf; exportgraphics(f,'VAF-VC1k1.pdf')
-
-
 %%
 if ~isfield(UserVar,'DefineOutputs')
-    
+
     UserVar.DefineOutputs="-ubvb-LSF-h-sbB-s-";
     plots=UserVar.DefineOutputs  ; 
     % plots='-ubvb-log10(BasalSpeed)-sbB-ab-log10(C)-log10(AGlen)-save-';
@@ -48,20 +44,6 @@ if ~isfield(UserVar,'DefineOutputs')
 else
     plots=UserVar.DefineOutputs;
 end
- 
-if ~isfield(CtrlVar,"FigTitleText")
-    CtrlVar.FigTitleText="";
-end
-
-
-CtrlVar.QuiverColorPowRange=2; 
-
-%%
-GLgeo=GLgeometry(MUA.connectivity,MUA.coordinates,GF,CtrlVar);
-TRI=[]; DT=[]; xGL=[] ; yGL=[] ;
-x=MUA.coordinates(:,1);  y=MUA.coordinates(:,2);
-
-%%
 
 if contains(plots,'-save-')
 
@@ -87,6 +69,39 @@ if contains(plots,'-save-')
 end
 
 
+%%
+
+
+if ~CtrlVar.doplots
+    return
+end
+
+
+%%
+if isempty(EastWestVideo)
+    EastWestVideo=VideoWriter("EastWest.mp4","MPEG-4");
+    open(EastWestVideo)
+
+    NorthSouthVideo=VideoWriter("NorthSouth.mp4","MPEG-4");
+    open(NorthSouthVideo)
+
+    dhdtVideo=VideoWriter("dhdt.mp4","MPEG-4");
+    open(dhdtVideo)
+
+
+end
+
+% f=gcf; exportgraphics(f,'VAF-VC1k1.pdf')
+
+
+%%
+
+if ~isfield(CtrlVar,"FigTitleText")
+    CtrlVar.FigTitleText="";
+end
+
+
+CtrlVar.QuiverColorPowRange=2; 
 
 % only do plots at end of run
 % if ~strcmp(CtrlVar.DefineOutputsInfostring,'Last call') ; return ; end
@@ -104,45 +119,30 @@ end
 
 if contains(plots,'-LSF-')
 
-    FLSF=FindOrCreateFigure("LSF") ;
-    clf(FLSF) ; 
-    hold off
-    [~,cbar]=PlotMeshScalarVariable(CtrlVar,MUA,F.LSF/1000);
-    title(sprintf('LSF at t=%g (yr)',CtrlVar.time)) ;
-    hold on
-    [xGL,yGL,GLgeo]=PlotGroundingLines(CtrlVar,MUA,F.GF,GLgeo,xGL,yGL,"color","r");
-    [xc,yc]=PlotCalvingFronts(CtrlVar,MUA,F,'b',LineWidth=2);
-    title(cbar,"(km)")
+    [cbar,xGL,yGL,xCF,yCF]=UaPlots(CtrlVar,MUA,F,F.LSF/1000,GetRidOfValuesDownStreamOfCalvingFronts=false,FigureTitle="LSF");
+    title("Level Set Function") ;
+    lg=legend;
+    CM=cmocean('balanced',50,'pivot',0) ; colormap(CM);
+    title(cbar,"")
     axis tight
     hold off
 
 
-    FindOrCreateFigure("Calving Rate") ;
-    hold off
-    [~,cbar]=PlotMeshScalarVariable(CtrlVar,MUA,F.c);
-    title(sprintf('Calving Rate at t=%g (yr)',CtrlVar.time)) ;
-    hold on
-    [xGL,yGL,GLgeo]=PlotGroundingLines(CtrlVar,MUA,F.GF,GLgeo,xGL,yGL,"color","r");
-    [xc,yc]=PlotCalvingFronts(CtrlVar,MUA,F,'b',LineWidth=2);
-    title(cbar,"(km)")
+    cbar=UaPlots(CtrlVar,MUA,F,F.c,GetRidOfValuesDownStreamOfCalvingFronts=false,FigureTitle="Calving rate");
+    lg=legend;
+    title("Calving Rate") 
+    title(cbar,"(m/yr)")
     axis tight
     hold off
 
 
-    if ~isempty(yc)
+    if ~isempty(yCF)
+
         icCounter=icCounter+1;
-        cyMax(icCounter)=max(yc) ;
+        cyMax(icCounter)=max(yCF) ;
         ctime(icCounter)=F.time ;
 
-
-        FindOrCreateFigure(" yc(t)")
-        hold off
-        plot(ctime,cyMax/1000,'or')
-        xlabel("t (yr)")
-        ylabel(" y-calving front (km) ")
-
     end
-
 
     if ~isempty(yGL)
 
@@ -150,49 +150,58 @@ if contains(plots,'-LSF-')
         GLMax(iGLCounter)=max(yGL) ;
         GLtime(iGLCounter)=F.time ;
 
-
-        FindOrCreateFigure(" yGL(t)")
-        hold off
-        plot(GLtime,GLMax/1000,'or')
-        xlabel("t (yr)")
-        ylabel(" y-GL  (km) ")
-
     end
 
+    FindOrCreateFigure("yCF(t) & xGL(t)")
 
+    hold off
+    yyaxis left
+    plot(ctime,cyMax/1000,'o-b',DisplayName="Calving front")
+    ylabel(" y-axis calving front (km) ")
 
+    yyaxis right
+    plot(GLtime,GLMax/1000,'*-r',DisplayName="Grounding line")
+    ylabel(" y-axis grounding line  (km) ")
 
-   
-
-   FindOrCreateFigure("sbB")
+    xlabel("t (yr)")
+    lg=legend();
 
 
 end
 
 if contains(plots,'-sbB-')
-%%
+%%   
+ FindOrCreateFigure("sbB")
+
     TRI=[]; DT=[]; xGL=[] ; yGL=[] ;
     FIGsbB=FindOrCreateFigure("sbB"); clf(FIGsbB);
     hold off
     AspectRatio=3; 
     ViewAndLight(1)=-40 ;  ViewAndLight(2)=20 ;
     ViewAndLight(3)=30 ;  ViewAndLight(4)=50;
-    sCol=[1 1 1]; bCol=[0 0 1]; BCol=[0.5 0.5 0.5] ; 
+    sCol=[1 1 1]; bCol=[0 0 1]; BCol=[0.5 0.5 0.5] ;
     [TRI,DT]=Plot_sbB(CtrlVar,MUA,F.s,F.b,F.B,TRI,DT,AspectRatio,ViewAndLight,[],sCol,bCol,BCol);
-%%   
+    %%
+end
+
+
+if contains(plots,"ubvb")
+    UaPlots(CtrlVar,MUA,F,"-uv-",FigureTitle="-uv-",GetRidOfValuesDownStreamOfCalvingFronts=false);
+    legend;
+end
+
+if contains(plots,"speed")
+
+    UaPlots(CtrlVar,MUA,F,"-speed-",FigureTitle="-speed-",logColorbar=true,GetRidOfValuesDownStreamOfCalvingFronts=false);
+    legend;
 end
 
 
 
 if contains(plots,'-B-')
-    FindOrCreateFigure("B");
-    hold off
-    [~,cbar]=PlotMeshScalarVariable(CtrlVar,MUA,F.B);
-    hold on ;
-    [xGL,yGL,GLgeo]=PlotGroundingLines(CtrlVar,MUA,F.GF,GLgeo,xGL,yGL,'r');
-    [xc,yc]=PlotCalvingFronts(CtrlVar,MUA,F,'w',LineWidth=2);
-    PlotMuaBoundary(CtrlVar,MUA,'b')
-    title(colorbar,'(m)')
+    cbar=UaPlots(CtrlVar,MUA,F,F.B,FigureTitle="B",GetRidOfValuesDownStreamOfCalvingFronts=false,PlotUnderMesh=false,MeshColor="w");
+    title(cbar,'(m)')
+    CM=cmocean('balanced',25,'pivot',0) ; colormap(CM);
     title("Bedrock")
 
 end
@@ -202,17 +211,25 @@ end
 if contains(plots,'-dhdt-')
     %%
     UaPlots(CtrlVar,MUA,F,F.dhdt,FigureTitle="dh/dt",GetRidOfValuesDownStreamOfCalvingFronts=false,PlotUnderMesh=true,MeshColor="w")
+    figdhdt=gcf ; 
+    figdhdt.Position=[1358	273	1153	1003];
     plot(F.x(BCs.hPosNode)/1000,F.y(BCs.hPosNode)/1000,"or",MarkerSize=2,DisplayName="Active Set")
     CL=clim;
     if CL(1) < 0 && CL(2)> 0
         CM=cmocean('balanced',25,'pivot',0) ; colormap(CM);
     end
     title(colorbar,'(m/yr)')
-    ti=title("Rate of thickness changes, $\dot{h}$"+CtrlVar.FigTitleText,Interpreter="latex");  ti.FontSize=14;
+    ti=title("Rate of thickness change, $\dot{h}$"+CtrlVar.FigTitleText,Interpreter="latex");  ti.FontSize=14;
     subtitle(sprintf("$t$=%g ",F.time),Interpreter="latex")
     xlabel("x (km)") ; ylabel("y (km)")
-    fig=gcf ; %fig.Position=[3500 450 800 700]; 
+  
     lg=legend(Interpreter="latex");
+    clim([-200 50] ) ; CM=cmocean('-balanced',50,'pivot',0) ; colormap(CM);
+    axis off ; ScaleBar(1000,[],[0.10 0.05])
+  
+    frame=getframe(gcf);
+    writeVideo(dhdtVideo,frame)
+    
 
     %%
 
@@ -234,47 +251,9 @@ end
 
 
 
-if contains(plots,'-ubvb-')
-    % plotting horizontal velocities
-
-    CtrlVar.VelPlotIntervalSpacing='log10';
-    UaPlots(CtrlVar,MUA,F,"-uv-",FigureTitle="(ub,vb)",GetRidOfValuesDownStreamOfCalvingFronts=false,PlotUnderMesh=false,MeshColor="w")
-    ti=title("Velocities, $\mathbf{v}$"+CtrlVar.FigTitleText,Interpreter="latex");  ti.FontSize=14;
-    subtitle(sprintf("$t$=%g ",F.time),Interpreter="latex")
-    xlabel('x (km)') ; ylabel('y (km)')
-    fig=gcf ; %fig.Position=[3700 450 800 700]; 
-    %%
-    
-end
-
-if contains(plots,'-udvd-')
-    % plotting horizontal velocities
-    figure
-    N=1;
-    %speed=sqrt(ud.*ud+vd.*vd);
-    %CtrlVar.MinSpeedWhenPlottingVelArrows=0; CtrlVar.MaxPlottedSpeed=max(speed); 
-    CtrlVar.VelPlotIntervalSpacing='log10';
-    %CtrlVar.RelativeVelArrowSize=10;
-    %CtrlVar.VelColorMap='hot';
-    QuiverColorGHG(x(1:N:end),y(1:N:end),ud(1:N:end),vd(1:N:end),CtrlVar);
-    hold on ;
-    [xGL,yGL,GLgeo]=PlotGroundingLines(CtrlVar,MUA,F.GF,GLgeo,xGL,yGL,'k');
-    PlotMuaBoundary(CtrlVar,MUA,'b')
-    title(sprintf('(ud,vd) t=%-g ',CtrlVar.time)) ; xlabel('xps (km)') ; ylabel('yps (km)')
-    axis equal tight
-    
-end
-
-% if contains(plots,'-log10speed-')
-%     FindOrCreateFigure("-log10speed-")
-%     cbar=UaPlots(CtrlVar,MUA,F,"-log10speed-") ;
-%     title(sprintf('log10(speed) at t=%-g ',CtrlVar.time)) ; xlabel('xps (km)') ; ylabel('yps (km)')
-%     title(cbar,"$\log_{10}(\| \mathbf{v} \|)$",Interpreter="latex")
-%   
-% end
 
 if contains(plots,'-e-')
-    % plotting effectiv strain rates
+    % plotting effective strain rates
     
     % first get effective strain rates, e :
     [etaInt,xint,yint,exx,eyy,exy,Eint,e,txx,tyy,txy]=calcStrainRatesEtaInt(CtrlVar,MUA,u,v,AGlen,n);
@@ -290,72 +269,6 @@ if contains(plots,'-e-')
     title(sprintf('e t=%-g ',CtrlVar.time)) ; xlabel('x (km)') ; ylabel('y (km)')
     
 end
-
-
-if contains(plots,'-log10(AGlen)-')
-%%    
-    figure
-    PlotMeshScalarVariable(CtrlVar,MUA,log10(AGlen));
-    hold on ; 
-    [xGL,yGL,GLgeo]=PlotGroundingLines(CtrlVar,MUA,F.GF,GLgeo,xGL,yGL,'k');
-    PlotMuaBoundary(CtrlVar,MUA,'b')
-    title(sprintf('log_{10}(AGlen) t=%-g ',CtrlVar.time)) ; xlabel('x (km)') ; ylabel('y (km)')
-    title(colorbar,'log_{10}(yr^{-1} kPa^{-3})')
-%%
-end
-
-
-if contains(plots,'-log10(C)-')
-%%    
-    figure
-    PlotMeshScalarVariable(CtrlVar,MUA,log10(C));
-    hold on 
-    [xGL,yGL,GLgeo]=PlotGroundingLines(CtrlVar,MUA,F.GF,GLgeo,xGL,yGL,'k');
-    PlotMuaBoundary(CtrlVar,MUA,'b')
-    title(sprintf('log_{10}(C) t=%-g ',CtrlVar.time)) ; xlabel('x (km)') ; ylabel('y (km)')
-    title(colorbar,'log_{10}(m yr^{-1} kPa^{-3})')
-%%
-end
-
-
-if contains(plots,'-C-')
-    
-    figure
-    PlotElementBasedQuantities(MUA.connectivity,MUA.coordinates,C,CtrlVar);
-    title(sprintf('C t=%-g ',CtrlVar.time)) ; xlabel('x (km)') ; ylabel('y (km)')
-    
-end
-
-
-if contains(plots,'-log10(SurfSpeed)-')
-    
-    us=ub+ud;  vs=vb+vd;
-    SurfSpeed=sqrt(us.*us+vs.*vs);
-    
-    FindOrCreateFigure("SurfSpeed") ; 
-    PlotNodalBasedQuantities(MUA.connectivity,MUA.coordinates,log10(SurfSpeed),CtrlVar);
-    hold on ;
-    [xGL,yGL,GLgeo]=PlotGroundingLines(CtrlVar,MUA,F.GF,GLgeo,xGL,yGL,'k');
-    [xc,yc]=PlotCalvingFronts(CtrlVar,MUA,F,'b',LineWidth=2);
-    PlotMuaBoundary(CtrlVar,MUA,'b')
-    
-    title(sprintf('log_{10}(Surface speed) t=%-g ',CtrlVar.time)) ; xlabel('x (km)') ; ylabel('y (km)')
-    title(colorbar,'log_{10}(m/yr)')
-end
-
-
-
-if contains(plots,'-log10(BasalSpeed)-')
-    BasalSpeed=sqrt(ub.*ub+vb.*vb); 
-    FindOrCreateFigure("Basal Speed")  ;  
-    PlotNodalBasedQuantities(MUA.connectivity,MUA.coordinates,log10(BasalSpeed),CtrlVar);
-    hold on
-    plot(GLgeo(:,[3 4])'/CtrlVar.PlotXYscale,GLgeo(:,[5 6])'/CtrlVar.PlotXYscale,'k','LineWidth',1);
-    title(sprintf('log_{10}(Basal speed) t=%-g ',CtrlVar.time)) ; xlabel('x (km)') ; ylabel('y (km)') ; title(colorbar,'log_{10}(m/yr)')
-end
-
-
-
 
 
 
@@ -419,26 +332,85 @@ if contains(plots,'-EastWestProfile-')
     dhdtProfile=Fdhdt(xProfile,yProfile);
 
     fP=FindOrCreateFigure("EastWestProfile"); clf(fP);
-    yyaxis left
+    fP.Position=[2600 70 1600 590];
+    % yyaxis left
     plot(xProfile/1000,sProfile,"b-",DisplayName="s",LineWidth=1.5)
     hold on
     plot(xProfile/1000,BProfile,"k-",DisplayName="B",LineWidth=1.5)
     plot(xProfile/1000,bProfile,"b-",DisplayName="b",LineWidth=1.5)
     ylabel("Geometry (m)")
-    yyaxis right
-    plot(xProfile/1000,uProfile,"r-",DisplayName="u")
-    plot(xProfile/1000,100*dhdtProfile,"r--",DisplayName="100 x dh/dt")
-    ylabel("u-velocity (m/yr)")
-
+    % yyaxis right
+    % plot(xProfile/1000,uProfile,"r-",DisplayName="u")
+    % plot(xProfile/1000,100*dhdtProfile,"r--",DisplayName="100 x dh/dt")
+    % ylabel("u-velocity (m/yr)")
+    % 
 
     xlabel("x (km)")
     title("East-West Profile")
-    subtitle(sprintf("time=%5.1f \t dt=%5.3f",F.time,F.dt))
+    subtitle(sprintf("time=%5.2g",F.time))
     lg=legend; 
+
+    frame=getframe(gcf);
+    writeVideo(EastWestVideo,frame)
+    
+
 %%
 
 end
 
-drawnow limitrate 
+
+if contains(plots,'-NorthSouthProfile-')
+
+    %%
+    yProfile=linspace(-1000e3,1000e3); 
+    xProfile=xProfile*0;
+    Fs=scatteredInterpolant(F.x,F.y,F.s);
+    Fb=Fs; Fb.Values=F.b;
+    FB=Fs; FB.Values=F.B;
+    Fu=Fs; Fu.Values=F.ub;
+    Fdhdt=Fs; Fdhdt.Values=F.dhdt ; 
+    sProfile=Fs(xProfile,yProfile);
+    bProfile=Fb(xProfile,yProfile);
+    BProfile=FB(xProfile,yProfile);
+    uProfile=Fu(xProfile,yProfile);
+    dhdtProfile=Fdhdt(xProfile,yProfile);
+
+    fP=FindOrCreateFigure("NorthSouthProfile"); clf(fP);
+    fP.Position=[2600 660 1600 590];
+
+   % yyaxis left
+    plot(yProfile/1000,sProfile,"b-",DisplayName="s",LineWidth=1.5)
+    hold on
+    plot(yProfile/1000,BProfile,"k-",DisplayName="B",LineWidth=1.5)
+    plot(yProfile/1000,bProfile,"b-",DisplayName="b",LineWidth=1.5)
+    ylabel("Geometry (m)")
+    % yyaxis right
+    % plot(yProfile/1000,uProfile,"r-",DisplayName="u")
+    % plot(yProfile/1000,100*dhdtProfile,"r--",DisplayName="100 x dh/dt")
+    % ylabel("u-velocity (m/yr)")
+
+
+    xlabel("x (km)")
+    title("North-South Profile")
+    subtitle(sprintf("time=%5.2g",F.time))
+    lg=legend;
+
+    frame=getframe(gcf);
+    writeVideo(NorthSouthVideo,frame)
+    %%
+
+end
+
+
+
+drawnow limitrate
+
+
+if CtrlVar.DefineOutputsInfostring=="Last call"
+    close(EastWestVideo)
+    close(NorthSouthVideo)
+    close(dhdtVideo)
+end
+
 
 end
