@@ -12,33 +12,40 @@ persistent cyMax ctime icCounter iGLCounter GLMax GLtime   EastWestVideo NorthSo
 if isempty(cyMax)
 
     icCounter=0 ;
-    cyMax=NaN(10000,1) ; 
+    cyMax=NaN(10000,1) ;
     ctime=NaN(10000,1) ;
     iGLCounter=0 ;
-    GLMax=NaN(10000,1) ; 
-    GLtime=NaN(10000,1) ; 
+    GLMax=NaN(10000,1) ;
+    GLtime=NaN(10000,1) ;
 
 end
 
 if icCounter > numel(cyMax)
-   
+
     cyMax=[cyMax;cyMax+NaN];
     ctime=[ctime;ctime+NaN];
 
 end
 
 if iGLCounter > numel(GLMax)
-   
+
     GLMax=[GLMax;GLMax+NaN];
     GLtime=[GLtime;GLtime+NaN];
 
 end
 
 %%
+
+if ~isfield(UserVar,"CreateVideo")
+    UserVar.CreateVideo=false;
+end
+
+
+
 if ~isfield(UserVar,'DefineOutputs')
 
     UserVar.DefineOutputs="-ubvb-LSF-h-sbB-s-";
-    plots=UserVar.DefineOutputs  ; 
+    plots=UserVar.DefineOutputs  ;
     % plots='-ubvb-log10(BasalSpeed)-sbB-ab-log10(C)-log10(AGlen)-save-';
     % plots='-save-';
 else
@@ -78,17 +85,17 @@ end
 
 
 %%
-if isempty(EastWestVideo)
-    EastWestVideo=VideoWriter("EastWest.mp4","MPEG-4");
-    open(EastWestVideo)
+if UserVar.CreateVideo
+    if isempty(EastWestVideo)
+        EastWestVideo=VideoWriter("EastWest.mp4","MPEG-4");
+        open(EastWestVideo)
 
-    NorthSouthVideo=VideoWriter("NorthSouth.mp4","MPEG-4");
-    open(NorthSouthVideo)
+        NorthSouthVideo=VideoWriter("NorthSouth.mp4","MPEG-4");
+        open(NorthSouthVideo)
 
-    dhdtVideo=VideoWriter("dhdt.mp4","MPEG-4");
-    open(dhdtVideo)
-
-
+        dhdtVideo=VideoWriter("dhdt.mp4","MPEG-4");
+        open(dhdtVideo)
+    end
 end
 
 % f=gcf; exportgraphics(f,'VAF-VC1k1.pdf')
@@ -101,7 +108,7 @@ if ~isfield(CtrlVar,"FigTitleText")
 end
 
 
-CtrlVar.QuiverColorPowRange=2; 
+CtrlVar.QuiverColorPowRange=2;
 
 % only do plots at end of run
 % if ~strcmp(CtrlVar.DefineOutputsInfostring,'Last call') ; return ; end
@@ -130,7 +137,7 @@ if contains(plots,'-LSF-')
 
     cbar=UaPlots(CtrlVar,MUA,F,F.c,GetRidOfValuesDownStreamOfCalvingFronts=false,FigureTitle="Calving rate");
     lg=legend;
-    title("Calving Rate") 
+    title("Calving Rate")
     title(cbar,"(m/yr)")
     axis tight
     hold off
@@ -170,13 +177,13 @@ if contains(plots,'-LSF-')
 end
 
 if contains(plots,'-sbB-')
-%%   
- FindOrCreateFigure("sbB")
+    %%
+    FindOrCreateFigure("sbB")
 
     TRI=[]; DT=[]; xGL=[] ; yGL=[] ;
     FIGsbB=FindOrCreateFigure("sbB"); clf(FIGsbB);
     hold off
-    AspectRatio=3; 
+    AspectRatio=3;
     ViewAndLight(1)=-40 ;  ViewAndLight(2)=20 ;
     ViewAndLight(3)=30 ;  ViewAndLight(4)=50;
     sCol=[1 1 1]; bCol=[0 0 1]; BCol=[0.5 0.5 0.5] ;
@@ -211,8 +218,10 @@ end
 if contains(plots,'-dhdt-')
     %%
     UaPlots(CtrlVar,MUA,F,F.dhdt,FigureTitle="dh/dt",GetRidOfValuesDownStreamOfCalvingFronts=false,PlotUnderMesh=true,MeshColor="w")
-    figdhdt=gcf ; 
-    figdhdt.Position=[1358	273	1153	1003];
+    figdhdt=gcf ;
+    if UserVar.CreateVideo
+        figdhdt.Position=[1358	273	1153	1003];
+    end
     plot(F.x(BCs.hPosNode)/1000,F.y(BCs.hPosNode)/1000,"or",MarkerSize=2,DisplayName="Active Set")
     CL=clim;
     if CL(1) < 0 && CL(2)> 0
@@ -222,14 +231,16 @@ if contains(plots,'-dhdt-')
     ti=title("Rate of thickness change, $\dot{h}$"+CtrlVar.FigTitleText,Interpreter="latex");  ti.FontSize=14;
     subtitle(sprintf("$t$=%g ",F.time),Interpreter="latex")
     xlabel("x (km)") ; ylabel("y (km)")
-  
+
     lg=legend(Interpreter="latex");
     clim([-200 50] ) ; CM=cmocean('-balanced',50,'pivot',0) ; colormap(CM);
     axis off ; ScaleBar(1000,[],[0.10 0.05])
-  
-    frame=getframe(gcf);
-    writeVideo(dhdtVideo,frame)
-    
+
+    if UserVar.CreateVideo
+        frame=getframe(gcf);
+        writeVideo(dhdtVideo,frame)
+    end
+
 
     %%
 
@@ -245,7 +256,7 @@ if contains(plots,'-s-')
     subtitle(sprintf("$t$=%g ",F.time),Interpreter="latex")
     xlabel("x (km)") ; ylabel("y (km)")
     CM=cmocean('-ice',15) ; clim([0 4000]); colormap(CM);
-    fig=gcf ; % fig.Position=[3600 450 800 700]; 
+    fig=gcf ; % fig.Position=[3600 450 800 700];
     %%
 end
 
@@ -254,27 +265,27 @@ end
 
 if contains(plots,'-e-')
     % plotting effective strain rates
-    
+
     % first get effective strain rates, e :
     [etaInt,xint,yint,exx,eyy,exy,Eint,e,txx,tyy,txy]=calcStrainRatesEtaInt(CtrlVar,MUA,u,v,AGlen,n);
     % all these variables are are element variables defined on integration points
     % therfore if plotting on nodes, must first project these onto nodes
     eNod=ProjectFintOntoNodes(MUA,e);
-    
+
     figure
     [FigHandle,ColorbarHandel,tri]=PlotNodalBasedQuantities(MUA.connectivity,MUA.coordinates,eNod,CtrlVar)    ;
-    hold on ; 
+    hold on ;
     [xGL,yGL,GLgeo]=PlotGroundingLines(CtrlVar,MUA,F.GF,GLgeo,xGL,yGL,'k');
     PlotMuaBoundary(CtrlVar,MUA,'b')
     title(sprintf('e t=%-g ',CtrlVar.time)) ; xlabel('x (km)') ; ylabel('y (km)')
-    
+
 end
 
 
 
 if contains(plots,'-h-')
-%%
-  
+    %%
+
     UaPlots(CtrlVar,MUA,F,F.h,FigureTitle="Ice thickness")
     hold on
 
@@ -282,26 +293,26 @@ if contains(plots,'-h-')
     %I=F.h<=CtrlVar.ThickMin;
     %plot(MUA.coordinates(I,1)/CtrlVar.PlotXYscale,MUA.coordinates(I,2)/CtrlVar.PlotXYscale,'.r')
 
-    title(sprintf('h t=%-g ',CtrlVar.time)) ; 
-    xlabel('x (km)') ; ylabel('y (km)') ; 
+    title(sprintf('h t=%-g ',CtrlVar.time)) ;
+    xlabel('x (km)') ; ylabel('y (km)') ;
     title(colorbar,'(m)')
     axis equal
     colormap(othercolor("Mdarkterrain",25))  ; % reasonably good for topography
-%%
+    %%
 end
 %%
 if contains(plots,'-stresses-')
-    
+
     figure
 
     [txzb,tyzb,txx,tyy,txy,exx,eyy,exy,e]=CalcNodalStrainRatesAndStresses(CtrlVar,MUA,AGlen,n,C,m,F.GF,s,b,ub,vb,ud,vd);
     N=10;
-    
+
     %xmin=-750e3 ; xmax=-620e3 ; ymin=1340e3 ; ymax = 1460e3 ;
     %I=find(x>xmin & x< xmax & y>ymin & y< ymax) ;
     %I=I(1:N:end);
     I=1:N:MUA.Nnodes;
-    
+
     scale=1e-2;
     PlotTensor(x(I)/CtrlVar.PlotXYscale,y(I)/CtrlVar.PlotXYscale,txx(I),txy(I),tyy(I),scale);
     hold on
@@ -311,20 +322,20 @@ if contains(plots,'-stresses-')
     axis([xmin xmax ymin ymax]/CtrlVar.PlotXYscale)
     xlabel(CtrlVar.PlotsXaxisLabel) ;
     ylabel(CtrlVar.PlotsYaxisLabel) ;
-    
+
 end
 
 
 if contains(plots,'-EastWestProfile-')
 
-%%
-    xProfile=linspace(-1000e3,1000e3); 
+    %%
+    xProfile=linspace(-1000e3,1000e3);
     yProfile=xProfile*0;
     Fs=scatteredInterpolant(F.x,F.y,F.s);
     Fb=Fs; Fb.Values=F.b;
     FB=Fs; FB.Values=F.B;
     Fu=Fs; Fu.Values=F.ub;
-    Fdhdt=Fs; Fdhdt.Values=F.dhdt ; 
+    Fdhdt=Fs; Fdhdt.Values=F.dhdt ;
     sProfile=Fs(xProfile,yProfile);
     bProfile=Fb(xProfile,yProfile);
     BProfile=FB(xProfile,yProfile);
@@ -332,7 +343,9 @@ if contains(plots,'-EastWestProfile-')
     dhdtProfile=Fdhdt(xProfile,yProfile);
 
     fP=FindOrCreateFigure("EastWestProfile"); clf(fP);
-    fP.Position=[2600 70 1600 590];
+    if UserVar.CreateVideo
+        fP.Position=[2600 70 1600 590];
+    end
     % yyaxis left
     plot(xProfile/1000,sProfile,"b-",DisplayName="s",LineWidth=1.5)
     hold on
@@ -343,18 +356,20 @@ if contains(plots,'-EastWestProfile-')
     % plot(xProfile/1000,uProfile,"r-",DisplayName="u")
     % plot(xProfile/1000,100*dhdtProfile,"r--",DisplayName="100 x dh/dt")
     % ylabel("u-velocity (m/yr)")
-    % 
+    %
 
     xlabel("x (km)")
     title("East-West Profile")
     subtitle(sprintf("time=%5.2g",F.time))
-    lg=legend; 
+    lg=legend;
 
-    frame=getframe(gcf);
-    writeVideo(EastWestVideo,frame)
-    
+    if UserVar.CreateVideo
+        frame=getframe(gcf);
+        writeVideo(EastWestVideo,frame)
+    end
 
-%%
+
+    %%
 
 end
 
@@ -362,13 +377,13 @@ end
 if contains(plots,'-NorthSouthProfile-')
 
     %%
-    yProfile=linspace(-1000e3,1000e3); 
+    yProfile=linspace(-1000e3,1000e3);
     xProfile=xProfile*0;
     Fs=scatteredInterpolant(F.x,F.y,F.s);
     Fb=Fs; Fb.Values=F.b;
     FB=Fs; FB.Values=F.B;
     Fu=Fs; Fu.Values=F.ub;
-    Fdhdt=Fs; Fdhdt.Values=F.dhdt ; 
+    Fdhdt=Fs; Fdhdt.Values=F.dhdt ;
     sProfile=Fs(xProfile,yProfile);
     bProfile=Fb(xProfile,yProfile);
     BProfile=FB(xProfile,yProfile);
@@ -376,9 +391,12 @@ if contains(plots,'-NorthSouthProfile-')
     dhdtProfile=Fdhdt(xProfile,yProfile);
 
     fP=FindOrCreateFigure("NorthSouthProfile"); clf(fP);
-    fP.Position=[2600 660 1600 590];
 
-   % yyaxis left
+    if UserVar.CreateVideo
+        fP.Position=[2600 660 1600 590];
+    end
+
+    % yyaxis left
     plot(yProfile/1000,sProfile,"b-",DisplayName="s",LineWidth=1.5)
     hold on
     plot(yProfile/1000,BProfile,"k-",DisplayName="B",LineWidth=1.5)
@@ -395,8 +413,10 @@ if contains(plots,'-NorthSouthProfile-')
     subtitle(sprintf("time=%5.2g",F.time))
     lg=legend;
 
-    frame=getframe(gcf);
-    writeVideo(NorthSouthVideo,frame)
+    if UserVar.CreateVideo
+        frame=getframe(gcf);
+        writeVideo(NorthSouthVideo,frame)
+    end
     %%
 
 end
@@ -407,9 +427,11 @@ drawnow limitrate
 
 
 if CtrlVar.DefineOutputsInfostring=="Last call"
-    close(EastWestVideo)
-    close(NorthSouthVideo)
-    close(dhdtVideo)
+    if UserVar.CreateVideo
+        close(EastWestVideo)
+        close(NorthSouthVideo)
+        close(dhdtVideo)
+    end
 end
 
 

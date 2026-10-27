@@ -100,6 +100,7 @@ CtrlVar.InfoLevelThickMin=0; % This provides information on whether the ice thic
 %% Plots and outputs
 CtrlVar.DefineOutputsDt=0.1;  % controls time interval between calls do DefineOutPuts.m
 CtrlVar.doplots=1;
+UserVar.CreateVideo=false;
 CtrlVar.PlotMesh=0;
 CtrlVar.PlotBCs=0 ;
 CtrlVar.PlotXYscale=1000;
@@ -172,7 +173,7 @@ end
 
 
 
-%%
+%% FileNames
 CtrlVar.Experiment=UserVar.RunType;
 CtrlVar.NameOfRestartFiletoRead="Restart"+UserVar.RunType;
 CtrlVar.NameOfRestartFiletoRead=replace(CtrlVar.NameOfRestartFiletoRead,".","k")+".mat";
@@ -187,15 +188,14 @@ CtrlVar.LinearSolver.Type="PARDISO" ;
 CtrlVar.Parallel.uvhAssembly.spmd.isOn=true;
 CtrlVar.Parallel.uvAssembly.spmd.isOn=true;
 
-
-%% Parpool, open a pool, provided none is already open
+% Parpool, open a pool, provided none is already open
 if isempty(gcp('nocreate'))
     parpool("Threads",4)
 end
 
 %% Active set
 
-CtrlVar.ActiveSet.DeferReleases=true;   % (25 Oct 2026) active-set test: defer release-only updates to the next time step
+CtrlVar.ActiveSet.DeferReleases=true;             % (25 Oct 2026) active-set test: defer release-only updates to the next time step
 CtrlVar.ActiveSet.DeferReleasesMaxThickening=1;   % (25 Oct 2026) active-set test: defer only if all released nodes thicken by less than ThickMin
 
 %%
