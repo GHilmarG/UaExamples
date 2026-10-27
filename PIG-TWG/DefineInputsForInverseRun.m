@@ -52,9 +52,9 @@ Priors.AGlen=AGlenVersusTemp(-10)+zeros(MUA.Nnodes,1);
 Priors.n=F.n; 
 
 
-switch CtrlVar.SlidingLaw
+switch SlidingLawCode(CtrlVar.SlidingLaw)   % names and aliases, see SlidingLawCode.m
     
-    case {"Weertman","Tsai","Cornford","Umbi"}
+    case {1,4,5,6}   % Weertman, Tsai, Cornford, Umbi
         
         % u=C tau^m
         
@@ -65,7 +65,7 @@ switch CtrlVar.SlidingLaw
         Priors.C=C0;
         
         
-    case {"Budd","W-N0"}
+    case 2   % Budd
 
         % u=C tau^m / N^q
         hf=F.rhow.*(F.S-F.B)./F.rho;
