@@ -41,11 +41,11 @@ UserVar.DistanceBetweenPointsAlongBoundary=5e3 ;
 
 CtrlVar.SlidingLaw="Weertman" ; % "Umbi" ; % "Weertman" ; % "Tsai" ; % "Cornford" ;  "Umbi" ; "Cornford" ; % "Tsai" , "Budd"
 
-switch CtrlVar.SlidingLaw
+switch SlidingLawCode(CtrlVar.SlidingLaw)   % names and aliases, see SlidingLawCode.m
     
-    case "Weertman"
+    case 1   % Weertman
         UserVar.CFile='FC-Weertman.mat'; UserVar.AFile='FA-Weertman.mat';
-    case "Umbi"
+    case 6   % Umbi
         UserVar.CFile='FC-Umbi.mat'; UserVar.AFile='FA-Umbi.mat';
     otherwise
         error('A and C fields not available')

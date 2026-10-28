@@ -44,7 +44,7 @@ CtrlVar.UseUserDefinedRunStopCriterion=false; % one can also introduce UserDefin
                                               % through DefineRunStopCriterion.m
 
 %% Sliding law
-CtrlVar.SlidingLaw="W" ; 
+CtrlVar.SlidingLaw="-W-" ;
     % "W" is the Weertman sliding law
     % "W-N0" is the Bud sliding law.
     % "minCW-N0" is the Tsai sliding law
