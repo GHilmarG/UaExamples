@@ -84,8 +84,7 @@ CtrlVar.SlidingLaw="Weertman" ;
 % CtrlVar.SlidingLaw="Cornford" ;
 % CtrlVar.SlidingLaw="Joughin" ;
 
-pattern=["Joughin","rCW-V0"];
-if contains(CtrlVar.SlidingLaw,pattern)
+if SlidingLawCode(CtrlVar.SlidingLaw)==7   % Joughin (names and aliases, see SlidingLawCode.m)
     UserVar.C0=UserVar.C0/UserVar.V0;
 end
 

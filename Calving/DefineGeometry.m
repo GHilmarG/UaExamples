@@ -49,7 +49,7 @@ switch UserVar.InitialGeometry
         
         if contains(FieldsToBeDefined,"s")
             fprintf(' The geometry is initialised based on a previously obtained steady-state solutions. \n')
-            switch CtrlVar.SlidingLaw
+            switch SlidingLawCode(CtrlVar.SlidingLaw)   % names and aliases, see SlidingLawCode.m
                 
                 
                 % Here some input files are needed that give the steady-state
@@ -65,7 +65,7 @@ switch UserVar.InitialGeometry
                 
                 
                 
-                case "Tsai"
+                case 4   % Tsai
                     load(DataFile,'FsTsai','FbTsai')
                     s=FsTsai(x,y) ;
                     b=FbTsai(x,y) ;
