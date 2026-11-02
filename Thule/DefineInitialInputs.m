@@ -88,7 +88,7 @@ CtrlVar.TotalNumberOfForwardRunSteps=inf;
 
 CtrlVar.dt=0.001;   
 CtrlVar.StartTime=0; 
-CtrlVar.EndTime=10; 
+CtrlVar.EndTime=1; 
 
 
 
