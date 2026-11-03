@@ -88,7 +88,7 @@ CtrlVar.TotalNumberOfForwardRunSteps=inf;
 
 CtrlVar.dt=0.001;   
 CtrlVar.StartTime=0; 
-CtrlVar.EndTime=10; 
+CtrlVar.EndTime=1; 
 
 
 
@@ -184,19 +184,15 @@ CtrlVar.NameOfRestartFiletoWrite=CtrlVar.NameOfRestartFiletoRead;
 
 CtrlVar.LinearSolver.Type="PARDISO" ;
 
-%% Parallel
-CtrlVar.Parallel.uvhAssembly.spmd.isOn=true;
-CtrlVar.Parallel.uvAssembly.spmd.isOn=true;
+CtrlVar.uvhMatrixAssembly.CompiledKernel=true; 
+CtrlVar.uvMatrixAssembly.CompiledKernel=true; 
+CtrlVar.hMatrixAssembly.CompiledKernel=true; 
 
-% Parpool, open a pool, provided none is already open
-if isempty(gcp('nocreate'))
-    parpool("Threads",4)
-end
+CtrlVar.Parallel.uvhAssembly.spmd.isOn=false;        % assembly in parallel using spmd over sub-domain (domain decomposition)  
+CtrlVar.Parallel.uvAssembly.spmd.isOn=false;          % assembly in parallel using spmd over sub-domain (domain decomposition)  
 
 %% Active set
 
-CtrlVar.ActiveSet.DeferReleases=true;             % (25 Oct 2026) active-set test: defer release-only updates to the next time step
-CtrlVar.ActiveSet.DeferReleasesMaxThickening=1;   % (25 Oct 2026) active-set test: defer only if all released nodes thicken by less than ThickMin
 
 %%
 
