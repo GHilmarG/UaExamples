@@ -25,7 +25,7 @@ CtrlVar.dt=0.01;
 
 CtrlVar.time=0; 
 
-CtrlVar.DefineOutputsDt=0; % interval between calling UaOutputs. 0 implies call it at each and every run step.
+CtrlVar.DefineOutputsDt=0.1; % interval between calling UaOutputs. 0 implies call it at each and every run step.
                        % setting CtrlVar.DefineOutputsDt=1; causes UaOutputs to be called every 1 years.
                        % This is a more reasonable value once all looks OK.
 
@@ -87,7 +87,7 @@ CtrlVar.MeshRefinementMethod='explicit:local:newest vertex bisection';    % can 
                                                    % 'explicit:local:red-green'
                                                    % 'explicit:local:newest vertex bisection';
 %  
-CtrlVar.SaveAdaptMeshFileName='AdaptMesh.mat'; 
+CtrlVar.SaveAdaptMeshFileName=[]; % if left empty no file is created. 
 
 
 
@@ -103,15 +103,24 @@ CtrlVar.MeshAdapt.GLrange=[20000 5000 ; 10000 2000 ; 5000 500];
 
 
 %% Pos. thickness constraints
-CtrlVar.ThickMin=1; % minimum allowed thickness without (potentially) doing something about it
-CtrlVar.ResetThicknessToMinThickness=0;  % if true, thickness values less than ThickMin will be set to ThickMin
-CtrlVar.ThicknessConstraints=1  ;        % if true, min thickness is enforced using active set method
-CtrlVar.ThicknessConstraintsItMax=5  ; 
+% using defaults
 
 %%
 
 xd=640e3; xu=0e3 ; yr=0 ; yl=80e3 ;  
 MeshBoundaryCoordinates=[xu yr ; xu yl ; xd yl ; xd yr];
+
+%% PARDISO and compiled assembly
+% Note: this requires compiled kernels and the PARDISO link
+
+CtrlVar.uvhMatrixAssembly.CompiledKernel=true;
+CtrlVar.uvMatrixAssembly.CompiledKernel=true;
+CtrlVar.hMatrixAssembly.CompiledKernel=true;
+
+CtrlVar.Parallel.uvAssembly.spmd.isOn=false;    % the compiled uv-assembly is parallel already
+CtrlVar.Parallel.uvhAssembly.spmd.isOn=false;   % the compiled uvh-assembly is parallel already
+
+CtrlVar.LinearSolver.Type="PARDISO" ;
 
  
 end
