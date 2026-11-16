@@ -79,7 +79,7 @@ if contains(UserVar.RunType,"Inverse")
         CtrlVar.ReadInitialMesh=1;
         CtrlVar.AdaptMesh=0;
 
-        CtrlVar.Inverse.Iterations=10;
+        CtrlVar.Inverse.Iterations=100;
         CtrlVar.Inverse.InvertFor='logA-logC' ; %
         CtrlVar.Inverse.Regularize.Field=CtrlVar.Inverse.InvertFor;
 
@@ -90,7 +90,7 @@ if contains(UserVar.RunType,"Inverse")
 
             CtrlVar.Inverse.MinimisationMethod="-UaOptimisation-GradientBased-";
 
-        elseif contains(UserVar.RunType,"MatlabOptimisation-GradientBased-")
+        elseif contains(UserVar.RunType,"-MatlabOptimisation-GradientBased-")
 
             CtrlVar.Inverse.MinimisationMethod="-MatlabOptimisation-GradientBased-";
 
@@ -103,6 +103,10 @@ if contains(UserVar.RunType,"Inverse")
 
             CtrlVar.Inverse.MinimisationMethod="-UaOptimisation-HessianBased-";
       
+        elseif contains(UserVar.RunType,"-UaOptimisation-NewtonCG-")
+
+            CtrlVar.Inverse.MinimisationMethod="-UaOptimisation-NewtonCG-";
+
 
         else
             error("CaseNotFound")
@@ -283,6 +287,15 @@ filename=replace(filename,'.','k');
 CtrlVar.Inverse.NameOfRestartOutputFile=filename;
 CtrlVar.Inverse.NameOfRestartInputFile=CtrlVar.Inverse.NameOfRestartOutputFile;
 
+%% 
+CtrlVar.LinearSolver.Type="PARDISO";  
 
+CtrlVar.Parallel.uvhAssembly.spmd.isOn=false;        
+CtrlVar.Parallel.uvAssembly.spmd.isOn=false;        
+
+
+CtrlVar.uvhMatrixAssembly.CompiledKernel=true; 
+CtrlVar.uvMatrixAssembly.CompiledKernel=true; 
+CtrlVar.hMatrixAssembly.CompiledKernel=true; 
 
 end
